@@ -1,0 +1,139 @@
+# Tahap 2: Data Charting & MCDM Synthesis
+## Proyek: DSS Prioritisasi CCTV Permukiman Mahasiswa Jatinangor (Smart Living & Safety)
+
+*Sumber: 12 paper inti tahap eligibility (full-text). File pendamping: `tabel-paper-final.csv` (judul/abstrak/DOI/metode), `eligibility-12.csv` (lembar kerja full-text).*
+
+---
+
+## Bagian A: Charting Detail 12 Paper
+
+### Paper 1 — Wang et al. (2025), Applied Sciences
+**Judul:** Monitoring Layout and Optimisation Method Based on Minimum Weighted Vertices of Roads
+**Main problem:** Penyebaran kamera pengawas boros (terlalu banyak tiang dan kamera) sementara cakupan jalan belum tentu penuh; konflik antara budget dan coverage.
+**Data (input):** Simpul/vertex jaringan jalan; derajat ketetanggaan tiap simpul (adjacency degree); model coverage kamera.
+**Karakteristik metode:** Minimum Weighted Vertex Cover (MWVC) + greedy algorithm; bobot vertex diturunkan dari derajat simpul sehingga persimpangan penting diprioritaskan.
+**Output & manfaat:** Jumlah tiang 62 menjadi 33 (minus 46,8%), kamera 196 menjadi 98 (minus 50%), coverage jalan tetap 100% pada studi kota Wuwei. Bukti kuantitatif bahwa sedikit titik dengan penempatan tepat mengalahkan banyak titik sporadis.
+**Relevansi Jatinangor:** JANGKAR UTAMA. Alternatif level segmen jalan; C4 (efisiensi coverage); C6 (derajat simpul); C7 (blind-zone); C9 (efisiensi tiang). Argumen budget constraint.
+
+### Paper 2 — Gonzalez-Villa et al. (2024), Multimedia Tools and Applications (S4AllCities)
+**Judul:** Decision-support system for safety and security assessment and management in smart cities
+**Main problem:** Ancaman terorisme di keramaian dan infrastruktur kritis; operator keamanan butuh dukungan keputusan real-time pada fase pencegahan maupun intervensi.
+**Data (input):** Pergerakan pejalan kaki dan kendaraan; model ancaman (probabilitas IED, kebakaran, penembakan); status jaringan lalu lintas normal vs anomali.
+**Karakteristik metode:** DSS terintegrasi (non-MCDM): model prediktif progresi serangan + model probabilistik asesmen ancaman; diuji melalui pilot operasional di kota nyata; terintegrasi dengan legacy system.
+**Output & manfaat:** Strategi evakuasi optimal; estimasi egress time; profil pergerakan pejalan; probabilitas ancaman; rute intervensi optimal. Arsitektur DSS safety paling lengkap (pencegahan + intervensi).
+**Relevansi Jatinangor:** PEMBANDING ARSITEKTUR (RQ1). Pola simulasi-DSS sengaja TIDAK diadopsi untuk Jatinangor karena membutuhkan data kalibrasi yang mahal dan tidak tersedia. Elemen response time/egress dicatat sebagai keterbatasan data dan riset lanjutan.
+
+### Paper 3 — Feizizadeh & Omarzadeh (2025), Annals of GIS
+**Judul:** A GIS based spatiotemporal modelling approach for cycling risk mapping using crowd-sourced sensor data
+**Main problem:** Risiko dan ketidaknyamanan pesepeda tidak terpetakan sehingga intervensi keselamatan tidak tepat sasaran.
+**Data (input):** Crowd-sensor (kecepatan, getaran sepeda, jarak ke objek); volume lalu lintas; guna lahan; karakteristik sosiodemografi; kondisi jalur (Berlin, dataset OpenSenseMap).
+**Karakteristik metode:** Statistik spasial + analisis multi-kriteria berbasis GIS; estimasi volume dan diskontinuitas rute secara spatiotemporal.
+**Output & manfaat:** Peta risiko pesepeda; korelasi signifikan antara volume-ketidaknyamanan dengan guna lahan komersial/residensial serta kawasan sekolah dan universitas.
+**Relevansi Jatinangor:** Pola GIS-multikriteria untuk RQ1/RQ3. C2 (volume mobilitas); C5 (sosiodemografi); C8 (guna lahan kos dan kampus). Template metodologis peta prioritas gang.
+
+### Paper 4 — Ahmed et al. (2022), Frontiers in Built Environment
+**Judul:** A multi-attribute utility decision support tool for a smart campus (UAE as a case study)
+**Main problem:** Transformasi smart campus mengabaikan persepsi pengguna; keputusan investasi teknologi butuh dasar yang objektif dan disepakati stakeholder.
+**Data (input):** Survei mahasiswa, dosen, staf administrasi, dan personel IT; daftar kriteria dari literatur smart campus.
+**Karakteristik metode:** AHP antar kelompok stakeholder + model utility function menjadi decision support tool investasi.
+**Output & manfaat:** Konsensus lintas kelompok: smart security and safety, navigasi kampus, dan adaptive learning adalah kriteria terpenting; dihasilkan tool keputusan investasi optimum.
+**Relevansi Jatinangor:** Skema pembobotan AHP tiga pihak atau lebih untuk RQ3. Konteks kampus mendekati Jatinangor. C8/C9. Bukti bahwa safety dipersepsikan terpenting oleh penghuni kawasan pendidikan.
+
+### Paper 5 — Choi et al. (2025), Journal of Asian Architecture and Building Engineering
+**Judul:** Smart city technologies for apartment complexes in South Korea
+**Main problem:** Teknologi smart city apa yang harus diprioritaskan untuk hunian vertikal padat (60% populasi Korea tinggal di apartemen).
+**Data (input):** 16 teknologi pada 4 domain (mobilitas, environment, safety, welfare); penilaian panel 22 ahli akademisi dan industri.
+**Karakteristik metode:** MCDM terintegrasi + evaluasi expected utility pada tiga skenario (peningkatan nilai aset, hunian high-tech, kepuasan residensial).
+**Output & manfaat:** Domain smart safety dan smart environment terpenting untuk deployment teknologi residensial; panduan bagi perencana dan penyedia layanan.
+**Relevansi Jatinangor:** Justifikasi fokus safety untuk hunian kos-kosan padat. C5/C8. Logika multi-skenario diadaptasi (skenario anggaran vs kepuasan warga).
+
+### Paper 6 — Kanj et al. (2024), IEEE Access
+**Judul:** Dynamic Decision Making Process for Dangerous Good Transportation Using a Combination of TOPSIS and AHP Methods with Fuzzy Sets
+**Main problem:** Risiko pengangkutan barang berbahaya di smart city; rute harus meminimalkan potensi kejadian berbahaya.
+**Data (input):** Data real-time cloud; tiga kriteria: cost, duration, risk.
+**Karakteristik metode:** Fuzzy AHP untuk pembobotan + Fuzzy TOPSIS untuk perankingan rute; diuji pada lingkungan statis vs dinamis (keputusan dapat berubah mengikuti nilai kriteria).
+**Output & manfaat:** Risiko turun dan safety meningkat; template hybrid bobot-ranking dengan kriteria tiga serangkai yang ringkas.
+**Relevansi Jatinangor:** JUSTIFIKASI INTI AHP-TOPSIS (RQ3). C1 (risk); C9 (cost). Mewakili pola dominan RQ2 (AHP untuk bobot, TOPSIS untuk ranking).
+
+### Paper 7 — Kabashkin et al. (2025), Drones
+**Judul:** Synchronized Multi-Point UAV-Based Traffic Monitoring for Urban Infrastructure Decision Support
+**Main problem:** Monitoring lalu lintas kota terfragmentasi (titik observasi terpisah dan tidak sinkron) sehingga keputusan infrastruktur tidak berbasis gambaran jaringan; dibutuhkan evaluasi skenario intervensi yang objektif.
+**Data (input):** Video real-time armada UAV terkoordinasi di 30 titik observasi kritis pada jam sibuk (distrik GreenLine, Astana); parameter flow, kecepatan, dan delay.
+**Karakteristik metode:** Pengumpulan aerial sinkron multi-titik + kalibrasi model simulasi lalu lintas + evaluasi 6 skenario infrastruktur dengan kerangka MCDM.
+**Output & manfaat:** Skenario intervensi terefektif teridentifikasi; pendekatan replicable yang menghubungkan sensing sinkron dengan evaluasi berbasis simulasi.
+**Relevansi Jatinangor:** Penutup lubang spasial pasca #121 gugur aturan tahun (evaluasi skenario spasial multi-kriteria). C2 (flow/delay). Logika 30 titik kritis diterjemahkan menjadi sampling segmen gang Jatinangor. Adaptasi: armada UAV tidak tersedia, diganti observasi manual dan CCTV eksisting.
+
+### Paper 8 — Baddour et al. (2026), Journal of Intelligent Decision Making and Information Science
+**Judul:** Intelligent Decision Support for Diplomatic Quarter Planning Through Multi-Criteria Analysis and Urban Intelligence
+**Main problem:** Perencanaan diplomatic quarter multi-faktor (security, aksesibilitas, infrastruktur, resilience, sustainability) yang kompleks dan subjektif.
+**Data (input):** Dataset urban dan gedung yang tersedia publik; kriteria arsitektural, lingkungan, dan urban.
+**Karakteristik metode:** BWM untuk bobot + CoCoSo untuk ranking, dikomparasi langsung dengan AHP, TOPSIS, VIKOR; agreement pakar 92,8% vs 88,6%; robustness 0,91 vs 0,84; stabil pada sensitivitas +-20%.
+**Output & manfaat:** Bukti komparatif kinerja metode berangka; framework yang skalabel dan objektif.
+**Relevansi Jatinangor:** Komparasi metode untuk RQ2. Kriteria security/accessibility/infrastructure menjadi C1/C8/C9. Alasan memilih AHP-TOPSIS: selisih kinerja kecil tetapi jauh lebih sederhana dengan pakar yang tersedia di Jatinangor.
+
+### Paper 9 — Almassawa et al. (2024), Planning Malaysia
+**Judul:** Policy on the implementation of smart mobility in South Tangerang City, Indonesia based on public transportation using the PROMETHEE method
+**Main problem:** Kesiapan implementasi smart mobility di South Tangerang yang urbanisasinya cepat.
+**Data (input):** Indikator availability, security, comfort transportasi publik; analisis multivariat + MCDA.
+**Karakteristik metode:** PROMETHEE untuk model strategi kebijakan.
+**Output & manfaat:** Ditemukan belum siap; rekomendasi security, reorganisasi rute, informasi real-time. Relevan untuk negara berkembang.
+**Relevansi Jatinangor:** Variasi metode RQ2 (PROMETHEE). Indikator security menjadi C1. Salah satu dari dua konteks Indonesia.
+
+### Paper 10 — Shiddiqy et al. (2025), Int. Journal of Safety and Security Engineering
+**Judul:** An Integrated Smart Defense Architecture for the Nusantara Capital City of Indonesia
+**Main problem:** Arsitektur pertahanan IKN yang multidimensi (teknologi, ketahanan nasional, keamanan publik).
+**Data (input):** Dokumen kebijakan pertahanan, dokumen perencanaan strategis, kasus ibu kota dunia (data sekunder).
+**Karakteristik metode:** SWOT untuk identifikasi faktor, dilanjutkan AHP untuk prioritisasi.
+**Output & manfaat:** C4ISR 46,6%; AI-surveillance 27,7%; keamanan infrastruktur digital 16,1%. Bobot surveillance kuantitatif dari AHP.
+**Relevansi Jatinangor:** Legitimasi bobot tinggi untuk surveillance (C4/C7). Bukti AHP dapat berjalan dari data sekunder/dokumen, cocok untuk keterbatasan data Jatinangor. Konteks Indonesia kedua.
+
+### Paper 11 — Zheng et al. (2025), Journal of Cases on Information Technology
+**Judul:** A Bayesian Network and DEMATEL-ISM Approach for Smart Community Flood Risk Assessment (Tangxia, China)
+**Main problem:** Waterlogging komunitas padat akibat iklim dan urbanisasi; tata drainase perlu optimasi.
+**Data (input):** Faktor alam + sosial; data sosioekonomi; IoT; ArcGIS (komunitas Tangxia, Guangzhou).
+**Karakteristik metode:** DEMATEL-ISM untuk struktur hierarki faktor + Bayesian Network untuk inferensi probabilistik dinamis; analisis sensitivitas intervensi.
+**Output & manfaat:** Upgrade kapasitas drainase 500 m3/hr menurunkan probabilitas risiko 33,8%. Model analysis-design-transformation untuk kawasan padat.
+**Relevansi Jatinangor:** Variasi metode struktural RQ2. Logika intervensi terukur menjadi C3 (PJU) dan C9. Toolchain Python + ArcGIS untuk RQ3.
+
+### Paper 12 — Yuhang et al. (2025), Applied Sciences
+**Judul:** Sensor Placement Optimization for Power Grid Condition Monitoring Based on a Backup Coverage Model (Guangzhou)
+**Main problem:** Trade-off penempatan sensor: coverage vs redundansi vs biaya monitoring grid kota.
+**Data (input):** Proximity infrastruktur + kepadatan penduduk; pembobotan Entropy Weight Method.
+**Karakteristik metode:** EWM untuk bobot objektif + model Backup Coverage Sensor Location Problem (BCSLP) + Genetic Algorithm; strategi balanced resilience-biased terbukti optimal.
+**Output & manfaat:** Strategi ekstrem (breadth-only atau resilience-only) suboptimal; framework risk-informed yang skalabel.
+**Relevansi Jatinangor:** C4/C7/C9 + C5 (density). EWM sebagai opsi validasi silang bobot objektif terhadap AHP subjektif di RQ3.
+
+---
+
+## Bagian B: Sintesis Gabungan (bukan satu paper)
+
+### B.1 Taksonomi arsitektur DSS (jawaban RQ1)
+
+| Pola | Paper pendukung | Nasib di model Jatinangor |
+|---|---|---|
+| GIS-MCDM dan evaluasi skenario spasial | #31, #11, #46 | DIPAKAI sebagai arsitektur utama (menggantikan template #121 yang gugur aturan tahun) |
+| Optimasi coverage | #39, #56 | DIPAKAI untuk logika penempatan titik |
+| Expert-driven (survei + AHP) | #37, #126, #83 | DIPAKAI untuk skema pembobotan |
+| Simulasi-DSS operasional | #45 | DITOLAK (butuh data kalibrasi mahal) |
+| Policy-MCDA | #96, #74 | DIPAKAI untuk framing rekomendasi kebijakan |
+
+### B.2 Sebaran metode MCDM (jawaban RQ2)
+
+| Peran | Metode dominan | Paper |
+|---|---|---|
+| Pembobotan subjektif | AHP, BWM | #14, #37, #83, #74 |
+| Pembobotan objektif | Entropy (EWM) | #56 |
+| Perankingan | TOPSIS/Fuzzy TOPSIS, CoCoSo, PROMETHEE | #14, #83, #96 |
+| Struktural/kausal | DEMATEL-ISM, Bayesian | #11 |
+| Evaluasi skenario spasial | MCDM multi-skenario | #46 |
+| Pola pemenang | AHP (bobot) + TOPSIS (ranking) | #14 |
+
+### B.3 Taksonomi kriteria benefit/cost (jawaban RQ2, bahan RQ3)
+
+Semua arah dirumuskan terhadap urgensi (skor tinggi = makin prioritas): kriminalitas dan risiko (#83, #14, #96); mobilitas dan volume (#31, #96); infrastruktur dan penerangan (#83, #11); coverage dan gap (#39, #56); kepadatan hunian (#56, #31, #126); guna lahan dan proximity (#31, #83, #37); biaya dan kesiapan (#14, #39, #83).
+
+Aturan kejujuran klasifikasi: jika arah preferensi sebuah kriteria di paper sumber tidak eksplisit, catat sebagai *context-dependent* di charting — jangan dipaksa masuk benefit/cost hanya dari nama variabel.
+
+### B.4 Penurunan model Jatinangor (jawaban RQ3)
+
+Alternatif = segmen gang (dari #39 dan #31). Delapan dari sembilan kriteria C1-C9 ditelusur ke minimal dua paper pada tabel B.3; hanya C6 (derajat simpul jalan) yang bersumber tunggal pada #39 dan dicatat apa adanya. Pembobotan AHP multistakeholder (pemerintah, kampus, warga) mengikuti #37 dengan angka acuan #83 dan #74. Perankingan TOPSIS mengikuti pola pemenang B.2. Elemen yang ditolak: simulasi operasional ala #45 dan BWM-CoCoSo ala #83 (argumen tercatat di charting). Elemen ditunda: response time ala #45 (data tidak tersedia; menjadi keterbatasan dan riset lanjutan).
