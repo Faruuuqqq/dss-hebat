@@ -168,19 +168,32 @@ Catatan komparasi (bukan pemakaian primer): #83 membandingkan BWM-CoCoSo vs AHP-
 
 Frekuensi dukungan tiap kriteria model terhadap korpus (arah dirumuskan terhadap urgensi: skor tinggi = makin prioritas):
 
-| Kriteria | Muncul di paper | Frekuensi |
-|---|---|---|
-| C1 Riwayat kerawanan | #83, #14, #96, #31 | 4 paper |
-| C2 Volume mobilitas malam | #31, #46, #96 | 3 paper |
-| C5 Kepadatan penghuni | #56, #31, #126 | 3 paper |
-| C8 Kedekatan guna lahan rentan | #31, #83, #37 | 3 paper |
-| C9 Kelayakan implementasi | #14, #39, #83 | 3 paper |
-| C3 Defisiensi penerangan | #83, #11 | 2 paper |
-| C4 Efisiensi coverage | #39, #56 | 2 paper |
-| C7 Coverage gap CCTV eksisting | #39, #56 | 2 paper |
-| C6 Derajat simpul jalan | #39 | 1 paper (sumber tunggal, dicatat apa adanya) |
+| Kriteria | Muncul di paper | Frekuensi | Arah (thd urgensi) |
+|---|---|---|---|
+| C1 Riwayat kerawanan | #83, #14, #96, #31 | 4 paper | Benefit |
+| C2 Volume mobilitas malam | #31, #46, #96 | 3 paper | Benefit |
+| C5 Kepadatan penghuni | #56, #31, #126 | 3 paper | Benefit |
+| C8 Kedekatan guna lahan rentan | #31, #83, #37 | 3 paper | Benefit |
+| C9 Kelayakan implementasi | #14, #39, #83 | 3 paper | Benefit |
+| C3 Defisiensi penerangan | #83, #11 | 2 paper | Benefit |
+| C4 Efisiensi coverage | #39, #56 | 2 paper | Benefit |
+| C7 Coverage gap CCTV eksisting | #39, #56 | 2 paper | Benefit |
+| C6 Derajat simpul jalan | #39 | 1 paper (sumber tunggal, dicatat apa adanya) | Benefit |
 
 Semua arah dirumuskan terhadap urgensi (skor tinggi = makin prioritas): kriminalitas dan risiko (#83, #14, #96); mobilitas dan volume (#31, #96); infrastruktur dan penerangan (#83, #11); coverage dan gap (#39, #56); kepadatan hunian (#56, #31, #126); guna lahan dan proximity (#31, #83, #37); biaya dan kesiapan (#14, #39, #83).
+
+### B.3b Pemetaan kriteria cost literatur ke model Jatinangor
+
+Benefit dan cost adalah sifat kriteria dalam suatu formulasi keputusan, bukan sifat absolut nama variabel. Kriteria berarah cost di paper sumber tidak diadopsi mentah-mentah, melainkan diperlakukan sebagai berikut:
+
+| Kriteria cost di literatur | Paper | Perlakuan di model Jatinangor |
+|---|---|---|
+| Jumlah tiang dan kamera | #39 | Diserap ke C9 (kelayakan) + kendala anggaran bertahap |
+| Biaya implementasi | #83 | Diserap ke C9 (komponen biaya dalam skor kelayakan) |
+| Latency dan emisi | #56 | Kendala operasional, bukan kriteria (ditunda, data tak tersedia) |
+| Risiko kecelakaan | #46 | Dibalik menjadi urgensi C1 (risiko tinggi = makin prioritas) |
+| Duration (waktu tempuh) | #14 | Bukan kriteria CCTV; aspek paparan diwakili C2 |
+| Cost (transportasi) | #14 | Diserap ke C9 |
 
 Aturan kejujuran klasifikasi: jika arah preferensi sebuah kriteria di paper sumber tidak eksplisit, catat sebagai *context-dependent* di charting — jangan dipaksa masuk benefit/cost hanya dari nama variabel.
 

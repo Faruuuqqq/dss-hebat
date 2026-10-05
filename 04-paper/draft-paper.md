@@ -158,11 +158,11 @@ Angka frekuensi dalam tabel tidak bersifat eksklusif: satu paper dapat memakai l
 
 **Tabel IV. TAKSONOMI KRITERIA KEPUTUSAN**
 
-| Kelompok | Orientasi | Contoh kriteria dari literatur |
-|---|---|---|
-| Benefit | Semakin tinggi semakin diprioritaskan (dalam konteks keputusan paper sumber) | Volume mobilitas dan aktivitas [3], cakupan pengawasan [1], [12], keamanan dan aksesibilitas [8], [9], kepadatan hunian [12] |
-| Cost | Semakin rendah semakin dikehendaki | Jumlah perangkat dan biaya [1], risiko kecelakaan [7], biaya implementasi [8], latency dan emisi [12] |
-| Context-dependent | Arah preferensi tidak eksplisit pada data charting paper sumber | Faktor yang orientasinya bergantung pada formulasi model masing-masing paper (diklasifikasikan berdasarkan tujuan keputusan, bukan nama variabel) |
+| Kelompok | Orientasi | Contoh kriteria dari literatur | Perlakuan di model Jatinangor |
+|---|---|---|---|
+| Benefit | Semakin tinggi semakin diprioritaskan (dalam konteks keputusan paper sumber) | Volume mobilitas dan aktivitas [3], cakupan pengawasan [1], [12], keamanan dan aksesibilitas [8], [9], kepadatan hunian [12] | Seluruh C1–C9 (skor tinggi = prioritas) |
+| Cost | Semakin rendah semakin dikehendaki | Jumlah perangkat dan biaya [1], risiko kecelakaan [7], biaya implementasi [8], latency dan emisi [12] | Diserap ke C9 + kendala anggaran (rinci di B.3b sintesis) |
+| Context-dependent | Arah preferensi tidak eksplisit pada data charting paper sumber | Faktor yang orientasinya bergantung pada formulasi model masing-masing paper (diklasifikasikan berdasarkan tujuan keputusan, bukan nama variabel) | Tidak dipaksa biner |
 
 Taksonomi ini penting karena benefit dan cost merupakan sifat kriteria dalam suatu model keputusan, bukan sifat absolut dari nama variabel. Klasifikasi seluruh kriteria dilakukan terhadap tujuan keputusan paper sumber; ketika arah preferensi tidak eksplisit tercatat pada charting, kriteria dipisahkan sebagai context-dependent dan tidak dipaksa masuk biner benefit/cost. Seluruh arah kriteria pada model Jatinangor dirumuskan terhadap urgensi, yaitu skor yang lebih tinggi menandakan prioritas pemasangan yang lebih besar (Seksi IV).
 

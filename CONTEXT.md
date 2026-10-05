@@ -128,7 +128,7 @@ CONTEXT.md                       # FILE INI (full context)
 02-data\screening-log-140.csv    # log screening subset kerja (BUKAN alur resmi)
 02-data\eligibility-12.csv       # lembar kerja full-text 12 (Keputusan terisi; Fokus menunggu PDF)
 02-data\tabel-paper-final.csv    # judul/abstrak/DOI/metode 12 inti
-02-data\data-charting-12.csv     # charting 12 paper, 6 kolom (No, Paper, Domain, Komponen DSS, Metode, Kriteria, Relevansi Jatinangor)
+02-data\data-charting-12.csv     # charting 12 paper, 8 kolom (No, Paper, Domain, Komponen DSS, Metode, Kriteria, Relevansi Jatinangor, Arah_Kriteria)
 03-sintesis\tahap-2-charting-sintesis.md  # charting detail per paper + sintesis B.1–B.4
 03-sintesis\tahap-2-charting-sintesis.tex # versi LaTeX, sama isi dengan .md
 03-sintesis\tahap-3-model.md              # rumusan model A1–A5, C1–C9, AHP, TOPSIS, tolak/tunda
