@@ -1,0 +1,145 @@
+PANDUAN TUGAS PROYEK 1
+
+
+Mata Kuliah		: Decision Support System
+Sifat Tugas		: Kelompok (5 Mahasiswa)
+Pendekatan		: Scoping Review (SCR) berbasis PRISMA-ScR
+Format Luaran	: Paper 
+Waktu Pengerjaan	: 3 Minggu (Dikumpulkan pada Pertemuan 8)
+
+1. Deskripsi & Tujuan Proyek
+Tugas proyek UTS ini bertujuan melatih kemampuan mahasiswa dalam menganalisis masalah perkotaan, melakukan pemetaan literatur ilmiah secara sistematis, dan merancang Model Konseptual DSS untuk inisiatif Smart City di kawasan Jatinangor.
+Mahasiswa akan menyusun Paper Ilmiah bertipe Scoping Review (SCR) untuk memetakan bagaimana arsitektur DSS diterapkan dalam literatur Smart City, lalu menggunakan hasil pemetaan tersebut sebagai dasar perancangan model konseptual DSS Jatinangor.
+
+2. Pilihan Domain Smart City Jatinangor
+Setiap kelompok wajib memilih satu topik kasus di kawasan Jatinangor:
+DSS Smart Mobility
+DSS Smart Environment
+DSS Smart Living & Safety
+DSS Smart Economy
+DSS Smart Health (Kesehatan & Fasilitas Medis)
+
+3. Contoh Rumusan Pertanyaan Penelitian (Research Questions)
+Paper SCR menjawab 3 pertanyaan penelitian berikut:
+RQ1 (Pemetaan Arsitektur DSS): Bagaimana pemetaan lanskap penggunaan DSS dalam domain Smart City, serta bagaimana alur komponen masukan, engine pemrosesan, dan keluaran sistem pada literatur terdahulu?
+RQ2 (Pemetaan Metode & Kriteria MCDM): Bagaimana sebaran penggunaan metode MCDM (mis SAW, WP, TOPSIS, AHP) serta taksonomi kriteria (benefit/cost) yang digunakan pada literatur DSS Smart City?
+RQ3 (Formulasi Model Konseptual Jatinangor): Bagaimana rancangan model konseptual DSS (alternatif, kriteria, skema pembobotan, dan justifikasi metode) yang paling relevan untuk diimplementasikan pada studi kasus kawasan Jatinangor berdasarkan hasil pemetaan SCR?
+
+4. Tahapan Pengerjaan (3 Minggu)
+Tahap 1: Search Strategy & PRISMA-ScR Flowchart
+Merumuskan kata kunci pencarian (search string) di database ilmiah (Scopus), Menetapkan kriteria inklusi dan eksklusi.
+Mengumpulkan minimal 10–15 paper acuan utama dan memetakannya dalam diagram alir PRISMA-ScR (PRISMA for Scoping Reviews).
+Tahap 2: Data Charting & MCDM Synthesis
+Membedah paper terpilih ke dalam tabel ekstraksi data 
+Menganalisis variasi arsitektur DSS, sebaran penggunaan metode MCDM, serta menyusun pemetaan taksonomi kriteria (benefit vs cost).
+Tahap 3: Conceptual Modeling & Paper Writing
+Merancang struktur masalah Jatinangor: merumuskan alternatif kawasan, struktur kriteria, dan skema pembobotan hasil sintesis SCR.
+Menyusun argumen dan justifikasi teoritis pemilihan metode MCDM.
+Finalisasi paper sesuai format IEEE.
+
+5. Sistematika Penulisan Paper (Format IEEE 2-Kolom)
+Paper diketik sebanyak 6–8 halaman menggunakan template IEEE: https://www.ieee.org/conferences/publishing/templates (Times New Roman 10pt, Single Space, Two-Column Layout).
+TITLE & ABSTRACT: Judul mencerminkan kajian Scoping Review DSS Smart City Jatinangor. Abstrak (150–250 kata) memuat latar belakang, tujuan, metode SCR, jumlah paper dikaji, dan ringkasan model konseptual yang diusulkan.
+I. PENDAHULUAN: Latar belakang masalah Smart City Jatinangor, urgensi pemetaan DSS/MCDM, batasan studi, dan penjelasan RQ1, RQ2, RQ3.
+II. METODOLOGI REVIU (SCR PROTOCOL): Search string, kriteria inklusi/eksklusi, dan Diagram Alir Seleksi Paper (PRISMA-ScR).
+III. HASIL DAN PEMBAHASAN (SCOPING REVIEW SYNTHESIS):
+Tabel Ekstraksi Literatur (Data Charting): Pemetaan 10–15 paper (Penulis, Domain, Komponen DSS, Metode MCDM, Kriteria Utama).
+Analisis RQ1 (Pemetaan Kerangka/Arsitektur DSS) dan RQ2 (Sebaran Metode MCDM & Taksonomi Kriteria).
+IV. PERANCANGAN MODEL KONSEPTUAL DSS JATINANGOR (Jawaban RQ3):
+Profil lokasi dan perumusan alternatif kasus di Jatinangor.
+Matriks struktur kriteria (cost/benefit), skala pengukuran, dan skema pembobotan rekomendasi SCR.
+Justifikasi teoritis pemilihan metode MCDM (SAW/WP/TOPSIS/AHP) yang cocok untuk karakteristik kasus.
+Diagram alur/arsitektur konseptual proses pengambilan keputusan.
+V. KESIMPULAN & ROADMAP SOFTWARE: Ringkasan hasil pemetaan SCR dan rencana alur sistem yang akan dikembangkan menjadi perangkat lunak/koding pasca-UTS (menuju UAS).
+DAFTAR PUSTAKA: Minimal 10–15 rujukan paper ilmiah (format IEEE).
+
+6. Rubrik Penilaian Proyek UTS
+No
+Indikator Evaluasi
+Fokus Penilaian
+Bobot
+1
+Kualitas Protokol SCR
+Kejelasan kriteria inklusi/eksklusi, formulasi search string, dan kedisiplinan alur seleksi literatur (diagram PRISMA-ScR).
+25%
+2
+Sintesis Pemetaan SCR (RQ1 & RQ2)
+Kedalaman pemetaan arsitektur/komponen DSS, sebaran metode MCDM (SAW/WP/TOPSIS/AHP), dan taksonomi kriteria dari literatur.
+25%
+3
+Formulasi Model Konseptual Jatinangor (RQ3)
+Kejelasan perumusan masalah Jatinangor, struktur kriteria/bobot rekomendasi hasil SCR, dan ketepatan argumentasi pemilihan metode MCDM.
+35%
+4
+Format Paper & Kualitas Akademis
+Kerapian struktur paper IEEE, tata bahasa formal, kejelasan analisis, dan ketepatan sitasi baku.
+15%
+Total
+100%
+
+
+NB: Dokumen akhir perlu mencantumkan deklarasi penggunaan Gen-AI
+
+
+
+
+
+
+
+SCOPING REVIEW (SCR)
+
+
+Apa itu Scoping Review (SCR)?
+Scoping Review (SCR) adalah metode kajian literatur yang bertujuan untuk memetakan lanskap penelitian (mapping the landscape), mengidentifikasi konsep-konsep kunci, mengeksplorasi tipe bukti ilmiah yang ada, serta menemukan celah penelitian (research gap) pada suatu topik yang luas.
+Dalam tugas ini, pendekatan SCR digunakan karena domain Smart City dan Decision Support System (DSS) memiliki variasi indikator, kriteria, dan penerapan metode yang sangat luas. Melalui SCR, laporan memetakan bagaimana peneliti-peneliti sebelumnya membangun model DSS, lalu mengadopsi temuan tersebut untuk merancang model konseptual di kawasan Jatinangor.
+
+
+Langkah-langkah Menggunakan PRISMA
+Identifikasi
+Peneliti menentukan strategi pencarian dengan merumuskan kata kunci utama, rentang waktu publikasi, dan database yang akan digunakan. Tahap ini penting untuk menjamin keluasan cakupan literatur. Contoh: pencarian dilakukan di Scopus dengan kata kunci “YOLO object detection AND UAV” antara tahun 2015–2025.
+Screening
+Hasil pencarian awal biasanya menghasilkan ratusan hingga ribuan artikel. Tahap ini melibatkan penghapusan duplikasi, pengecekan akses, dan peninjauan awal. Biasanya peninjauan dilakukan terhadap judul serta abstrak untuk menyingkirkan artikel yang tidak relevan.
+Eligibility
+Artikel yang tersisa kemudian dibaca secara penuh (full-text review) untuk menilai kesesuaian dengan kriteria inklusi (misalnya topik, metode, bahasa, atau konteks penelitian). Artikel yang tidak memenuhi kriteria akan dikeluarkan dengan alasan yang jelas.
+Inclusion
+Tahap akhir adalah penetapan artikel yang benar-benar digunakan untuk analisis dan sintesis hasil. Jumlah akhir ini akan dicatat dalam PRISMA Flow Diagram.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Scope
+Suggested Boolean Search String
+Expected Use
+Very broad
+("smart city" OR "smart cities") AND ("decision support system*" OR "decision support" OR DSS OR "decision-making system*")
+Starting search to estimate the overall literature volume. Likely broad and may retrieve well above the target.
+Broad–moderate
+("smart city" OR "smart cities" OR "urban intelligence" OR "intelligent city") AND ("decision support system*" OR "decision support" OR DSS) AND (planning OR management OR governance OR infrastructure)
+Broadens the smart-city terminology while constraining results to urban planning, management, governance, or infrastructure decisions.
+Moderate / recommended starting point
+("smart city" OR "smart cities") AND ("decision support system*" OR "decision-making support" OR "decision support tool*" OR DSS) AND ("urban planning" OR "urban management" OR governance OR transportation OR energy OR environment OR infrastructure)
+Recommended initial Scoping Review string. Captures DSS applications across major smart-city domains while preserving manageable conceptual boundaries.
+Focused
+("smart city" OR "smart cities") AND ("decision support system*" OR "decision support tool*" OR "decision-making framework*") AND ("artificial intelligence" OR "machine learning" OR "data analytics" OR "big data" OR IoT OR "Internet of Things") AND (planning OR management OR governance)
+Suitable if the review is intended to emphasize data-driven and AI-enabled decision support systems.
+Highly focused
+("smart city" OR "smart cities") AND ("decision support system*" OR "decision support tool*") AND ("artificial intelligence" OR "machine learning" OR "big data analytics" OR IoT) AND ("urban planning" OR "urban governance" OR "infrastructure management" OR "resource allocation") AND (framework* OR model* OR architecture* OR implementation)
+Suitable for a more tightly bounded Scoping Review on AI/data-enabled DSS architectures, frameworks, and implementation in smart-city management.
+
+
