@@ -1,0 +1,12 @@
+# lokal saja, tidak di-push
+.playwright-mcp/
+99-arsip/
+
+# artefak build LaTeX (jika compile lokal)
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
