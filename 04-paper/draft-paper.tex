@@ -5,6 +5,7 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
+\usepackage{booktabs}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -97,23 +98,23 @@ Kajian ini menggunakan pendekatan Scoping Review dengan seleksi studi mengikuti 
 
 Pencarian dilakukan pada database Scopus dengan sintaks berikut (format TITLE-ABS-KEY). Kata kunci disusun dari tiga kelompok konsep: konteks kawasan cerdas, sistem pendukung keputusan dan MCDM, serta aspek keselamatan-keamanan-pemantauan termasuk penempatan fasilitas pengawasan:
 
-\begingroup
-\small\ttfamily\raggedright
-TITLE-ABS-KEY (\\
-\quad ( "smart city" OR "smart cities" OR "smart living" OR "urban intelligence"
-  OR "smart environment*" OR "safe city" OR "smart campus" )\\
-\quad AND ( "decision support system*" OR "decision support"
-  OR "decision-making support" OR "decision support tool*"
-  OR "decision support framework*" OR "decision support model*"
-  OR DSS OR MCDM OR "multi-criteria decision*" )\\
-\quad AND ( safet* OR secur* OR surveillanc* OR crime* OR "public safety"
-  OR "safety management" OR "risk assessment" OR CCTV
-  OR "closed-circuit television" OR "surveillance camera*"
-  OR "camera placement" OR "sensor placement" OR "facility location"
-  OR "site selection" OR "street lighting" OR monitor* )\\
+{\small
+\begin{verbatim}
+TITLE-ABS-KEY (
+  ( "smart city" OR "smart cities" OR "smart living" OR "urban intelligence"
+    OR "smart environment*" OR "safe city" OR "smart campus" )
+  AND ( "decision support system*" OR "decision support"
+    OR "decision-making support" OR "decision support tool*"
+    OR "decision support framework*" OR "decision support model*"
+    OR DSS OR MCDM OR "multi-criteria decision*" )
+  AND ( safet* OR secur* OR surveillanc* OR crime* OR "public safety"
+    OR "safety management" OR "risk assessment" OR CCTV
+    OR "closed-circuit television" OR "surveillance camera*"
+    OR "camera placement" OR "sensor placement" OR "facility location"
+    OR "site selection" OR "street lighting" OR monitor* )
 )
-\par
-\endgroup
+\end{verbatim}
+}
 
 Protokol membatasi dokumen bertipe Article, berbahasa Inggris, terbit 2021--2026, dengan teks lengkap yang dapat diakses. Pencarian dilakukan pada \textbf{[TIM: tanggal pencarian]} dan menghasilkan \textbf{582 rekaman} (sebelum penyaringan tahun); tidak ada rekaman duplikat maupun rekaman yang dibuang oleh otomasi atau alasan lain.
 
@@ -122,25 +123,19 @@ Protokol membatasi dokumen bertipe Article, berbahasa Inggris, terbit 2021--2026
 \begin{table}[htbp]
 \caption{Kriteria Inklusi dan Eksklusi Studi}
 \label{tab:kriteria}
-\begin{center}
-\begin{tabular}{|p{0.6cm}|p{3.5cm}|p{3.5cm}|}
-\hline
+\centering
+\begin{tabular}{p{0.6cm}p{3.5cm}p{3.5cm}}
+\toprule
 \textbf{Kode} & \textbf{Kriteria Inklusi} & \textbf{Kriteria Eksklusi} \\
-\hline
+\midrule
 I1 & Artikel ilmiah bertipe Article, terbit 2021--2026, berbahasa Inggris, dengan teks lengkap yang dapat diakses & Bukan Article, di luar rentang tahun, berbahasa non-Ingris, atau teks lengkap tidak dapat diakses \\
-\hline
 I2 & Membahas DSS atau kerangka pengambilan keputusan terstruktur dalam konteks urban, smart city, smart living, keselamatan, keamanan, atau pemantauan & Tidak membahas DSS atau pendekatan pengambilan keputusan terstruktur \\
-\hline
 I3 & Menggunakan atau membahas metode MCDM/MCDA secara eksplisit (pembobotan, perankingan, atau evaluasi multi-kriteria) & Hanya machine learning, deep learning, optimasi murni, atau analitik lain tanpa MCDM eksplisit \\
-\hline
 I4 & Konteks penerapan transferable ke lingkungan perkotaan/hunian (penempatan fasilitas, risiko, prioritas, alokasi sumber daya) & Konteks di luar lingkungan perkotaan atau hunian (misal jaringan non-urban, kesehatan murni, manufaktur tertutup) \\
-\hline
 I5 & Berupa studi primer, bukan review/scoping review/systematic review & Publikasi review (hanya dipakai sebagai penelusuran pustaka, bukan objek sintesis) \\
-\hline
 I6 & Teks lengkap tersedia untuk diverifikasi pada tahap full-text review & Teks lengkap tidak diperoleh atau duplikat teridentifikasi \\
-\hline
+\bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \subsection{Proses Seleksi Studi}
@@ -149,12 +144,12 @@ Seleksi studi dilakukan dalam empat tahap sesuai PRISMA-ScR: (1) \textbf{identif
 
 Alur seleksi ditampilkan pada Gambar~\ref{fig:prisma}. Sebuah artikel yang substantifnya relevan namun terbit pada 2020 gugur pada tahap penyaringan tahun (bagian dari 166), yang dicatat sebagai bukti kedisiplinan protokol. Seluruh keputusan eksklusi beserta alasannya tercatat dalam log screening tim.
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
-\includegraphics[height=0.7\textheight]{prisma-diagram.png}
-\caption{Diagram alir seleksi studi berdasarkan PRISMA-ScR (582 $\rightarrow$ 166 $\rightarrow$ 416 $\rightarrow$ 121 $\rightarrow$ 12). Tanggal pencarian: [ISI TANGGAL].}
+\includegraphics[width=\columnwidth]{prisma-diagram.png}
+\caption{Diagram alir seleksi studi berdasarkan PRISMA-ScR (582 \textrightarrow{} 166 \textrightarrow{} 416 \textrightarrow{} 121 \textrightarrow{} 12). Tanggal pencarian: [ISI TANGGAL].}
 \label{fig:prisma}
-\end{figure*}
+\end{figure}
 
 \subsection{Ekstraksi dan Analisis Literatur}
 
@@ -170,37 +165,26 @@ Studi yang disertakan kemudian di-charting ke dalam tabel ekstraksi dengan kolom
 \caption{Ekstraksi Literatur (Data Charting)}
 \label{tab:charting}
 \setlength{\tabcolsep}{3pt}
-\begin{center}
-\begin{tabular}{|p{0.5cm}|p{1.9cm}|p{2.4cm}|p{4.4cm}|p{2.6cm}|p{2.6cm}|p{4.0cm}|}
-\hline
+\centering
+\small
+\begin{tabular}{p{0.5cm}p{1.6cm}p{1.9cm}p{3.6cm}p{2.2cm}p{2.2cm}p{3.4cm}}
+\toprule
 \textbf{No.} & \textbf{Penulis} & \textbf{Domain} & \textbf{Komponen DSS} & \textbf{Metode MCDM} & \textbf{Kriteria Utama} & \textbf{Relevansi Jatinangor} \\
-\hline
+\midrule
 1 & Wang et al. \cite{wang2025} & Penempatan kamera jalan, Wuwei RRT & Input simpul jalan + model coverage; engine MWVC + greedy; output titik kamera dan tiang optimal & Optimasi coverage MWVC (non-MCDM) & Coverage jalan (benefit); jumlah tiang dan kamera (cost) & Jangkar argumen anggaran (tiang 62 ke 33, kamera 196 ke 98, coverage 100\%); C4/C6/C7/C9 \\
-\hline
 2 & Gonzalez-Villa et al. \cite{gonzalez2024} & Counter-terrorism dan infrastruktur kritis (S4AllCities) & Input pergerakan pejalan/kendaraan + model ancaman; engine prediktif-probabilistik; output evakuasi dan rute intervensi & DSS simulasi terintegrasi (non-MCDM) & Probabilitas ancaman, egress time, estimasi korban & Pembanding arsitektur; pola simulasi ditolak untuk model UTS, dicatat sebagai varian ideal \\
-\hline
 3 & Feizizadeh \& Omarzadeh \cite{feizizadeh2025} & Pemetaan risiko pesepeda, Berlin & Input crowd-sensor + guna lahan; engine statistik spasial + MCDA-GIS; output peta risiko & Spatial-MCDA berbasis GIS & Volume lalu lintas, kondisi jalur, lingkungan, guna lahan, sosiodemografi & Template peta prioritas gang; C2/C5/C8 \\
-\hline
 4 & Ahmed et al. \cite{ahmed2022} & Smart campus, UAE & Input survei 4 kelompok pengguna; engine AHP antar-stakeholder + utility function; output tool keputusan investasi & AHP multistakeholder + utility function & Smart security and safety, navigasi kampus, adaptive learning & Skema AHP tiga kelompok; bukti safety terpenting di kawasan pendidikan; C8/C9 \\
-\hline
 5 & Choi et al. \cite{choi2025} & Teknologi hunian padat, Korea Selatan & Input 16 teknologi + panel 22 ahli; engine MCDM + expected utility 3 skenario; output prioritas teknologi & MCDM terintegrasi + expected utility & Importance dan utility per domain; smart safety teratas & Legitimasi fokus safety hunian padat; C5/C8 \\
-\hline
 6 & Kanj et al. \cite{kanj2024} & Rute barang berbahaya, smart city & Input data cloud + cost/duration/risk; engine Fuzzy AHP + Fuzzy TOPSIS; output rute teraman & Fuzzy AHP (bobot) + Fuzzy TOPSIS (ranking) & Cost, duration, risk & Justifikasi inti AHP-TOPSIS; C1/C9 \\
-\hline
 7 & Kabashkin et al. \cite{kabashkin2025} & Monitoring lalu lintas UAV, Astana & Input video 30 titik kritis; engine simulasi + kerangka MCDM; output evaluasi 6 skenario & MCDM evaluasi skenario berbasis simulasi & Flow, kecepatan, delay, kriteria skenario & Sampling titik kritis menjadi logika segmen gang; UAV diganti observasi manual; C2 \\
-\hline
 8 & Baddour et al. \cite{baddour2026} & Perencanaan diplomatic quarter & Input dataset urban publik; engine BWM + CoCoSo dengan komparasi AHP/TOPSIS/VIKOR; output ranking skenario & BWM (bobot) + CoCoSo (ranking); komparasi berangka & Security, accessibility, infrastructure, sustainability, resilience & Komparasi metode; alasan memilih AHP-TOPSIS (selisih kinerja kecil, lebih sederhana); C1/C8/C9 \\
-\hline
 9 & Almassawa et al. \cite{almassawa2024} & Kebijakan smart mobility, South Tangerang & Input indikator availability/security/comfort; engine PROMETHEE; output strategi kebijakan & PROMETHEE & Availability, security, comfort & Variasi metode; konteks Indonesia; C1 \\
-\hline
 10 & Shiddiqy et al. \cite{shiddiqy2025} & Arsitektur pertahanan IKN, Indonesia & Input dokumen kebijakan sekunder; engine SWOT + AHP; output prioritas komponen & SWOT + AHP & C4ISR, AI-surveillance, keamanan infrastruktur, kolaborasi & Bukti AHP dari data sekunder; bobot surveilans tinggi; C4/C7 \\
-\hline
 11 & Zheng et al. \cite{zheng2025} & Risiko banjir komunitas, Guangzhou & Input faktor alam-sosial + IoT + ArcGIS; engine DEMATEL-ISM + Bayesian Network; output risiko dan evaluasi intervensi & DEMATEL-ISM + Bayesian Network & Faktor alam dan sosial; kapasitas drainase & Logika intervensi terukur; toolchain Python + ArcGIS; C3/C9 \\
-\hline
 12 & Yuhang et al. \cite{yuhang2025} & Penempatan sensor grid, Guangzhou & Input proximity + kepadatan penduduk (EWM); engine BCSLP + genetic algorithm; output strategi balanced & EWM (bobot objektif) + optimasi coverage & Primary coverage, backup coverage, risiko, biaya & EWM sebagai validasi silang bobot; C4/C5/C7/C9 \\
-\hline
+\bottomrule
 \end{tabular}
-\end{center}
 \end{table*}
 
 Charting menunjukkan komponen DSS dapat dipetakan ke tiga lapisan umum: lapisan input (data spasial, observasi, survei pakar, data historis, citra/sensor), decision engine (MCDM, machine learning, fuzzy logic, jaringan Bayesian, simulasi, optimasi), dan decision output (peta risiko, skor, perankingan, rute, prioritas intervensi). Keberagaman domain di atas tidak diadopsi sebagai variabel fisiknya, melainkan diabstraksi menjadi pola arsitektur dan logika keputusan yang domain-agnostic.
@@ -247,25 +231,19 @@ Penting dicatat bahwa pola hybrid (kombinasi lebih dari satu engine) dominan dal
 \begin{table}[!t]
 \caption{Sebaran dan Peran Metode MCDM}
 \label{tab:metode}
-\begin{center}
-\begin{tabular}{|p{1.9cm}|p{2.8cm}|p{2.9cm}|}
-\hline
+\centering
+\begin{tabular}{p{1.9cm}p{2.8cm}p{2.9cm}}
+\toprule
 \textbf{Peran} & \textbf{Metode ditemukan} & \textbf{Studi pendukung} \\
-\hline
+\midrule
 Pembobotan subjektif (pakar) & AHP, Fuzzy AHP, BWM & \cite{ahmed2022,kanj2024,baddour2026,shiddiqy2025} \\
-\hline
 Pembobotan objektif (data) & Entropy Weight Method (EWM) & \cite{yuhang2025} \\
-\hline
 Perankingan alternatif & TOPSIS, Fuzzy TOPSIS, CoCoSo, PROMETHEE & \cite{kanj2024,baddour2026,almassawa2024} \\
-\hline
 Struktural/kausal & DEMATEL-ISM, Bayesian Network & \cite{zheng2025} \\
-\hline
 Evaluasi skenario spasial & Kerangka MCDM multi-skenario & \cite{kabashkin2025} \\
-\hline
 Pola pemenang (kombinasi) & AHP untuk bobot + TOPSIS untuk ranking & \cite{kanj2024} \\
-\hline
+\bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 Angka frekuensi dalam tabel tidak bersifat eksklusif: satu paper dapat memakai lebih dari satu metode, sehingga jumlah kemunculan tidak dijumlahkan menjadi persentase artikel. Aturan hitung pada sintesis: hanya pemakaian sebagai engine utama yang dihitung, sedangkan komparasi metode pada \cite{baddour2026} dicatat terpisah dan bukan sebagai pemakaian. Hasilnya AHP/Fuzzy AHP dipakai primer di 3 paper \cite{ahmed2022,kanj2024,shiddiqy2025}, sedangkan BWM, EWM, TOPSIS/Fuzzy TOPSIS, CoCoSo, PROMETHEE, DEMATEL-ISM dengan Bayesian Network, dan MCDM multi-skenario masing-masing dipakai primer di 1 paper; tiga studi non-MCDM memakai optimasi MWVC \cite{wang2025}, DSS simulasi terintegrasi \cite{gonzalez2024}, dan statistik spasial \cite{feizizadeh2025}. Dari 12 studi disertakan, AHP merupakan metode yang paling sering muncul secara eksplisit dan konsisten berperan sebagai weighting method, sedangkan TOPSIS dan varian fuzzy-nya berperan sebagai ranking method. Pola kombinasi AHP lalu TOPSIS pada \cite{kanj2024} menjadi template yang paling langsung dapat diadopsi. Dua metode yang sering disebut pada rubrik kajian sejenis, yaitu SAW dan WP, tidak ditemukan secara eksplisit dalam 12 studi inti ini, sehingga tidak dijadikan dasar justifikasi model. Selain itu, komparasi berangka pada \cite{baddour2026} menunjukkan selisih kinerja antarmetode relatif kecil (agreement pakar 92,8\% untuk BWM-CoCoSo berbanding 88,6\% untuk AHP-TOPSIS, dengan selisih robustness 0,91 berbanding 0,84), sehingga kesederhanaan dan ketersediaan pakar menjadi penentu pemilihan metode, bukan perburuan skor tertinggi.
@@ -273,19 +251,16 @@ Angka frekuensi dalam tabel tidak bersifat eksklusif: satu paper dapat memakai l
 \begin{table}[!t]
 \caption{Taksonomi Kriteria Keputusan}
 \label{tab:taksonomi}
-\begin{center}
-\begin{tabular}{|p{1.5cm}|p{2.7cm}|p{3.4cm}|}
-\hline
+\centering
+\begin{tabular}{p{1.5cm}p{2.7cm}p{3.4cm}}
+\toprule
 \textbf{Kelompok} & \textbf{Orientasi} & \textbf{Contoh dari literatur} \\
-\hline
+\midrule
 Benefit & Semakin tinggi semakin diprioritaskan (dalam konteks keputusan paper sumber) & Volume mobilitas dan aktivitas \cite{feizizadeh2025}; cakupan pengawasan \cite{wang2025,yuhang2025}; keamanan dan aksesibilitas \cite{baddour2026,almassawa2024} \\
-\hline
 Cost & Semakin rendah semakin dikehendaki & Jumlah perangkat dan biaya \cite{wang2025}; risiko kecelakaan \cite{kabashkin2025}; biaya implementasi \cite{baddour2026} \\
-\hline
 Context-dependent & Arah preferensi tidak eksplisit pada data charting paper sumber & Faktor yang orientasinya bergantung pada formulasi model masing-masing paper (diklasifikasikan berdasarkan tujuan keputusan, bukan nama variabel) \\
-\hline
+\bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 Taksonomi ini penting karena benefit dan cost merupakan sifat kriteria dalam suatu model keputusan, bukan sifat absolut dari nama variabel. Klasifikasi seluruh kriteria dilakukan terhadap tujuan keputusan paper sumber; ketika arah preferensi tidak eksplisit tercatat pada charting, kriteria dipisahkan sebagai context-dependent dan tidak dipaksa masuk biner benefit/cost. Seluruh arah kriteria pada model Jatinangor dirumuskan terhadap urgensi, yaitu skor yang lebih tinggi menandakan prioritas pemasangan yang lebih besar (Seksi IV).
@@ -297,33 +272,23 @@ Taksonomi ini penting karena benefit dan cost merupakan sifat kriteria dalam sua
 \begin{table}[!t]
 \caption{Sintesis Temuan Literatur dan Implikasi}
 \label{tab:sintesis}
-\begin{center}
-\begin{tabular}{|p{1.5cm}|p{3.0cm}|p{3.1cm}|}
-\hline
+\centering
+\begin{tabular}{p{1.5cm}p{3.0cm}p{3.1cm}}
+\toprule
 \textbf{Aspek} & \textbf{Temuan literatur} & \textbf{Implikasi untuk Jatinangor} \\
-\hline
+\midrule
 Arsitektur & Lima pola; hybrid dominan; kebutuhan data antarpola berbeda jauh & Pakai baseline GIS-MCDM + optimasi coverage + expert-driven \\
-\hline
 Input & Spasial, observasi, survei pakar, data historis, sensor/citra & Cukup data diskrit lokal: survei, OSM, rekap insiden, RAB \\
-\hline
 Decision engine & MCDM, ML, fuzzy, simulasi, optimasi & MCDM dipilih karena transparan dan dapat diverifikasi pakar \\
-\hline
 Pembobotan & Banyak berbasis pakar (AHP, BWM) & AHP tiga kelompok pemangku kepentingan (AHP primer di 3 studi) \\
-\hline
 Perankingan & TOPSIS, CoCoSo, PROMETHEE & TOPSIS karena ringkas dan sejalan pola pemenang \cite{kanj2024} \\
-\hline
 Benefit & Cakupan, aktivitas, keamanan, kepadatan & Menjadi orientasi skor C1--C9 terhadap urgensi \\
-\hline
 Cost & Biaya, risiko, jumlah perangkat & Diperlakukan sebagai kendala anggaran dan kriteria kelayakan \\
-\hline
 Context-dependent & Bergantung formulasi model & Kriteria tanpa arah eksplisit tidak dipaksa biner \\
-\hline
 Output & Peta risiko, skor, peringkat, prioritas & Peta prioritas segmen gang + urutan pemasangan bertahap \\
-\hline
 Transferability & Bergantung kebutuhan data dan kompleksitas & Kelayakan adopsi diuji pada tiga dimensi (Seksi IV-E) \\
-\hline
+\bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \section{PERANCANGAN MODEL KONSEPTUAL DSS JATINANGOR (JAWABAN RQ3)}
@@ -337,23 +302,18 @@ Jatinangor dibagi menjadi beberapa desa dengan pola hunian campuran: permukiman 
 \begin{table}[htbp]
 \caption{Alternatif Segmen (A1--A5)}
 \label{tab:alternatif}
-\begin{center}
-\begin{tabular}{|p{0.9cm}|p{6.7cm}|}
-\hline
+\centering
+\begin{tabular}{p{0.9cm}p{6.7cm}}
+\toprule
 \textbf{Kode} & \textbf{Segmen (contoh operasional, nama final dari observasi lapangan)} \\
-\hline
+\midrule
 A1 & Gang kos kawasan Sayang (padat, akses sempit) \\
-\hline
 A2 & Ruas jalan Cikeruh dekat gerbang kampus \\
-\hline
 A3 & Persimpangan Hegarmanah (simpul multi-cabang) \\
-\hline
 A4 & Gang Cipacing (minim PJU) \\
-\hline
 A5 & Ruas Cileles (jalur mobilitas malam) \\
-\hline
+\bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 Aturan penentuan alternatif: 4--6 segmen; setiap alternatif mewakili satu segmen yang layak menerima tepat satu unit CCTV; nama final ditetapkan berdasarkan observasi lapangan. Alternatif segmen diadopsi dari \cite{wang2025} karena unit keputusannya berupa simpul atau segmen jalan dengan coverage terukur, dan dari \cite{feizizadeh2025} karena format peta prioritas spasialnya dapat direplikasi menjadi peta prioritas gang di Jatinangor.
@@ -366,31 +326,23 @@ Sembilan kriteria dirumuskan dengan satu arah tunggal: skor lebih tinggi berarti
 \caption{Matriks Kriteria Keselamatan C1--C9}
 \label{tab:kriteria}
 \setlength{\tabcolsep}{4pt}
-\begin{center}
-\begin{tabular}{|p{0.8cm}|p{2.6cm}|p{4.6cm}|p{1.7cm}|p{4.6cm}|p{3.4cm}|}
-\hline
+\centering
+\small
+\begin{tabular}{p{0.7cm}p{2.2cm}p{3.8cm}p{1.4cm}p{3.8cm}p{2.9cm}}
+\toprule
 \textbf{Kode} & \textbf{Kriteria} & \textbf{Definisi operasional} & \textbf{Satuan} & \textbf{Sumber data (utama / fallback)} & \textbf{Rujukan} \\
-\hline
+\midrule
 C1 & Riwayat kerawanan segmen & Kejadian kriminalitas/kecelakaan per km per tahun & kejadian/km/th & Rekap insiden / observasi + wawancara RT & \cite{kanj2024,baddour2026,almassawa2024,feizizadeh2025} \\
-\hline
 C2 & Volume mobilitas malam & Orang lewat pukul 18.00--24.00 & orang/jam & Counting manual / CCTV eksisting & \cite{feizizadeh2025,kabashkin2025,almassawa2024} \\
-\hline
 C3 & Defisiensi penerangan & Kekurangan cahaya PJU (skor survei) & skor 1--5 & Survei malam / data dinas (fallback: observasi) & \cite{baddour2026,zheng2025} \\
-\hline
 C4 & Efisiensi coverage & Luas ter-cover per titik CCTV & m2/titik & Pemetaan + model coverage & \cite{wang2025,yuhang2025} \\
-\hline
 C5 & Kepadatan penghuni & Kamar kos per km gang & kamar/km & Pendataan kos / data desa & \cite{yuhang2025,feizizadeh2025,choi2025} \\
-\hline
 C6 & Derajat simpul jalan & Jumlah cabang persimpangan & cabang & OpenStreetMap + observasi & \cite{wang2025} \\
-\hline
 C7 & Coverage gap CCTV eksisting & Jarak ke CCTV terdekat & meter & Survei titik CCTV & \cite{wang2025,yuhang2025} \\
-\hline
 C8 & Kedekatan guna lahan rentan & Radius 150 m ke kos, ATM, warung 24 jam, gerbang kampus & unit & Observasi + POI & \cite{feizizadeh2025,baddour2026,ahmed2022} \\
-\hline
 C9 & Kelayakan implementasi & Kesiapan tiang/listrik/internet dikurangi estimasi biaya & skor & Survei jaringan + RAB & \cite{kanj2024,wang2025,baddour2026} \\
-\hline
+\bottomrule
 \end{tabular}
-\end{center}
 \end{table*}
 
 \textbf{Validasi rujukan kriteria:} C1 didukung \cite{kanj2024,baddour2026,almassawa2024}; C2 oleh \cite{feizizadeh2025,kabashkin2025,almassawa2024}; C3 oleh \cite{baddour2026,zheng2025}; C4 oleh \cite{wang2025,yuhang2025}; C5 oleh \cite{yuhang2025,feizizadeh2025,choi2025}; C7 oleh \cite{wang2025,yuhang2025}; C8 oleh \cite{feizizadeh2025,baddour2026,ahmed2022}; dan C9 oleh \cite{kanj2024,wang2025,baddour2026}. Delapan dari sembilan kriteria ditelusuri ke minimal dua studi. C6 (derajat simpul jalan) hanya didukung eksplisit oleh \cite{wang2025} yang menjadikan adjacency degree sebagai bobot vertex utama; keterbatasan satu rujukan ini dicatat apa adanya, dengan penguatan tidak langsung dari pola struktur jaringan pada \cite{yuhang2025}.
