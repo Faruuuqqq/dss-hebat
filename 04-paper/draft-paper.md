@@ -154,7 +154,7 @@ Penting dicatat bahwa pola hybrid (kombinasi lebih dari satu engine) dominan dal
 | Evaluasi skenario spasial | Kerangka MCDM multi-skenario | [7] |
 | Pola pemenang (kombinasi) | AHP untuk bobot + TOPSIS untuk ranking | [6] |
 
-Angka frekuensi dalam tabel tidak bersifat eksklusif: satu paper dapat memakai lebih dari satu metode, sehingga jumlah kemunculan tidak dijumlahkan menjadi persentase artikel. Dari 12 studi disertakan, AHP merupakan metode yang paling sering muncul secara eksplisit dan konsisten berperan sebagai weighting method, sedangkan TOPSIS dan varian fuzzy-nya berperan sebagai ranking method. Pola kombinasi AHP lalu TOPSIS pada [6] menjadi template yang paling langsung dapat diadopsi. Dua metode yang sering disebut pada rubrik kajian sejenis, yaitu SAW dan WP, tidak ditemukan secara eksplisit dalam 12 studi inti ini, sehingga tidak dijadikan dasar justifikasi model. Selain itu, komparasi berangka pada [8] menunjukkan selisih kinerja antarmetode relatif kecil ( agreement pakar 92,8% untuk BWM-CoCoSo berbanding 88,6% untuk AHP-TOPSIS, dengan selisih robustness 0,91 berbanding 0,84), sehingga kesederhanaan dan ketersediaan pakar menjadi penentu pemilihan metode, bukan perburuan skor tertinggi.
+Angka frekuensi dalam tabel tidak bersifat eksklusif: satu paper dapat memakai lebih dari satu metode, sehingga jumlah kemunculan tidak dijumlahkan menjadi persentase artikel. Aturan hitung pada sintesis: hanya pemakaian sebagai engine utama yang dihitung, sedangkan komparasi metode pada [8] dicatat terpisah dan bukan sebagai pemakaian. Hasilnya AHP/Fuzzy AHP dipakai primer di 3 paper [4], [6], [10], sedangkan BWM, EWM, TOPSIS/Fuzzy TOPSIS, CoCoSo, PROMETHEE, DEMATEL-ISM dengan Bayesian Network, dan MCDM multi-skenario masing-masing dipakai primer di 1 paper; tiga studi non-MCDM memakai optimasi MWVC [1], DSS simulasi terintegrasi [2], dan statistik spasial [3]. Dari 12 studi disertakan, AHP merupakan metode yang paling sering muncul secara eksplisit dan konsisten berperan sebagai weighting method, sedangkan TOPSIS dan varian fuzzy-nya berperan sebagai ranking method. Pola kombinasi AHP lalu TOPSIS pada [6] menjadi template yang paling langsung dapat diadopsi. Dua metode yang sering disebut pada rubrik kajian sejenis, yaitu SAW dan WP, tidak ditemukan secara eksplisit dalam 12 studi inti ini, sehingga tidak dijadikan dasar justifikasi model. Selain itu, komparasi berangka pada [8] menunjukkan selisih kinerja antarmetode relatif kecil ( agreement pakar 92,8% untuk BWM-CoCoSo berbanding 88,6% untuk AHP-TOPSIS, dengan selisih robustness 0,91 berbanding 0,84), sehingga kesederhanaan dan ketersediaan pakar menjadi penentu pemilihan metode, bukan perburuan skor tertinggi.
 
 **Tabel IV. TAKSONOMI KRITERIA KEPUTUSAN**
 
@@ -177,7 +177,7 @@ Taksonomi ini penting karena benefit dan cost merupakan sifat kriteria dalam sua
 | Arsitektur | Lima pola; hybrid dominan; kebutuhan data antarpola berbeda jauh | Pakai baseline GIS-MCDM + optimasi coverage + expert-driven |
 | Input | Spasial, observasi, survei pakar, data historis, sensor/citra | Cukup data diskrit lokal: survei, OSM, rekap insiden, RAB |
 | Decision engine | MCDM, ML, fuzzy, simulasi, optimasi | MCDM dipilih karena transparan dan dapat diverifikasi pakar |
-| Pembobotan | Banyak berbasis pakar (AHP, BWM) | AHP tiga kelompok pemangku kepentingan |
+| Pembobotan | Banyak berbasis pakar (AHP, BWM) | AHP tiga kelompok pemangku kepentingan (AHP primer di 3 studi) |
 | Perankingan | TOPSIS, CoCoSo, PROMETHEE | TOPSIS karena ringkas dan sejalan pola pemenang [6] |
 | Benefit | Cakupan, aktivitas, keamanan, kepadatan | Menjadi orientasi skor C1-C9 terhadap urgensi |
 | Cost | Biaya, risiko, jumlah perangkat | Diperlakukan sebagai kendala anggaran dan kriteria kelayakan |
@@ -197,11 +197,11 @@ Jatinangor dibagi menjadi beberapa desa dengan pola hunian campuran: permukiman 
 
 | Kode | Segmen (contoh operasional, nama final dari observasi lapangan) |
 |---|---|
-| A1 | Gang kos kawasan padat (akses sempit, kepadatan tinggi) |
-| A2 | Ruas jalan utama dekat gerbang kampus |
-| A3 | Persimpangan multi-cabang (simpul perpotongan) |
-| A4 | Gang residensial dengan penerangan minim |
-| A5 | Ruas koridor mobilitas malam |
+| A1 | Gang kos kawasan Sayang (padat, akses sempit) |
+| A2 | Ruas jalan Cikeruh dekat gerbang kampus |
+| A3 | Persimpangan Hegarmanah (simpul multi-cabang) |
+| A4 | Gang Cipacing (minim PJU) |
+| A5 | Ruas Cileles (jalur mobilitas malam) |
 
 Aturan penentuan alternatif: 4-6 segmen; setiap alternatif mewakili satu segmen yang layak menerima tepat satu unit CCTV; nama final ditetapkan berdasarkan observasi lapangan. Alternatif segmen diadopsi dari [1] karena unit keputusannya berupa simpul atau segmen jalan dengan coverage terukur, dan dari [3] karena format peta prioritas spasialnya dapat direplikasi menjadi peta prioritas gang di Jatinangor.
 
@@ -225,21 +225,23 @@ Sembilan kriteria dirumuskan dengan satu arah tunggal: skor lebih tinggi berarti
 
 **Validasi rujukan kriteria:** C1 didukung [6], [8], [9]; C2 oleh [3], [7], [9]; C3 oleh [8], [11]; C4 oleh [1], [12]; C5 oleh [12], [3], [5]; C7 oleh [1], [12]; C8 oleh [3], [8], [4]; dan C9 oleh [6], [1], [8]. Delapan dari sembilan kriteria ditelusuri ke minimal dua studi. C6 (derajat simpul jalan) hanya didukung eksplisit oleh [1] yang menjadikan adjacency degree sebagai bobot vertex utama; keterbatasan satu rujukan ini dicatat apa adanya, dengan penguatan tidak langsung dari pola struktur jaringan pada [12].
 
+**Urutan prioritas kriteria:** berdasarkan frekuensi dukungan di 12 studi, dengan seri yang diputus menurut relevansi langsung terhadap keputusan penempatan CCTV (kendala anggaran dan paparan didahulukan atas faktor pendukung), urutannya adalah C1 > C9 > C2 > C5 > C8 > C4 > C7 > C3 > C6. C1 menempati urutan pertama dengan dukungan 4 studi sebagai inti urgensi pemasangan; C9 kedua sebagai jangkar kelayakan anggaran [1]; C6 terakhir karena bersumber tunggal.
+
 ### C. Skema Pembobotan AHP dan Perankingan TOPSIS
 
 **Pembobotan AHP multistakeholder** mengadopsi skema AHP lintas kelompok dari [4] karena studi itu membuktikan AHP dapat mempertemukan persepsi empat kelompok pengguna dalam satu bobot konsensus, dengan angka acuan konsistensi dan komparasi dari [8] dan [10] yang keduanya menunjukkan AHP berjalan valid bahkan dengan data sekunder:
 
 1. Responden tiga kelompok: (a) pemerintah daerah (dinas terkait, kecamatan), (b) kampus dan pengelola kawasan, (c) warga (RT, pemilik kos).
 2. Kuesioner pairwise comparison sembilan kriteria per kelompok dengan skala Saaty 1-9.
-3. Agregasi antarkelompok menggunakan geometric mean; uji Consistency Ratio dengan ambang CR < 0,1 [FULLTEXT-VERIFY: angka acuan CR 0,046 dari [8]].
-4. Validasi silang opsional: bobot objektif Entropy Weight Method dari data lapangan [12] sebagai pembanding terhadap bobot subjektif AHP.
+3. Agregasi antarkelompok menggunakan geometric mean; uji Consistency Ratio dengan ambang CR < 0,1 [FULLTEXT-VERIFY: angka acuan CR 0,046 dari [8]], dihitung lewat lamda-maks, CI = (lamda-maks - n)/(n - 1), dan CR = CI/RI dengan RI untuk n = 9 sebesar 1,45.
+4. Validasi silang opsional: bobot objektif Entropy Weight Method dari data lapangan [12] sebagai pembanding terhadap bobot subjektif AHP; selisih besar memicu diskusi ulang dengan pakar, bukan penggantian otomatis.
 
 **Perankingan TOPSIS** mengadopsi pola pemenang AHP-TOPSIS dari [6] karena kombinasi itu terbukti menyelesaikan perankingan multi-kriteria dengan kriteria ringkas tanpa infrastruktur komputasi berat:
 
 1. Matriks keputusan A1-A5 terhadap C1-C9 dari data lapangan.
-2. Normalisasi matriks dan pengalikan bobot AHP.
-3. Perhitungan jarak ke solusi ideal positif dan negatif, lalu closeness coefficient untuk menetapkan peringkat prioritas pemasangan.
-4. Analisis sensitivitas bobot sebesar ±20% untuk menguji ketahanan peringkat, mengikuti praktik sensitivitas pada [8].
+2. Normalisasi kolom matriks lalu pengalikan bobot AHP menjadi matriks terbobot.
+3. Perhitungan jarak tiap alternatif ke solusi ideal positif dan negatif, lalu closeness coefficient C(i) = D-(i)/(D+(i) + D-(i)) untuk menetapkan peringkat prioritas pemasangan dari nilai terbesar.
+4. Analisis sensitivitas bobot sebesar ±20% untuk menguji ketahanan peringkat, mengikuti praktik sensitivitas pada [8]; peringkat dinyatakan robust bila posisinya tidak berubah.
 
 Justifikasi teoritis pemilihan metode: dari kandidat metode pembobotan dan perankingan yang lazim (SAW, WP, TOPSIS, AHP), kombinasi AHP-TOPSIS yang dipilih karena (a) terbukti dipakai berpasangan dalam literatur korpus ini [6], (b) AHP mengakomodasi penilaian pakar secara konsisten, sesuai ketersediaan data Jatinangor, sebagaimana dibuktikan AHP berjalan dari data sekunder pada [10], (c) TOPSIS ringkas, transparan, dan menangani kompromi benefit-cost secara langsung, sementara selisih kinerja terhadap metode lebih kompleks ternyata kecil menurut komparasi berangka [8], dan (d) SAW dan WP tidak ditemukan eksplisit pada 12 studi inti, sehingga tidak memiliki dukungan bukti dalam protokol ini.
 
@@ -279,7 +281,7 @@ Kelayakan model diuji pada tiga dimensi. **Pertama, kebutuhan data:** seluruh in
 
 ## V. KESIMPULAN DAN ROADMAP SOFTWARE
 
-Kajian ini memetakan 12 studi literatur melalui protokol PRISMA-ScR dan menemukan lima pola arsitektur DSS keselamatan perkotaan, sebaran metode MCDM dengan pola dominan AHP untuk pembobotan dan TOPSIS untuk perankingan, serta taksonomi kriteria benefit, cost, dan context-dependent. Dari sintesis tersebut dirancang model konseptual DSS prioritisasi CCTV untuk Jatinangor: alternatif segmen gang A1-A5, matriks kriteria C1-C9 dengan satu arah terhadap urgensi, pembobotan AHP tiga kelompok pemangku kepentingan, perankingan TOPSIS dengan analisis sensitivitas, dan arsitektur empat lapisan berbasis data diskrit.
+Kajian ini memetakan 12 studi literatur melalui protokol PRISMA-ScR dan menemukan lima pola arsitektur DSS keselamatan perkotaan, sebaran metode MCDM dengan pola dominan AHP untuk pembobotan dan TOPSIS untuk perankingan, serta taksonomi kriteria benefit, cost, dan context-dependent. Dari sintesis tersebut dirancang model konseptual DSS prioritisasi CCTV untuk Jatinangor: alternatif segmen gang A1-A5, matriks kriteria C1-C9 dengan satu arah terhadap urgensi dan urutan prioritas C1>C9>C2>C5>C8>C4>C7>C3>C6, pembobotan AHP tiga kelompok pemangku kepentingan, perankingan TOPSIS dengan analisis sensitivitas, dan arsitektur empat lapisan berbasis data diskrit.
 
 Roadmap pengembangan menuju perangkat lunak pasca-UTS:
 
