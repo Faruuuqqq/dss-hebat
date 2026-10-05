@@ -108,8 +108,9 @@ GIS-MCDM (#31/#11/#46) DIPAKAI | optimasi coverage (#39/#56) DIPAKAI | expert-dr
 **RQ3 — model** (`03-sintesis\tahap-3-model.md`):
 - **Alternatif A1–A5** = segmen gang (nama final dari lapangan; aturan 4–6 segmen, 1 unit CCTV per segmen).
 - **9 kriteria C1–C9:** C1 riwayat kerawanan | C2 mobilitas malam | C3 defisiensi penerangan | C4 efisiensi coverage | C5 kepadatan penghuni | C6 derajat simpul | C7 gap CCTV eksisting | C8 kedekatan guna lahan rentan | C9 kelayakan implementasi. Validasi: 8 dari 9 kriteria ≥2 paper; **C6 bersumber tunggal #39** (jujur dicatat).
-- **AHP:** 3 kelompok (pemerintah/kampus/warga), skala Saaty 1–9, agregasi geometric mean, CR<0,1 (angka acuan 0,046 dari [8] — masih ditandai `[FULLTEXT-VERIFY]`), validasi silang opsional EWM [12].
-- **TOPSIS:** matriks → normalisasi → bobot → jarak ideal → closeness → ranking; sensitivitas ±20% [8].
+- **Urutan prioritas kriteria** (frekuensi + tiebreak relevansi CCTV): C1 > C9 > C2 > C5 > C8 > C4 > C7 > C3 > C6.
+- **AHP:** 3 kelompok (pemerintah/kampus/warga), skala Saaty 1–9, agregasi geometric mean, CR<0,1 (angka acuan 0,046 dari [8] — masih ditandai `[FULLTEXT-VERIFY]`), validasi silang opsional EWM [12]. Rumus lengkap + contoh hitung 3-kriteria berlabel ILUSTRASI (w = 0,539/0,164/0,297; CR = 0,008) — bukan data lapangan.
+- **TOPSIS:** matriks → normalisasi → bobot → jarak ideal → closeness → ranking; sensitivitas ±20% [8]. Contoh closeness dummy berlabel ILUSTRASI (S3 0,768 > S1 0,682 > S2 0,192).
 - **Arsitektur 4 lapis:** Input (data diskrit) → Preprocessing (kodifikasi A1–A5) → Decision Engine (AHP+TOPSIS+GIS) → Output (peringkat + peta prioritas + urutan pemasangan bertahap).
 - **Ditolak:** simulasi operasional #45 (kalibrasi mahal); BWM-CoCoSo #83 (selisih kecil, pakar tak ada). **Ditunda:** response time/egress #45. **Dicatat:** #121 gugur tahun.
 

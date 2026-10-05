@@ -109,6 +109,23 @@
 
 ### B.1 Taksonomi arsitektur DSS (jawaban RQ1)
 
+Matriks komponen per paper (abstraksi domain-agnostic: yang dipakai untuk model Jatinangor adalah pola alurnya, bukan variabel fisiknya):
+
+| Paper | Input | Engine | Output |
+|---|---|---|---|
+| #39 Wang | Simpul jalan + derajat adjacency + model coverage | MWVC + greedy | Titik kamera/tiang optimal, coverage 100% |
+| #45 S4AllCities | Pergerakan pejalan/kendaraan + model ancaman | Prediktif + probabilistik (simulasi) | Evakuasi, egress time, rute intervensi |
+| #31 Feizizadeh | Crowd-sensor + volume + guna lahan + sosiodemografi | Statistik spasial + MCDA-GIS | Peta risiko spasial |
+| #37 Ahmed | Survei 4 kelompok + kriteria literatur | AHP antar-stakeholder + utility | Tool keputusan investasi |
+| #126 Choi | 16 teknologi + panel 22 ahli | MCDM + expected utility 3 skenario | Prioritas teknologi/domain |
+| #14 Kanj | Data cloud + cost/duration/risk | Fuzzy AHP + Fuzzy TOPSIS | Rute teraman (statis vs dinamis) |
+| #46 Kabashkin | Video UAV 30 titik + flow/speed/delay | Simulasi + kerangka MCDM | Evaluasi 6 skenario |
+| #83 Baddour | Dataset urban publik | BWM + CoCoSo (komparasi AHP/TOPSIS/VIKOR) | Ranking skenario |
+| #96 Almassawa | Indikator availability/security/comfort | PROMETHEE | Strategi kebijakan |
+| #74 Shiddiqy | Dokumen kebijakan sekunder | SWOT + AHP | Prioritas komponen berbobot |
+| #11 Zheng | Faktor alam-sosial + IoT + ArcGIS | DEMATEL-ISM + Bayesian Network | Risiko + evaluasi intervensi |
+| #56 Yuhang | Proximity + kepadatan (EWM) | BCSLP + Genetic Algorithm | Strategi coverage balanced |
+
 | Pola | Paper pendukung | Nasib di model Jatinangor |
 |---|---|---|
 | GIS-MCDM dan evaluasi skenario spasial | #31, #11, #46 | DIPAKAI sebagai arsitektur utama (menggantikan template #121 yang gugur aturan tahun) |
@@ -118,6 +135,25 @@
 | Policy-MCDA | #96, #74 | DIPAKAI untuk framing rekomendasi kebijakan |
 
 ### B.2 Sebaran metode MCDM (jawaban RQ2)
+
+Frekuensi pemakaian primer (aturan hitung: metode yang dipakai sebagai engine utama paper; komparator pada #83 dicatat terpisah, bukan sebagai pemakai):
+
+| Metode | Dipakai primer di | Frekuensi |
+|---|---|---|
+| AHP / Fuzzy AHP (pembobotan) | #37, #14, #74 | 3 paper |
+| BWM (pembobotan) | #83 | 1 paper |
+| Entropy Weight Method (pembobotan objektif) | #56 | 1 paper |
+| TOPSIS / Fuzzy TOPSIS (perankingan) | #14 | 1 paper |
+| CoCoSo (perankingan) | #83 | 1 paper |
+| PROMETHEE (perankingan) | #96 | 1 paper |
+| DEMATEL-ISM + Bayesian Network (struktural) | #11 | 1 paper |
+| MCDM multi-skenario (evaluasi spasial) | #46 | 1 paper |
+| MCDM + expected utility (multi-skenario) | #126 | 1 paper |
+| Non-MCDM: MWVC+greedy (optimasi) | #39 | 1 paper |
+| Non-MCDM: DSS simulasi terintegrasi | #45 | 1 paper |
+| Non-MCDM: statistik spasial + MCDA-GIS | #31 | 1 paper |
+
+Catatan komparasi (bukan pemakaian primer): #83 membandingkan BWM-CoCoSo vs AHP-TOPSIS vs VIKOR (agreement pakar 92,8% vs 88,6%; robustness 0,91 vs 0,84; CR 0,046 vs 0,071). SAW dan WP tidak ditemukan eksplisit pada 12 studi inti.
 
 | Peran | Metode dominan | Paper |
 |---|---|---|
@@ -129,6 +165,20 @@
 | Pola pemenang | AHP (bobot) + TOPSIS (ranking) | #14 |
 
 ### B.3 Taksonomi kriteria benefit/cost (jawaban RQ2, bahan RQ3)
+
+Frekuensi dukungan tiap kriteria model terhadap korpus (arah dirumuskan terhadap urgensi: skor tinggi = makin prioritas):
+
+| Kriteria | Muncul di paper | Frekuensi |
+|---|---|---|
+| C1 Riwayat kerawanan | #83, #14, #96, #31 | 4 paper |
+| C2 Volume mobilitas malam | #31, #46, #96 | 3 paper |
+| C5 Kepadatan penghuni | #56, #31, #126 | 3 paper |
+| C8 Kedekatan guna lahan rentan | #31, #83, #37 | 3 paper |
+| C9 Kelayakan implementasi | #14, #39, #83 | 3 paper |
+| C3 Defisiensi penerangan | #83, #11 | 2 paper |
+| C4 Efisiensi coverage | #39, #56 | 2 paper |
+| C7 Coverage gap CCTV eksisting | #39, #56 | 2 paper |
+| C6 Derajat simpul jalan | #39 | 1 paper (sumber tunggal, dicatat apa adanya) |
 
 Semua arah dirumuskan terhadap urgensi (skor tinggi = makin prioritas): kriminalitas dan risiko (#83, #14, #96); mobilitas dan volume (#31, #96); infrastruktur dan penerangan (#83, #11); coverage dan gap (#39, #56); kepadatan hunian (#56, #31, #126); guna lahan dan proximity (#31, #83, #37); biaya dan kesiapan (#14, #39, #83).
 
