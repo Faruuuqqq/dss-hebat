@@ -12,7 +12,9 @@ Scoping review PRISMA-ScR + model konseptual AHP-TOPSIS. **Mulai dari `CONTEXT.m
 02-data\tabel-paper-final.csv        # metadata 12 paper inti
 02-data\data-charting-12.csv          # charting ringkas 12 paper
 03-sintesis\tahap-2-charting-sintesis.md  # charting detail + sintesis RQ1/RQ2
+03-sintesis\tahap-2-charting-sintesis.tex # versi LaTeX (sama isi)
 03-sintesis\tahap-3-model.md             # model A1-A5 + C1-C9 + AHP-TOPSIS
+03-sintesis\tahap-3-model.tex            # versi LaTeX (sama isi)
 04-paper\draft-paper.md               # DRAF paper (bukan final, masih ada [TIM]/[FULLTEXT-VERIFY])
 04-paper\draft-paper.tex              # naskah LaTeX IEEEtran conference (Gambar 1 = PNG; lint lolos, belum dicompile)
 04-paper\prisma-diagram.svg           # diagram PRISMA alur resmi 582→12

@@ -130,7 +130,9 @@ CONTEXT.md                       # FILE INI (full context)
 02-data\tabel-paper-final.csv    # judul/abstrak/DOI/metode 12 inti
 02-data\data-charting-12.csv     # charting 12 paper, 6 kolom (No, Paper, Domain, Komponen DSS, Metode, Kriteria, Relevansi Jatinangor)
 03-sintesis\tahap-2-charting-sintesis.md  # charting detail per paper + sintesis B.1–B.4
+03-sintesis\tahap-2-charting-sintesis.tex # versi LaTeX, sama isi dengan .md
 03-sintesis\tahap-3-model.md              # rumusan model A1–A5, C1–C9, AHP, TOPSIS, tolak/tunda
+03-sintesis\tahap-3-model.tex             # versi LaTeX, sama isi dengan .md
 04-paper\draft-paper.md          # DRAF LENGKAP paper (semua seksi I–V + 12 referensi IEEE)
 04-paper\draft-paper.tex         # naskah LaTeX IEEEtran conference (Gambar 1 sudah pakai PNG; lint lolos, BELUM dicompile — mesin ini tak punya LaTeX)
 04-paper\prisma-diagram.svg      # PRISMA alur resmi 582→12 (tanggal masih [ISI TANGGAL])
