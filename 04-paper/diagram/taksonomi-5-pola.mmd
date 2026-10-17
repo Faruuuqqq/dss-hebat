@@ -1,17 +1,14 @@
-%% Gambar 2 — Taksonomi lima pola arsitektur DSS (pengganti blok ASCII).
-%% Cara pakai: paste seluruh isi file ini ke https://mermaid.live
-%%   lalu Export > PNG (skala 2-3x). Simpan sebagai:
-%%   04-paper/gambar-2-taksonomi.png (sejajar dengan draft-paper.tex).
-%% Isi = blok verbatim Seksi III-A, tidak boleh diubah tanpa sinkron ke paper.
+%% Gambar 2 — Taksonomi lima pola arsitektur DSS dan status adopsinya pada model Jatinangor.
+%% Menggunakan nama penulis untuk mencegah ketidaksinkronan nomor baris tabel vs nomor sitasi IEEE.
 flowchart TD
-    ROOT["Arsitektur DSS<br/>(5 pola, 12 studi)"]
-    GIS["GIS-MCDM [3][7][11]<br/>DIPAKAI: peta prioritas spasial"]
-    OPT["Optimasi coverage [1][12]<br/>DIPAKAI: penempatan hemat alat"]
-    EXP["Expert-driven [4][5][8]<br/>DIPAKAI: bobot multistakeholder"]
-    SIM["Simulasi-DSS [2]<br/>DITOLAK: kalibrasi mahal"]
-    POL["Policy-MCDA [9][10]<br/>DIPAKAI: framing kebijakan"]
+    ROOT["Arsitektur DSS Keselamatan Urban<br/>(5 Pola Sintesis dari 12 Studi)"]
+    GIS["GIS-MCDM & Spasial<br/>(Feizizadeh, Kabashkin, Zheng)<br/>DIADOPSI: Peta prioritas segmen gang"]
+    OPT["Optimasi Coverage<br/>(Wang, Yuhang)<br/>DIADOPSI: Penempatan hemat alat di bawah anggaran"]
+    EXP["Expert-Driven AHP<br/>(Ahmed, Choi, Baddour)<br/>DIADOPSI: Pembobotan konsensus multipihak"]
+    SIM["Simulasi-DSS Operasional<br/>(González-Villa)<br/>DITOLAK: Kalibrasi sensor real-time mahal"]
+    POL["Policy-MCDA<br/>(Almassawa, Shiddiqy)<br/>DIADOPSI: Framing kebijakan alokasi bertahap"]
     ROOT --> GIS & OPT & EXP & SIM & POL
-    classDef pakai fill:#d9ead3,stroke:#38761d;
-    classDef tolak fill:#f4cccc,stroke:#cc0000;
+    classDef pakai fill:#d9ead3,stroke:#38761d,stroke-width:1.5px;
+    classDef tolak fill:#f4cccc,stroke:#cc0000,stroke-width:1.5px;
     class GIS,OPT,EXP,POL pakai;
     class SIM tolak;

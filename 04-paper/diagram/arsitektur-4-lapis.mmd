@@ -1,23 +1,19 @@
-%% Gambar 3 — Arsitektur konseptual empat lapis DSS (pengganti blok ASCII).
-%% Cara pakai: paste seluruh isi file ini ke https://mermaid.live
-%%   lalu Export > PNG (skala 2-3x). Simpan sebagai:
-%%   04-paper/gambar-3-arsitektur.png (sejajar dengan draft-paper.tex).
-%% Layout LR (kiri-kanan) agar pas di figure* dua kolom IEEE.
-%% Isi = Seksi IV-D + Tabel C1-C9, tidak boleh diubah tanpa sinkron ke paper.
+%% Gambar 3 — Arsitektur konseptual empat lapis DSS prioritas CCTV Jatinangor.
+%% Memisahkan kriteria urgensi C1-C8 dari kelayakan teknis/biaya C9.
 flowchart LR
-    subgraph L1["INPUT LAYER (data diskrit lokal)"]
-        I1["C1 rekap insiden<br/>C2 counting manual<br/>C3 survei penerangan"]
-        I2["C4/C6/C7 OSM + coverage<br/>C5 data kos<br/>C8 POI | C9 RAB"]
+    subgraph L1["LAPISAN INPUT (Data Diskrit Lokal)"]
+        I1["Urgensi Risiko C1-C8:<br/>• C1 Rekap insiden<br/>• C2 Mobilitas malam<br/>• C3 Defisiensi PJU<br/>• C4/C6/C7 Geometri & gap<br/>• C5/C8 Kosan & POI"]
+        I2["Kelayakan & Biaya:<br/>• C9 Kesiapan tiang/PLN<br/>• Estimasi RAB (Biaya)"]
     end
     subgraph L2["PREPROCESSING"]
-        P["pembersihan data<br/>kodifikasi<br/>A1-A5<br/>normalisasi kriteria"]
+        P["Pembersihan data<br/>Kodifikasi segmen A1-A5<br/>Normalisasi vektor Euclidean"]
     end
     subgraph L3["DECISION ENGINE"]
-        A["AHP: bobot C1-C9<br/>geometric mean + CR"]
-        T["TOPSIS: normalisasi<br/>closeness → ranking"]
-        G["GIS: gap coverage<br/>visualisasi peta"]
+        A["AHP Multistakeholder:<br/>Bobot konsensus C1-C8<br/>Uji Konsistensi (CR < 0,1)"]
+        T["TOPSIS Urgensi:<br/>Jarak ideal positif/negatif<br/>Closeness score (Ci)"]
+        B["Modul Alokasi Anggaran:<br/>Filter kelayakan C9<br/>Plafon biaya per fase"]
     end
-    subgraph L4["OUTPUT"]
-        O["peringkat A1-A5<br/>peta prioritas<br/>pemasangan bertahap"]
+    subgraph L4["OUTPUT REKOMENDASI"]
+        O["Peringkat urgensi A1-A5<br/>Rasio manfaat-biaya<br/>Peta prioritas spasial<br/>Jadwal pemasangan bertahap<br/>(Fase 1, 2, dan 3)"]
     end
     L1 --> L2 --> L3 --> L4
