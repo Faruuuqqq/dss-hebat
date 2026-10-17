@@ -19,6 +19,8 @@ Scoping review PRISMA-ScR + model konseptual AHP-TOPSIS. **Mulai dari `CONTEXT.m
 04-paper\draft-paper.tex              # naskah LaTeX IEEEtran conference (Gambar 1 = PNG; lint lolos, belum dicompile)
 04-paper\prisma-diagram.svg           # diagram PRISMA alur resmi 582→12
 04-paper\prisma-diagram.png           # render 2x SVG (eksklusi tema 109), dipakai di .tex
+04-paper\diagram\taksonomi-5-pola.mmd  # sumber Mermaid Gambar 2 (render di mermaid.live)
+04-paper\diagram\arsitektur-4-lapis.mmd # sumber Mermaid Gambar 3 (render di mermaid.live)
 99-arsip\                             # JANGAN dikutip di paper
 ```
 

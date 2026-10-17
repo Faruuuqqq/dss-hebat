@@ -137,6 +137,8 @@ CONTEXT.md                       # FILE INI (full context)
 04-paper\draft-paper.tex         # naskah LaTeX IEEEtran conference (Gambar 1 sudah pakai PNG; lint lolos, BELUM dicompile — mesin ini tak punya LaTeX)
 04-paper\prisma-diagram.svg      # PRISMA alur resmi 582→12 (tanggal masih [ISI TANGGAL])
 04-paper\prisma-diagram.png      # render 2x dari SVG (1342×1938, eksklusi tema sudah 109) — dipakai draft-paper.tex
+04-paper\diagram\taksonomi-5-pola.mmd   # sumber Mermaid Gambar 2 (render di mermaid.live → gambar-2-taksonomi.png)
+04-paper\diagram\arsitektur-4-lapis.mmd  # sumber Mermaid Gambar 3 (render di mermaid.live → gambar-3-arsitektur.png)
 99-arsip\                        # JANGAN dikutip di paper:
   JANGAN-DIPAKAI-promptclaude-smart-environment-lama.txt   # brief lama, domain salah
   JANGAN-DIPAKAI-prisma-salah-1719-deep-learning.png       # PRISMA contoh, angka salah

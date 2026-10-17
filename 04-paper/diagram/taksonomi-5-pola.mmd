@@ -1,0 +1,17 @@
+%% Gambar 2 — Taksonomi lima pola arsitektur DSS (pengganti blok ASCII).
+%% Cara pakai: paste seluruh isi file ini ke https://mermaid.live
+%%   lalu Export > PNG (skala 2-3x). Simpan sebagai:
+%%   04-paper/gambar-2-taksonomi.png (sejajar dengan draft-paper.tex).
+%% Isi = blok verbatim Seksi III-A, tidak boleh diubah tanpa sinkron ke paper.
+flowchart TD
+    ROOT["Arsitektur DSS<br/>(5 pola, 12 studi)"]
+    GIS["GIS-MCDM [3][7][11]<br/>DIPAKAI: peta prioritas spasial"]
+    OPT["Optimasi coverage [1][12]<br/>DIPAKAI: penempatan hemat alat"]
+    EXP["Expert-driven [4][5][8]<br/>DIPAKAI: bobot multistakeholder"]
+    SIM["Simulasi-DSS [2]<br/>DITOLAK: kalibrasi mahal"]
+    POL["Policy-MCDA [9][10]<br/>DIPAKAI: framing kebijakan"]
+    ROOT --> GIS & OPT & EXP & SIM & POL
+    classDef pakai fill:#d9ead3,stroke:#38761d;
+    classDef tolak fill:#f4cccc,stroke:#cc0000;
+    class GIS,OPT,EXP,POL pakai;
+    class SIM tolak;

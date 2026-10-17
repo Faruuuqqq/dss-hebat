@@ -10,7 +10,7 @@
 
 # Decision Support Systems for Urban Surveillance and Public Safety Facility Placement: A Scoping Review and Conceptual Framework for CCTV Prioritization in Jatinangor Student Settlements
 
-**Ringkasan**—Permukiman mahasiswa Jatinangor diwarnai gang sempit, penerangan jalan terbatas, mobilitas malam tinggi, dan penempatan CCTV yang sporadis akibat keterbatasan anggaran, sehingga alokasi fasilitas pengawasan memerlukan prioritisasi yang terukur. Kajian ini memetakan literatur Decision Support System (DSS) untuk urban surveillance dan public safety facility placement melalui scoping review berbasis PRISMA-ScR di database Scopus (TITLE-ABS-KEY; 2021-2026, artikel, bahasa Inggris), dengan alur seleksi 582 rekaman disaring, 416 laporan diminta untuk diambil, 121 laporan dinilai pada tahap teks lengkap, dan 12 studi disertakan. Sintesis menunjukkan lima pola arsitektur DSS (GIS-MCDM, optimasi coverage, expert-driven, simulasi-DSS, dan policy-MCDA), sebaran metode MCDM dengan pola dominan AHP untuk pembobotan dan TOPSIS untuk perankingan, serta taksonomi kriteria benefit, cost, dan context-dependent. Berdasarkan sintesis tersebut, dirumuskan model konseptual DSS untuk Jatinangor berupa alternatif segmen gang (A1-A5), matriks sembilan kriteria keselamatan (C1-C9), skema pembobotan AHP tiga kelompok pemangku kepentingan, dan perankingan TOPSIS yang menghasilkan peta prioritas penempatan CCTV bertahap sesuai anggaran.
+**Ringkasan**—Permukiman mahasiswa Jatinangor diwarnai gang sempit, penerangan jalan terbatas, mobilitas malam tinggi, dan penempatan CCTV yang sporadis akibat keterbatasan anggaran, sehingga alokasi fasilitas pengawasan memerlukan prioritisasi yang terukur. Kajian ini memetakan literatur Decision Support System (DSS) untuk urban surveillance dan public safety facility placement melalui scoping review berbasis PRISMA-ScR di database Scopus (TITLE-ABS-KEY; 2021-2026, artikel, bahasa Inggris), dengan alur seleksi 582 rekaman disaring, 416 laporan diminta untuk diambil, 121 laporan dinilai pada tahap teks lengkap, dan 12 studi disertakan. Sintesis menunjukkan lima pola arsitektur DSS (GIS-MCDM, optimasi coverage, expert-driven, simulasi-DSS, dan policy-MCDA), sebaran metode MCDM dengan pola dominan AHP untuk pembobotan dan TOPSIS untuk perankingan, serta taksonomi kriteria benefit, cost, dan context-dependent. Berdasarkan sintesis tersebut, dirumuskan model konseptual DSS untuk Jatinangor berupa alternatif segmen gang (A1-A5), matriks sembilan kriteria keselamatan (C1-C9), skema pembobotan AHP tiga kelompok pemangku kepentingan, dan perankingan TOPSIS yang menghasilkan peta prioritas penempatan CCTV bertahap sesuai anggaran. Delapan dari sembilan kriteria didukung minimal dua studi dan seluruh klaim numerik dapat ditelusuri ke tabel charting.
 
 **Kata Kunci**—Decision Support System, Multi-Criteria Decision Making, Scoping Review, PRISMA-ScR, AHP, TOPSIS, CCTV placement, Smart Living and Safety, Jatinangor.
 
@@ -120,20 +120,7 @@ Berdasarkan sintesis charting, arsitektur DSS pada literatur terbagi menjadi lim
 
 **[Gambar 2. Taksonomi lima pola arsitektur DSS dan nasibnya pada model Jatinangor]**
 
-```
-Lanskap arsitektur DSS keselamatan (5 pola dari 12 studi)
-|
-+-- GIS-MCDM + evaluasi skenario spasial [3], [7], [11]
-|      -> DIPAKAI: arsitektur utama (peta prioritas spasial)
-+-- Optimasi coverage [1], [12]
-|      -> DIPAKAI: logika penempatan titik berbudget ketat
-+-- Expert-driven (survei + AHP) [4], [5], [8]
-|      -> DIPAKAI: skema pembobotan multistakeholder
-+-- Simulasi-DSS operasional [2]
-|      -> DITOLAK: butuh data kalibrasi mahal
-+-- Policy-MCDA [9], [10]
-       -> DIPAKAI: framing rekomendasi kebijakan
-```
+![Taksonomi lima pola arsitektur DSS](gambar-2-taksonomi.png)
 
 Penting dicatat bahwa pola hybrid (kombinasi lebih dari satu engine) dominan dalam literatur. Namun, kebutuhan data antarpola berbeda jauh: pola yang bergantung pada simulasi real-time, citra berbiaya, atau machine learning membutuhkan data berdensitas tinggi, sedangkan pola GIS-MCDM, optimasi coverage, dan expert-driven dapat berjalan di atas data tabular, data spasial statis, dan penilaian pakar. Dengan kriteria transferability, tiga pola terakhir merupakan baseline yang paling realistis untuk Jatinangor, dan kesimpulan ini menjadi dasar perancangan model pada Seksi IV.
 
@@ -247,26 +234,7 @@ Justifikasi teoritis pemilihan metode: dari kandidat metode pembobotan dan peran
 
 ### D. Arsitektur Konseptual dan Justifikasi Adopsi
 
-```
-INPUT LAYER (data diskrit lokal)
-  C1 rekap insiden | C2 counting manual | C3 survei penerangan
-  C4/C6/C7 pemetaan OSM + coverage | C5 data kos | C8 POI | C9 RAB
-        |
-        v
-PREPROCESSING
-  pembersihan data | kodifikasi segmen A1-A5 | normalisasi kriteria
-        |
-        v
-DECISION ENGINE
-  [AHP] bobot C1-C9 per kelompok -> agregasi geometric mean + CR
-  [TOPSIS] matriks keputusan -> normalisasi -> closeness -> ranking
-  [GIS] pemetaan segmen + gap coverage -> visualisasi peta
-        |
-        v
-DECISION OUTPUT
-  peringkat prioritas A1-A5 | peta prioritas segmen gang
-  | urutan pemasangan bertahap sesuai anggaran
-```
+![Arsitektur konseptual empat lapisan DSS](gambar-3-arsitektur.png)
 
 Arsitektur empat lapisan ini mengadopsi pola GIS-MCDM dari [3] dan [7] karena keduanya membuktikan keluaran keputusan spasial terbangun dari data lintas sumber, logika optimasi coverage dari [1] dan [12] karena keduanya menunjukkan cakupan penuh tercapai dengan jumlah perangkat jauh lebih sedikit, serta skema expert-driven dari [4] dan [8] karena penilaian pakar adalah sumber bobot yang paling tersedia di Jatinangor. Justifikasi adopsi dan penolakan elemen literatur dicatat eksplisit:
 
