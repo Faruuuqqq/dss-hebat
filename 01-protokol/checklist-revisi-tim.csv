@@ -1,0 +1,18 @@
+ID,Fase,Nama_Tugas,PIC,Dependensi,Prioritas,Status,Kriteria_Selesai
+T1.1,Fase 1: Pondasi Data,Rekonsiliasi Alur PRISMA-ScR (582->416->121->12),A1,-,P1,Selesai,"Angka di Abstrak, Seksi II-C, dan Caption Gambar 1 identik persis (582->416->121->12)"
+T1.2,Fase 1: Pondasi Data,Tabel Pemetaan Studi x Kriteria (Single Source of Truth),A2; A4,-,P1,Selesai,"Tabel III dan Tabel VIII 100% konsisten pada data charting dan sitasi paper"
+T1.3,Fase 1: Pondasi Data,Justifikasi Batasan Protokol & Deklarasi Gen-AI,A1,T1.1,P2,Selesai,Seksi II-B & Deklarasi Gen-AI transparan dan memenuhi standar etika IEEE
+T2.1,Fase 2: Model Konseptual,Pemisahan Urgensi (C1-C8) dari Kelayakan/Biaya (C9),A4,T1.2,P1,Selesai,TOPSIS mengukur urgensi murni; C9 dan biaya investasi dipisahkan sebagai kendala
+T2.2,Fase 2: Model Konseptual,Mekanisme Alokasi Anggaran Bertahap (Budget Ceiling/Knapsack),A5; A4,T2.1,P2,Selesai,Seksi IV memuat aturan cut-off alokasi anggaran bertahap per fase pemasangan
+T2.3,Fase 2: Model Konseptual,Penyempurnaan Struktur AHP & Prosedur Multistakeholder,A4,T2.1,P2,Selesai,"Prosedur AHP rinci, jumlah pakar terdefinisi, CR < 0.1, opsi hierarki kriteria"
+T2.4,Fase 2: Model Konseptual,Kelengkapan Formulasi Matematis TOPSIS,A4,T2.1,P2,Selesai,Seksi IV-C memuat persamaan matematis normalisasi hingga jarak ideal lengkap
+T2.5,Fase 2: Model Konseptual,Perbaikan Alternatif A1-A5 & Karakteristik Lokal,A3,-,P3,Selesai,Dasar pemilihan A1-A5 mengacu tipologi spasial lokal Jatinangor
+T2.6,Fase 2: Model Konseptual,Landasan Teori Kriminologi (CPTED & Routine Activity),A3; A5,-,P3,Selesai,Pendahuluan/Pembahasan memuat landasan pencegahan kriminal dan UU PDP
+T3.1,Fase 3: Bukti & Contoh Numerik,Penyusunan Pilot Dummy Numerik AHP-TOPSIS,A4,"T2.1, T2.3, T2.4",P1,Selesai,Skrip dan tabel perhitungan numerik dummy terverifikasi (CR < 0.1)
+T4.1,Fase 4: Penulisan Ulang,Sinkronisasi Diagram Gambar 2 & Gambar 3,A2,T1.2,P2,Selesai,File .mmd dan .png sinkron dengan teks naskah dan nomor sitasi IEEE
+T4.2,Fase 4: Penulisan Ulang,Koreksi Data Demografi (3.740 jiwa/km2),A3,-,P2,Selesai,Angka kepadatan dan data BPS 2024 diverifikasi akurat
+T4.3,Fase 4: Penulisan Ulang,Penyesuaian Nada Klaim (Tone Down),A5,-,P2,Selesai,Istilah dominan/pemenang/demonstrating disesuaikan dengan bukti korpus
+T4.4,Fase 4: Penulisan Ulang,Pembersihan Istilah Internal Kelas (UTS/UAS),A1,-,P3,Selesai,Naskah bersih dari istilah internal perkuliahan
+T4.5,Fase 4: Penulisan Ulang,Penyesuaian Gap Penelitian di Pendahuluan,A1; A5,-,P3,Selesai,Pendahuluan memuat latar belakang gap dan kontribusi paper hibrida
+T4.6,Fase 4: Penulisan Ulang,Penyelarasan Bahasa Naskah,A1,"T4.3, T4.4",P3,Selesai,Format bahasa Indonesia baku dengan istilah asing dicetak miring
+T4.7,Fase 4: Penulisan Ulang,Audit Tata Letak Tabel & Kolom IEEE,A1; A2,All,P2,Selesai,Kompilasi LaTeX bersih tanpa overflow tabel dan memenuhi batas halaman
