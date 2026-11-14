@@ -25,6 +25,33 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-14 · Sesi 13 — Hardening lanjutan webapp (empty state, peta, ekspor CSV)
+
+**Konteks:** setelah sesi 12, dilakukan audit untuk mencari celah yang belum tertangani pada `07-webapp/`. Audit menemukan dua bug nyata dan satu fitur yang belum pernah diuji.
+
+**Bug yang diperbaiki (dibuktikan RED sebelum GREEN):**
+1. **Tabel alokasi fase tanpa empty state.** Bila semua alternatif tidak layak atau biayanya melebihi plafon, tabel hanya menampilkan header tanpa baris sehingga tampak rusak. Sekarang muncul pesan penjelas disertai rincian pengecualian. Tes B11 dibuktikan **GAGAL** lebih dulu.
+2. **Label kode 3 karakter meluap keluar titik peta.** Kode D10/D11/D12 memakai ukuran font yang sama dengan A1–A5 sehingga tidak terbaca. Ukuran font kini dibatasi agar muat di dalam lingkaran. Diverifikasi lewat render ulang peta 12 node.
+
+**Fitur yang akhirnya tercakup tes:**
+- **Ekspor CSV** sebelumnya tidak pernah diverifikasi otomatis. `scripts/ui-export.mjs` menekan tombol unduh di peramban sungguhan, menyimpan berkasnya, lalu memeriksa nama berkas, header 17 kolom, CC kanonik (A3 0,644530; A5 0,182026), kedua dataset (5 dan 12 baris), serta ekspor yang mengikuti hasil edit C9. Hasilnya **ekspor sudah benar** (22/22 LULUS) dan kini terlindungi regresi.
+
+**Perubahan:**
+- `app/page.tsx`: empty state tabel fase, batas ukuran font label peta, `allocatedPhaseCount`.
+- `lib/engine.ts`: buang ekspor `DATASET_KEYS` yang tidak terpakai.
+- `scripts/ui-bugs.mjs`: tambah tes B11/B12 (empty state).
+- `scripts/ui-export.mjs` (baru), `package.json` (`test:export`), `README.md`.
+
+**Verifikasi:**
+- `ui-bugs` → 18/18 LULUS. `ui-check` → 18/18 LULUS tanpa error konsol. `ui-export` → 22/22 LULUS. `parity` → 50+ LULUS.
+- `npm run verify` (lint + parity + build) → LULUS.
+- Pemeriksaan visual: peta 12 node (D10–D12 terbaca), empty state alokasi, tampilan 1440 px.
+
+**Open items:**
+- [ ] (Opsional) Deploy Vercel + Supabase.
+- [ ] (Opsional) Muat data dari basis data, bukan statis di `lib/engine.ts`.
+- [ ] (Opsional) Audit aksesibilitas otomatis (axe) — belum ada.
+
 ### 2026-11-14 · Sesi 12 — Perbaikan bug webapp Next.js
 
 **Konteks:** fokus dipertajam ke `07-webapp/` saja, dengan prioritas memperbaiki bug pada website.
