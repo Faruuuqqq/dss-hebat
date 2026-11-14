@@ -41,7 +41,7 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 - **Setiap klaim numerik harus bisa ditelusuri** ke sumber (file data / PDF / URL). Kalau tidak ada sumbernya, jangan ditulis.
 - **Jaga `draft-paper-hasil.md` ↔ `.tex` tetap sinkron.** Setelah edit `.tex`, cek braces/environment seimbang.
 - **Data yang belum dari lapangan wajib dilabeli** `[SIMULASI]` / "estimasi terdokumentasi".
-- Konvensi commit (bila diminta commit): `feat|fix|docs|data|refactor(<scope>): <ringkas>`.
+- **Konvensi commit:** satu baris (one-liner) `feat|fix|docs|data|refactor|chore|test|build(<scope>): <ringkas>`, maksimal ~72 karakter, tanpa bullet di badan pesan. Satu commit = satu perubahan logis. Commit **berurutan**, bukan paralel: satu repo hanya punya satu index sehingga commit bersamaan akan bentrok di `index.lock`.
 
 ## 4. Status terkini (per 14 Nov 2026)
 
