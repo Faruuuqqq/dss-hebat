@@ -25,6 +25,35 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-14 · Sesi 17 — Bukti integrasi dari clone bersih
+
+**Konteks:** verifikasi sebelumnya dilakukan di direktori kerja yang sudah berisi `node_modules` dan `.next`, sehingga belum membuktikan bahwa **repo yang di-commit** benar-benar berjalan. Diuji ulang dengan `git clone` ke direktori kosong.
+
+**Isi clone (hanya berkas ter-track):** 92 berkas; **tanpa** `node_modules`, `.next`, `.shots`, `*.xdv`, maupun `*.log`; `99-arsip/` juga tidak ikut (ter-ignore). Jadi tidak ada artefak build yang bocor ke repo.
+
+**Hasil di dalam clone (bukan di direktori kerja):**
+
+| Langkah | Hasil |
+|---|---|
+| `bash build-papers.sh` | OK — 5 halaman & 8 halaman, 0 overfull hbox, 0 undefined |
+| `node 05-aplikasi/test-algoritma.mjs` | SEMUA LULUS |
+| `bash 05-aplikasi/test-ui.sh` | SEMUA LULUS |
+| `npm ci` (dari `package-lock.json`) | berhasil |
+| `npm run verify` (lint + parity + build) | LULUS, build 45 s |
+| `parity.mts` | **71 PASS, 0 FAIL** |
+| `ui-bugs.mjs` | **18 PASS, 0 FAIL** |
+| `ui-check.mjs` | **23 PASS, 0 FAIL** |
+| `ui-export.mjs` | **22 PASS, 0 FAIL** |
+| `ui-a11y.mjs` | **0 pelanggaran** (serius/kritis maupun ringan) |
+
+**Bukti perbaikan `.shots` bukan asumsi:** pada clone, `.shots/` **tidak ada**, lalu `ui-check.mjs` membuatnya sendiri dan menulis `ui-check.png` (130 KB). Sebelum perbaikan, langkah ini akan gagal.
+
+**Bukti build deterministik lintas mesin:** PDF hasil build di dalam clone **byte-identik** dengan PDF di repo utama (`0f2a81b2…` untuk 04-paper, `5152a487…` untuk 06-paper-hasil). Jadi `SOURCE_DATE_EPOCH` benar-benar membuat hasil dapat direproduksi, bukan hanya stabil di satu direktori.
+
+**Catatan:** `npm ci` memblokir postinstall `@tailwindcss/oxide` (kebijakan `allowScripts`), tetapi build tetap sukses karena paket binary per platform (`@tailwindcss/oxide-linux-x64-gnu`) sudah tersedia. Ini terverifikasi, bukan diasumsikan.
+
+**Pembersihan:** server clone dihentikan, port 3311 dipastikan bebas, clone sementara dihapus. Repo utama tetap bersih (`git status` kosong).
+
 ### 2026-11-14 · Sesi 16 — Verifikasi paralel multi-agen + konvensi commit one-liner
 
 **Konteks:** pengguna meminta commit penting dengan pesan conventional one-liner secara berurutan, memakai multi-agen.
