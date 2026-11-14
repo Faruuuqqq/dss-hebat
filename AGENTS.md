@@ -85,6 +85,7 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 ```
 PROGRESS.md                  # log progres (selalu diperbarui)
 AGENTS.md                    # file ini
+build-papers.sh              # compile kedua paper deterministik (Tectonic + SOURCE_DATE_EPOCH)
 assets/diagram/
   arsitektur-4-lapis-kanonik.tex   # SUMBER TUNGGAL gambar arsitektur (TikZ)
   build-arsitektur-png.sh          # regenerasi PNG 400 dpi dari sumber TikZ
@@ -115,9 +116,9 @@ dss_revisi_markdown/         # naskah final proposal — SUMBER KEBENARAN TUNGGA
 node 05-aplikasi/test-algoritma.mjs        # ekstrak & uji engine aktual dari index.html (harus PASS)
 bash 05-aplikasi/test-ui.sh               # smoke test UI (opsional, butuh Chromium/Chrome)
 
-# compile paper (butuh Tectonic; unduh binary tunggal, tanpa instalasi TeX penuh)
-cd 06-paper-hasil && tectonic -X compile draft-paper-hasil.tex --keep-logs
-cd 04-paper      && tectonic -X compile draft-paper.tex --keep-logs
+# compile kedua paper (butuh Tectonic; binary tunggal, tanpa instalasi TeX penuh).
+# SOURCE_DATE_EPOCH membuat PDF deterministik sehingga `git status` tetap bersih.
+TECTONIC=/path/ke/tectonic bash build-papers.sh
 
 # regenerasi gambar arsitektur (butuh Tectonic + pymupdf)
 bash assets/diagram/build-arsitektur-png.sh

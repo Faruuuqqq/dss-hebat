@@ -42,6 +42,7 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 **Perubahan:**
 - `assets/diagram/arsitektur-4-lapis-kanonik.tex` (baru), `assets/diagram/build-arsitektur-png.sh` (baru).
+- `build-papers.sh` (baru): compile kedua paper dengan `SOURCE_DATE_EPOCH` agar PDF **deterministik** (dua run bit-identik, `git status` tetap bersih setelah rebuild).
 - `06-paper-hasil/draft-paper-hasil.tex`: `array` + `\newcolumntype{P}`, `tikz`, `\cost`, figur jadi `figure*` vektor, kalimat C9 diperbaiki.
 - `04-paper/draft-paper.tex`: figur arsitektur memakai `\input` sumber TikZ.
 - `06-paper-hasil/draft-paper-hasil.md` dan `04-paper/gambar-3-arsitektur.png`, `06-paper-hasil/img/*.png`: disinkronkan.
@@ -50,6 +51,7 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 **Verifikasi:**
 - `tectonic -X compile` 06-paper-hasil → **exit 0, 5 halaman, 0 overfull hbox**, tanpa ref/sitasi undefined.
 - `tectonic -X compile` 04-paper → **exit 0, 8 halaman, 0 overfull hbox**, tanpa ref/sitasi undefined.
+- `bash build-papers.sh` dijalankan dua kali → hash PDF **identik** (deterministik).
 - Keterisian halaman: 06 → p1–p4 91,9%, p5 85,6% (sebelumnya p5 hanya ~40%). 04 → semua ≥83%.
 - Review visual seluruh halaman via render 130–200 dpi: tabel, persamaan, dua kolom, dan ketiga gambar tampil benar; angka kanonik terbaca (CR 0,0104; C1 23,95%; A3 0,6445).
 - `bash assets/diagram/build-arsitektur-png.sh` → PNG 2788×1283 @400 dpi untuk kedua paper; skrip terbukti reproducible.
@@ -59,7 +61,6 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 **Catatan jujur:** paper hasil 5 halaman (target internal 6–8). Halaman terakhir kini 86% terisi, jadi tidak ada pemborosan ruang; menambah 1–2 halaman berarti menambah pembahasan substantif, bukan memperbaiki format.
 
 **Open items:**
-- [ ] Commit semua pekerjaan (belum masuk git).
 - [ ] Migrasi Next.js (`07-webapp/`).
 - [ ] (Opsional) Perluas pembahasan paper hasil bila venue menuntut 6–8 halaman.
 - [ ] (Opsional) Validasi lapangan C1–C9, RAB, GPS CCTV, dan *counting* malam.
