@@ -697,7 +697,12 @@ function PriorityMap({
         viewBox="0 0 800 440"
         role="img"
         aria-label="Peta prioritas skematik segmen CCTV Jatinangor"
-        className="w-full rounded border border-line bg-surface"
+        /*
+          Lebar minimum menjaga label tetap terbaca di layar sempit: tanpa ini,
+          SVG 800x440 menyusut ke ~358 px dan teks 10 px menjadi ~4 px. Panel
+          sudah menyediakan overflow-x-auto sehingga pengguna dapat menggeser.
+        */
+        className="w-full min-w-[640px] rounded border border-line bg-surface"
       >
         <rect x="1" y="1" width="798" height="438" rx="6" fill="var(--surface)" />
         <text x="22" y="28" fontSize="13" fontWeight="700" fill="var(--ink-soft)">

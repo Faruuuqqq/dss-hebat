@@ -25,6 +25,29 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-14 · Sesi 14 — Audit aksesibilitas webapp (axe-core)
+
+**Konteks:** aksesibilitas belum pernah diaudit pada `07-webapp/`. Audit dijalankan otomatis dengan axe-core pada WCAG 2.1 A/AA.
+
+**Pelanggaran yang ditemukan dan diperbaiki:**
+1. **serious — `scrollable-region-focusable`** (muncul di 390 px). Pembungkus tabel memakai `overflow-x-auto` tetapi tidak dapat dijangkau papan ketik, sehingga pengguna keyboard di layar sempit tidak bisa menggeser tabel sama sekali. Diperbaiki dengan `tabIndex={0}`, `role="region"`, dan nama aksesibel per panel.
+2. **minor — `empty-table-header`**. Sel header pertama matriks AHP kosong. Diberi label "Kriteria".
+
+**Perubahan:**
+- `app/page.tsx`: panel `scroll` kini focusable dan bernama; header matriks AHP diberi teks.
+- `scripts/ui-a11y.mjs` (baru): audit axe-core pada 4 keadaan (data resmi desktop, data resmi ponsel, kondisi tanpa alternatif layak, dataset simulasi); keluar dengan kode 1 bila ada pelanggaran serious/critical.
+- `scripts/ui-check.mjs`: 4 pemeriksaan baru membuktikan 7 region bergulir focusable, bernama, dan dapat menerima fokus.
+- `package.json` (`test:a11y`), `README.md`.
+
+**Verifikasi:**
+- `test:a11y` → **0 pelanggaran** di seluruh keadaan (sebelumnya 1 serious + 4 minor).
+- `test:ui` → 22/22 LULUS. `test:bugs` → 18/18. `test:export` → 22/22. `parity` → 50+.
+- `npm run verify` (lint + parity + build) → LULUS.
+
+**Open items:**
+- [ ] (Opsional) Deploy Vercel + Supabase (butuh kredensial pengguna).
+- [ ] (Opsional) Muat data dari basis data, bukan statis di `lib/engine.ts`.
+
 ### 2026-11-14 · Sesi 13 — Hardening lanjutan webapp (empty state, peta, ekspor CSV)
 
 **Konteks:** setelah sesi 12, dilakukan audit untuk mencari celah yang belum tertangani pada `07-webapp/`. Audit menemukan dua bug nyata dan satu fitur yang belum pernah diuji.
