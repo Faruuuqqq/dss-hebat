@@ -25,6 +25,37 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-14 · Sesi 16 — Verifikasi paralel multi-agen + konvensi commit one-liner
+
+**Konteks:** pengguna meminta commit penting dengan pesan conventional one-liner secara berurutan, memakai multi-agen.
+
+**Keputusan:** commit tidak diparalelkan karena satu repo hanya punya satu index (`index.lock` akan bentrok); paralelisasi dipakai untuk **verifikasi** yang memang independen. Dua agen dijalankan serentak tanpa menyentuh git dan tanpa mengubah berkas sumber.
+
+**Hasil agen `verify-webapp`** (dari keadaan tanpa `.next`, port 3311):
+- `npm run verify`: eslint bersih, parity **71/71 PASS**, `next build` sukses (4 rute statis, TypeScript OK).
+- Suite peramban: `parity` 71/71 · `ui-bugs` **18/18** · `ui-check` **23/23** · `ui-export` **22/22** · `ui-a11y` **0 pelanggaran** (4 keadaan). Semua exit 0.
+- Server dimatikan lewat PID tersimpan; port 3311 dipastikan bebas.
+
+**Hasil agen `verify-papers`**:
+- `build-papers.sh`: 06-paper-hasil **5 halaman**, 04-paper **8 halaman**, **0 overfull hbox**, **0 referensi/sitasi undefined**. Hanya peringatan tipografi kosmetik (underfull box, inputenc utf8).
+- `test-algoritma.mjs`: **48 PASS, 0 FAIL**, termasuk paritas λmax/CI/CR, bobot, CC, fase, C9, biaya > plafon, 16 run sensitivitas, dan paritas Tabel VIII & X.
+- Pencarian angka historis (`0,6441`, `24,31`, `PRISMA 401`, `hierarki 3 kluster`, `418`, `415`) di seluruh luaran hidup: **0 hit**. Satu-satunya `401` adalah DOI `10.4018/JCIT.386165`.
+- Tidak ada artefak build ter-track. **Determinisme PDF terbukti**: dua rebuild menghasilkan sha256 identik.
+
+**Temuan yang ditindaklanjuti:**
+- `git status` setelah build ulang worker **bersih**, artinya build deterministik mereproduksi PDF ter-track byte-identik.
+- `07-webapp/scripts/ui-check.mjs` menulis screenshot ke `.shots/` tanpa membuat direktorinya. Sebelumnya lolos hanya karena folder itu kebetulan ada; setelah pembersihan repo, skrip akan gagal di clone baru. Diperbaiki dengan `fs.mkdirSync(".shots", { recursive: true })` dan diverifikasi pada keadaan tanpa `.shots`.
+
+**Perubahan:**
+- `07-webapp/scripts/ui-check.mjs`: buat folder `.shots` sebelum screenshot.
+- `AGENTS.md` §3: konvensi commit menjadi **one-liner** `type(scope): ringkas` dan dinyatakan bahwa commit harus berurutan, bukan paralel.
+
+**Verifikasi:** kedua agen melaporkan exit 0 tanpa kegagalan; `git status` bersih; 2 commit baru dibuat berurutan dengan pesan one-liner.
+
+**Open items:**
+- [ ] (Opsional) Push `main` ke `origin` (22+ commit lokal, belum di-push).
+- [ ] (Opsional) Deploy Vercel + Supabase (butuh kredensial pengguna).
+
 ### 2026-11-14 · Sesi 15 — Merapikan repo untuk GitHub
 
 **Konteks:** pengguna meminta folder repo dirapikan agar tampil bersih di GitHub.
