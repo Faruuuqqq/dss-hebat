@@ -13,7 +13,8 @@
     "test:bugs": "node scripts/ui-bugs.mjs",
     "test:ui": "node scripts/ui-check.mjs",
     "verify": "npm run lint && npm run parity && npm run build",
-    "test:export": "node scripts/ui-export.mjs"
+    "test:export": "node scripts/ui-export.mjs",
+    "test:a11y": "node scripts/ui-a11y.mjs"
   },
   "dependencies": {
     "next": "16.4.6",
@@ -25,6 +26,7 @@
     "@types/node": "24.10.1",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.1",
+    "axe-core": "^4.11.0",
     "eslint": "9.39.1",
     "eslint-config-next": "16.4.6",
     "playwright-core": "1.56.1",

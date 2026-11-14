@@ -31,6 +31,7 @@ npm start &
 npm run test:bugs    # 16 pemeriksaan perilaku input angka
 npm run test:ui      # 18 pemeriksaan interaksi dashboard
 npm run test:export  # 22 pemeriksaan ekspor CSV (isi berkas, kedua dataset)
+npm run test:a11y    # audit axe-core (WCAG 2.1 A/AA) di 2 lebar dan 4 keadaan
 ```
 
 Skrip peramban memakai `playwright-core` dengan Chromium yang sudah ada di mesin
@@ -58,6 +59,7 @@ scripts/
   ui-check.mjs      # uji interaksi peramban
   ui-bugs.mjs       # uji regresi perilaku input angka
   ui-export.mjs     # uji ekspor CSV (unduhan nyata + isi berkas)
+  ui-a11y.mjs       # audit aksesibilitas axe-core
 ```
 
 `lib/engine.ts` sengaja dibuat **mandiri tanpa impor internal** supaya dapat dijalankan

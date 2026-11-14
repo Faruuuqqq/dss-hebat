@@ -40,7 +40,19 @@ function Panel({
         </div>
         {actions ? <div className="shrink-0">{actions}</div> : null}
       </header>
-      <div className="w-full min-w-0 overflow-x-auto px-4 py-3">{children}</div>
+      {/*
+        Region yang dapat digulir horizontal wajib dapat dijangkau papan ketik
+        (WCAG 2.1.1). Tanpa tabIndex, pengguna keyboard di layar sempit tidak
+        bisa menggeser tabel lebar sama sekali.
+      */}
+      <div
+        className="w-full min-w-0 overflow-x-auto px-4 py-3"
+        tabIndex={0}
+        role="region"
+        aria-label={`${title} — area dapat digulir`}
+      >
+        {children}
+      </div>
     </section>
   );
 }
@@ -315,7 +327,7 @@ export default function Page() {
           <table className="border-collapse text-[12.5px]">
             <thead>
               <tr>
-                <Th> </Th>
+                <Th>Kriteria</Th>
                 {CRITERIA.map((c) => (
                   <Th key={c.code} align="right">
                     {c.code}

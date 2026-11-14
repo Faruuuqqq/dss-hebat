@@ -141,6 +141,34 @@ chk("label SIMULASI tampil", simulasiText.includes("SIMULASI"), true);
 // 9) Tidak ada error konsol
 chk("tanpa error konsol/halaman", errors.length === 0 ? "bersih" : errors.join(" | "), "bersih");
 
+
+// 11) Region bergulir horizontal harus dapat dijangkau papan ketik,
+//     supaya tabel lebar tetap bisa digeser tanpa tetikus.
+{
+  const audit = await page.evaluate(() => {
+    const regions = Array.from(document.querySelectorAll(".overflow-x-auto"));
+    return {
+      total: regions.length,
+      focusable: regions.filter((r) => r.tabIndex === 0).length,
+      named: regions.filter((r) => (r.getAttribute("aria-label") ?? "").length > 0).length,
+    };
+  });
+  chk("jumlah region bergulir", audit.total > 0, true);
+  chk("semua region focusable", audit.focusable, audit.total);
+  chk("semua region punya nama aksesibel", audit.named, audit.total);
+}
+
+// 12) Fokus keyboard benar-benar bisa masuk ke region bergulir
+{
+  const ok = await page.evaluate(() => {
+    const r = document.querySelector(".overflow-x-auto");
+    if (!r) return false;
+    r.focus();
+    return document.activeElement === r;
+  });
+  chk("region bergulir dapat menerima fokus", ok, true);
+}
+
 // 10) Screenshot untuk bukti
 await page.selectOption("select", "resmi");
 await page.waitForTimeout(400);
