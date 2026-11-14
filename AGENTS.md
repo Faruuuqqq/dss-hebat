@@ -55,8 +55,8 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 | Paper fase proposal (`04-paper/`) | SELESAI — diselaraskan ke AHP 8×8/PRISMA 416, **tercompile 8 halaman**; diagram arsitektur kini TikZ kanonik |
 | Data & sumber (`08-docs/data-dan-sumber.md`) | SELESAI — BPS + E-Office dicatat, data riil + dummy CCTV + sumber |
 | Dokumentasi SE (`08-docs/`) | SELESAI — SRS (FR/NFR/acceptance), traceability, UML Mermaid, mockup desktop/mobile aktual |
-| Migrasi Next.js (`07-webapp/`) | **BELUM** |
-| Git | semua pekerjaan baru **belum di-commit** |
+| Migrasi Next.js (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4, paritas angka kanonik & uji interaksi peramban LULUS |
+| Git | ter-commit (9 commit sesi 10–11); branch `main`; belum di-push |
 
 ## 5. Invarian (JANGAN dilanggar tanpa alasan kuat)
 
@@ -89,6 +89,11 @@ build-papers.sh              # compile kedua paper deterministik (Tectonic + SOU
 assets/diagram/
   arsitektur-4-lapis-kanonik.tex   # SUMBER TUNGGAL gambar arsitektur (TikZ)
   build-arsitektur-png.sh          # regenerasi PNG 400 dpi dari sumber TikZ
+07-webapp/                   # Next.js 16 + TS + Tailwind 4 (migrasi aplikasi)
+  app/page.tsx               # dashboard interaktif (client component)
+  lib/engine.ts              # mesin AHP-TOPSIS TS (mandiri, data-driven)
+  scripts/parity.mts         # paritas angka kanonik (node, tanpa build)
+  scripts/ui-check.mjs       # uji interaksi Chromium (playwright-core)
 05-aplikasi/
   index.html                 # aplikasi (1 file, offline) — DATASETS resmi & perluasan
   test-algoritma.mjs         # verifikasi: ekstrak script index.html + cek paritas CSV
@@ -122,12 +127,19 @@ TECTONIC=/path/ke/tectonic bash build-papers.sh
 
 # regenerasi gambar arsitektur (butuh Tectonic + pymupdf)
 bash assets/diagram/build-arsitektur-png.sh
+
+# webapp Next.js
+cd 07-webapp && npm run parity        # paritas angka kanonik (harus PASS)
+cd 07-webapp && npm run build         # build produksi (harus sukses)
+# uji interaksi: jalankan `npm start` lalu
+#   BASE_URL=http://127.0.0.1:3000 node scripts/ui-check.mjs
 ```
 Aplikasi: buka `05-aplikasi/index.html` di browser (tanpa server). Screenshot headless opsional via Chromium/Playwright.
 
 ## 9. Rencana berikutnya (open items)
 
-1. **Migrasi `07-webapp/`** (Next.js + TS + Tailwind) dengan mesin data-driven; paritas angka wajib.
-2. **Commit** semua pekerjaan (belum masuk git).
+1. (Opsional) Deploy `07-webapp/` ke Vercel + integrasi Supabase (tahap 2 rencana teknologi).
+2. (Opsional) Konfigurasi ESLint untuk `07-webapp/` (`npm run lint` belum aktif).
 3. (Opsional) Perdalam data lapangan: koordinat GPS titik CCTV, counting malam, survei PJU.
 4. (Opsional) Tinjau panjang paper hasil: 5 halaman padat (halaman terakhir 86% terisi). Jika venue menuntut 6–8 halaman, tambah pembahasan substantif, bukan penambahan kosmetik.
+5. (Opsional) Push branch `main` ke `origin` bila diinginkan.

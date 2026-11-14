@@ -25,6 +25,39 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-14 · Sesi 11 — Migrasi Next.js: paritas angka dan uji interaksi
+
+**Konteks:** fase 6 rencana (migrasi `07-webapp/` ke Next.js + TypeScript + Tailwind) dieksekusi dan diverifikasi, bukan hanya dievaluasi.
+
+**Keputusan:**
+- Stack: **Next.js 16.4.6 (App Router) + React 19 + TypeScript 5.9 + Tailwind 4**, semua versi dikunci di `package.json`.
+- `lib/engine.ts` dibuat **mandiri tanpa impor internal**, sehingga Next.js dan `node scripts/parity.mts` memakai kode yang sama persis tanpa langkah build perantara.
+- Aplikasi tetap 100% sisi klien; halaman di-prerender statis. Tidak ada backend maupun panggilan jaringan.
+- `A0` **tidak** diubah menjadi `1/3` tepat: `0,33` adalah nilai yang mereproduksi λmax 8,1031. Memakai `1/3` menggeser λmax ke 8,1067 dan memutus paritas.
+
+**Bug nyata yang ditemukan dan diperbaiki selama verifikasi:**
+1. `</td>` salah tempat di tabel AHP → build gagal; diperbaiki menjadi `</Td>`.
+2. `.cell { width:100% }` di dalam sel tabel auto-layout membuat kolom **C9 kolaps** sehingga nilainya tidak terlihat. Diperbaiki dengan `min-width: 58px`. Karena Turbopack memakai cache CSS, perbaikan baru berlaku setelah `rm -rf .next`.
+3. **Overflow horizontal pada 390 px**: anak grid default `min-width:auto` sehingga tabel lebar mendorong panel melebihi viewport. Diperbaiki dengan `min-w-0` pada section/panel/grid. Diverifikasi tidak overflow pada 390/768/1440 px.
+4. `/favicon.ico` 404 memunculkan error konsol; ditambahkan `app/icon.svg`.
+5. Glyph `D⁺`/`D⁻` tidak tersedia di font; diganti markup `<sup>`.
+
+**Perubahan:**
+- `07-webapp/`: `app/{layout,page,globals.css,icon.svg}`, `lib/{engine,format}`, `scripts/{parity.mts,ui-check.mjs}`, konfigurasi Next/Tailwind/TS, `README.md`, `.gitignore`.
+- `AGENTS.md`: status migrasi, peta file, perintah verifikasi, open items.
+
+**Verifikasi:**
+- `npm run build` → sukses; rute `/` dan `/icon.svg` **statis (prerender)**, tanpa error TypeScript.
+- `node scripts/parity.mts` → **SEMUA LULUS**. Termasuk λmax 8,1031; CI 0,0147; CR 0,0104; delapan bobot; CC A3 0,6445 > A1 0,5774 > A4 0,4995 > A2 0,4638 > A5 0,1820; fase [1,2,1,2,3]; subtotal 14,0/13,0/5,5; C9=1 → A1 `null`; biaya 15,1 → A5 `null`; sensitivitas 16 run dengan 2 pembalikan (C1 −20%, C2 +20%); A3 & A1 selalu dua teratas.
+- `node scripts/ui-check.mjs` terhadap server produksi → **18/18 LULUS, tanpa error konsol**: KPI 0,0104 & 5/5 & A3; edit C9→1 menurunkan KPI ke 4/5 dan menandai A1 tidak dialokasikan; biaya 15,1 memunculkan "Biaya > plafon"; fokus input bertahan saat mengetik; reset memulihkan 4 dan 5.5; dataset simulasi 12 alternatif dengan label SIMULASI.
+- Screenshot produksi 1440 px dan 390 px diperiksa secara visual; angka kanonik terbaca di layar.
+
+**Open items:**
+- [ ] (Opsional) Deploy Vercel + Supabase.
+- [ ] (Opsional) Konfigurasi ESLint (`npm run lint` belum aktif).
+- [ ] (Opsional) Perluas pembahasan paper hasil bila venue menuntut 6–8 halaman.
+- [ ] (Opsional) Validasi lapangan C1–C9, RAB, GPS CCTV, dan *counting* malam.
+
 ### 2026-11-14 · Sesi 10 — Compile nyata kedua paper, figur arsitektur kanonik, audit visual
 
 **Konteks:** rencana lanjutan dieksekusi penuh: freeze baseline, finalisasi paper, review visual, acceptance test, dan persiapan commit.
