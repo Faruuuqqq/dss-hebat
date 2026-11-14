@@ -2,13 +2,17 @@
   "name": "dss-cctv-jatinangor",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "DSS prioritisasi penempatan CCTV Jatinangor (AHP-TOPSIS) - Next.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "parity": "node scripts/parity.mts"
+    "lint": "eslint .",
+    "parity": "node scripts/parity.mts",
+    "test:bugs": "node scripts/ui-bugs.mjs",
+    "test:ui": "node scripts/ui-check.mjs",
+    "verify": "npm run lint && npm run parity && npm run build"
   },
   "dependencies": {
     "next": "16.4.6",
@@ -20,7 +24,9 @@
     "@types/node": "24.10.1",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.1",
-    "playwright-core": "^1.56.1",
+    "eslint": "9.39.1",
+    "eslint-config-next": "16.4.6",
+    "playwright-core": "1.56.1",
     "tailwindcss": "4.1.14",
     "typescript": "5.9.3"
   }

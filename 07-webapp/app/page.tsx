@@ -9,14 +9,14 @@ import {
   DATASETS,
   type Criterion,
   type Dataset,
-  allocPhases,
+  type DatasetKey,
   deepCopy,
+  getDataset,
   evaluate,
-  feasibleFlags,
   initialState,
-  topsis,
 } from "@/lib/engine";
 import { buildCsv, download, fmt, pct } from "@/lib/format";
+import { NumberCell } from "@/components/NumberCell";
 
 /* ---------------------------- komponen kecil ---------------------------- */
 
@@ -95,20 +95,20 @@ function Td({
 /* -------------------------------- halaman -------------------------------- */
 
 export default function Page() {
-  const [datasetKey, setDatasetKey] = useState<keyof typeof DATASETS>("resmi");
+  const [datasetKey, setDatasetKey] = useState<DatasetKey>("resmi");
   const [X, setX] = useState<number[][]>(() => deepCopy(DATASETS.resmi.X));
   const [C9, setC9] = useState<number[]>(() => DATASETS.resmi.C9.slice());
   const [COST, setCOST] = useState<number[]>(() => DATASETS.resmi.COST.slice());
   const [A, setA] = useState<number[][]>(() => deepCopy(A0));
 
-  const dataset: Dataset = DATASETS[datasetKey];
+  const dataset: Dataset = getDataset(datasetKey);
 
   const ev = useMemo(() => evaluate(String(datasetKey), X, C9, COST, A), [datasetKey, X, C9, COST, A]);
 
   const top = dataset.alts[ev.order[0]];
   const flips = ev.sensitivity.rows.filter((r) => r.reversals > 0);
 
-  function loadDataset(key: keyof typeof DATASETS) {
+  function loadDataset(key: DatasetKey) {
     const init = initialState(String(key));
     setDatasetKey(key);
     setX(init.X);
@@ -121,28 +121,21 @@ export default function Page() {
     loadDataset(datasetKey);
   }
 
-  function setCell(i: number, j: number, raw: string) {
-    const v = Number(raw);
-    if (!Number.isFinite(v)) return;
+  /** Tulis satu nilai matriks keputusan (C1–C8). */
+  function setCell(i: number, j: number, v: number) {
     setX((prev) => prev.map((row, ri) => (ri === i ? row.map((c, cj) => (cj === j ? v : c)) : row)));
   }
 
-  function setC9Cell(i: number, raw: string) {
-    const v = Number(raw);
-    if (!Number.isFinite(v)) return;
+  function setC9Cell(i: number, v: number) {
     setC9((prev) => prev.map((c, ri) => (ri === i ? v : c)));
   }
 
-  function setCostCell(i: number, raw: string) {
-    const v = Number(raw);
-    if (!Number.isFinite(v)) return;
+  function setCostCell(i: number, v: number) {
     setCOST((prev) => prev.map((c, ri) => (ri === i ? v : c)));
   }
 
   /** Ubah segitiga atas AHP; segitiga bawah otomatis resiprokal. */
-  function setAhpCell(i: number, j: number, raw: string) {
-    const v = Math.max(0.05, Number(raw));
-    if (!Number.isFinite(v)) return;
+  function setAhpCell(i: number, j: number, v: number) {
     setA((prev) =>
       prev.map((row, ri) =>
         row.map((c, cj) => {
@@ -193,7 +186,7 @@ export default function Page() {
           <span className="text-[11px] font-semibold text-ink-soft">Dataset</span>
           <select
             value={datasetKey}
-            onChange={(e) => loadDataset(e.target.value as keyof typeof DATASETS)}
+            onChange={(e) => loadDataset(e.target.value as DatasetKey)}
             className="rounded border border-line bg-surface px-2 py-1.5 text-[13px] font-medium"
           >
             {Object.entries(DATASETS).map(([key, d]) => (
@@ -266,38 +259,30 @@ export default function Page() {
                   </Td>
                   {CRITERIA.map((c, j) => (
                     <Td key={c.code} align="right">
-                      <input
-                        aria-label={`${c.code} ${alt.code}`}
-                        className="cell"
-                        type="number"
-                        step="any"
-                        min={0}
+                      <NumberCell
+                        label={`${c.code} ${alt.code}`}
                         value={X[i][j]}
-                        onChange={(e) => setCell(i, j, e.target.value)}
+                        min={0}
+                        onCommit={(v) => setCell(i, j, v)}
                       />
                     </Td>
                   ))}
                   <Td align="right">
-                    <input
-                      aria-label={`C9 ${alt.code}`}
-                      className="cell"
-                      type="number"
-                      step={1}
+                    <NumberCell
+                      label={`C9 ${alt.code}`}
+                      value={C9[i]}
                       min={1}
                       max={5}
-                      value={C9[i]}
-                      onChange={(e) => setC9Cell(i, e.target.value)}
+                      decimals={0}
+                      onCommit={(v) => setC9Cell(i, v)}
                     />
                   </Td>
                   <Td align="right">
-                    <input
-                      aria-label={`Biaya ${alt.code}`}
-                      className="cell"
-                      type="number"
-                      step="0.1"
-                      min={0}
+                    <NumberCell
+                      label={`Biaya ${alt.code}`}
                       value={COST[i]}
-                      onChange={(e) => setCostCell(i, e.target.value)}
+                      min={0}
+                      onCommit={(v) => setCostCell(i, v)}
                     />
                   </Td>
                 </tr>
@@ -347,16 +332,15 @@ export default function Page() {
                       {i === j ? (
                         <span className="text-ink-faint">1,00</span>
                       ) : j < i ? (
-                        <span className="text-ink-faint">{fmt(v, 2)}</span>
+                        <span className="tnum text-ink-faint">{v.toFixed(2)}</span>
                       ) : (
-                        <input
-                          aria-label={`AHP ${CRITERIA[i].code} terhadap ${CRITERIA[j].code}`}
-                          className="cell w-[62px]"
-                          type="number"
-                          step={0.01}
-                          min={0.05}
+                        <NumberCell
+                          label={`AHP ${CRITERIA[i].code} terhadap ${CRITERIA[j].code}`}
                           value={v}
-                          onChange={(e) => setAhpCell(i, j, e.target.value)}
+                          min={1 / 9}
+                          max={9}
+                          widthClass="w-[62px]"
+                          onCommit={(next) => setAhpCell(i, j, next)}
                         />
                       )}
                     </Td>

@@ -21,6 +21,7 @@ import {
   evaluate,
   initialState,
 } from "../lib/engine.ts";
+import { compact, fmt, parseNumber, pct } from "../lib/format.ts";
 
 let fail = 0;
 const near = (a: number, b: number, eps = 5e-4) => Math.abs(a - b) < eps;
@@ -124,6 +125,34 @@ const reciprocalErr = Math.max(
 );
 chk("A0 hampir-resiprokal (toleransi pembulatan 0,33)", reciprocalErr < 0.011, true);
 chk("λmax hanya cocok dengan A0 apa adanya", Number(ahp(A0).lam.toFixed(4)), 8.1031, 1e-4);
+
+console.log("\n=== 9. Format angka deterministik (bebas locale/ICU) ===");
+// Bila runtime memakai ICU berbeda, toLocaleString bisa berubah. Formatter
+// sendiri harus selalu memberi keluaran yang sama di server maupun klien.
+chk("fmt CR", fmt(CR, 4), "0,0104");
+chk("fmt λmax", fmt(lam, 4), "8,1031");
+chk("fmt CC A3", fmt(CC[2], 4), "0,6445");
+chk("fmt ribuan", fmt(1234.5, 1), "1.234,5");
+chk("fmt nol", fmt(0, 4), "0,0000");
+chk("fmt negatif", fmt(-0.5, 1), "−0,5");
+chk("fmt bukan angka", fmt(Number.NaN), "—");
+chk("pct C1", pct(w[0], 2), "23,95%");
+chk("compact 4.20", compact(4.2), "4.2");
+chk("compact 120", compact(120), "120");
+chk("compact C9 bulat", compact(4, 0), "4");
+
+console.log("\n=== 10. Parser input angka ===");
+chk("parse '7.5'", parseNumber("7.5"), 7.5);
+chk("parse '6,5' (koma)", parseNumber("6,5"), 6.5);
+chk("parse ' 12 ' (spasi)", parseNumber(" 12 "), 12);
+chk("parse '-3'", parseNumber("-3"), -3);
+chk("parse '' -> null", parseNumber(""), null);
+chk("parse '7.' -> 7", parseNumber("7."), 7);
+chk("parse '.' -> null", parseNumber("."), null);
+chk("parse '-' -> null", parseNumber("-"), null);
+chk("parse 'abc' -> null", parseNumber("abc"), null);
+chk("parse '1.2.3' -> null", parseNumber("1.2.3"), null);
+chk("parse '1e5' -> null (notasi eksponen ditolak)", parseNumber("1e5"), null);
 
 if (fail > 0) {
   console.log(`\n${fail} CHECK GAGAL`);

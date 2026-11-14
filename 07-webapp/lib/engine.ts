@@ -172,6 +172,24 @@ export const A0: number[][] = [
 
 export const deepCopy = <T,>(a: T[][]): T[][] => a.map((r) => r.slice());
 
+/** Kunci dataset yang sah. */
+export type DatasetKey = keyof typeof DATASETS;
+
+export const DATASET_KEYS = Object.keys(DATASETS) as DatasetKey[];
+
+/**
+ * Ambil dataset berdasarkan kunci.
+ *
+ * Nilai dari DOM (mis. `<select>`) bertipe string bebas, sehingga kunci yang
+ * tidak dikenal bisa masuk. Tanpa guard, `DATASETS[k]` bernilai undefined dan
+ * aplikasi melempar error saat membaca `.alts`. Di sini kunci tak dikenal
+ * dikembalikan ke dataset default agar aplikasi tetap berjalan.
+ */
+export function getDataset(key: string): Dataset {
+  const fallback: DatasetKey = "resmi";
+  return DATASETS[key as DatasetKey] ?? DATASETS[fallback];
+}
+
 /* ============================ ALGORITMA ============================ */
 
 /**
@@ -366,7 +384,7 @@ export function evaluate(
   COST: number[],
   A: number[][],
 ): Evaluation {
-  const dataset = DATASETS[datasetKey];
+  const dataset = getDataset(datasetKey);
   const altCodes = dataset.alts.map((a) => a.code);
 
   const ahpRes = ahp(A);
@@ -396,7 +414,7 @@ export function evaluate(
 
 /** Data awal untuk satu dataset (deep copy, aman untuk diedit di UI). */
 export function initialState(datasetKey: string = "resmi") {
-  const d = DATASETS[datasetKey];
+  const d = getDataset(datasetKey);
   return {
     datasetKey,
     X: deepCopy(d.X),

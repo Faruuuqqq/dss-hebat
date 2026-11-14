@@ -22,15 +22,21 @@ npm start            # default http://localhost:3000
 ## Verifikasi
 
 ```bash
-npm run parity       # 40+ pemeriksaan angka kanonik terhadap lib/engine.ts
-node scripts/ui-check.mjs   # uji interaksi di peramban (butuh server berjalan)
+npm run verify       # lint + parity + build dalam satu perintah
+npm run lint         # ESLint 9 (flat config)
+npm run parity       # 50+ pemeriksaan: angka kanonik, format, parser input
+
+# uji peramban (server harus berjalan lebih dulu)
+npm start &
+npm run test:bugs    # 16 pemeriksaan perilaku input angka
+npm run test:ui      # 18 pemeriksaan interaksi dashboard
 ```
 
-`scripts/ui-check.mjs` memakai `playwright-core` dengan Chromium yang sudah ada di mesin
-(tidak mengunduh peramban baru). Jalankan server lebih dulu, lalu misalnya:
+Skrip peramban memakai `playwright-core` dengan Chromium yang sudah ada di mesin
+(tidak mengunduh peramban baru). Untuk menunjuk server atau peramban lain:
 
 ```bash
-BASE_URL=http://127.0.0.1:3111 node scripts/ui-check.mjs
+BASE_URL=http://127.0.0.1:3111 CHROME=/path/ke/chrome npm run test:ui
 ```
 
 ## Struktur
@@ -41,16 +47,35 @@ app/
   page.tsx          # dashboard interaktif (client component)
   globals.css       # token warna/tipe, gaya sel matriks, fokus
   icon.svg          # favicon
+components/
+  NumberCell.tsx    # sel angka aman (draft string, koma, jepit saat blur)
 lib/
   engine.ts         # MESIN AHP-TOPSIS (mandiri, data-driven, tanpa impor internal)
-  format.ts         # format angka Indonesia + ekspor CSV
+  format.ts         # format deterministik + parser input + ekspor CSV
 scripts/
-  parity.mts        # paritas angka kanonik (dijalankan via type-stripping Node)
+  parity.mts        # paritas angka kanonik + format + parser
   ui-check.mjs      # uji interaksi peramban
+  ui-bugs.mjs       # uji regresi perilaku input angka
 ```
 
 `lib/engine.ts` sengaja dibuat **mandiri tanpa impor internal** supaya dapat dijalankan
 langsung oleh Next.js maupun oleh `node scripts/parity.mts` tanpa langkah build.
+
+## Perilaku input angka
+
+Seluruh sel angka memakai `components/NumberCell.tsx`. Alasannya: input yang dikendalikan
+langsung oleh state numerik (`value={n} onChange={e => setN(Number(e.target.value))}`)
+merusak pengetikan. Saat sel dikosongkan, `Number("")` bernilai `0`, React mengisi ulang `"0"`,
+lalu karakter berikutnya menempel sehingga `"7.5"` menjadi `"75"` dan `"1250"` menjadi `"01250"`.
+
+| Perilaku | Jaminan |
+|---|---|
+| Mengetik desimal | Teks dipertahankan selama fokus (`7.5` tetap `7.5`) |
+| Pemisah desimal | Titik maupun koma diterima (`6,5` → `6.5`) |
+| Nilai di luar rentang | Dijepit saat blur (C9 → 1..5, biaya ≥ 0, AHP → 1/9..9) |
+| Sel dikosongkan | Kembali ke nilai sah sebelumnya, bukan `0` |
+| Teks tidak valid | Ditolak, nilai sah sebelumnya dipertahankan |
+| Format angka | `lib/format.ts` tidak memakai `toLocaleString`, jadi keluaran identik di server dan klien (bebas risiko hydration) |
 
 ## Paritas dengan model kanonik
 
@@ -93,4 +118,4 @@ skalabilitas dan tidak boleh dijadikan hasil utama.
 ## Belum dikerjakan
 
 - Deploy ke Vercel dan integrasi Supabase (tahap 2 pada rencana teknologi).
-- `npm run lint` belum dikonfigurasi (Next 16 memakai ESLint datar; belum ada `eslint.config`).
+- Data masih statis di `lib/engine.ts`; belum ada pemuatan dari basis data.
