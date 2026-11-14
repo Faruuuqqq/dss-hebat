@@ -25,6 +25,37 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-14 · Sesi 15 — Merapikan repo untuk GitHub
+
+**Konteks:** pengguna meminta folder repo dirapikan agar tampil bersih di GitHub.
+
+**Temuan audit:**
+- 93 berkas ter-track, **tidak ada artefak build** yang ikut ter-commit (bersih).
+- `README.md` usang: memakai garis miring terbalik Windows (`00-brief\tugas.txt`) sehingga tidak terbaca sebagai pohon direktori di GitHub, dan masih menyatakan "belum dicompile" serta "mesin ini tanpa pdflatex" — keduanya sudah tidak benar.
+- Dua gambar di `04-paper/` **tidak dirujuk siapa pun**: `gambar-taksonomi.png` dan `gambar-arsitektur.png` (versi lama sebelum gambar kanonik).
+- Folder disk penuh artefak: `07-webapp/.next` (73 MB), `.shots` (1,4 MB), `__pycache__`, `.playwright-mcp`, dan `.xdv`/`.log` LaTeX.
+
+**Perubahan:**
+- `README.md` ditulis ulang: ringkasan proyek, tabel angka kanonik, struktur direktori bergaris miring depan, cara menjalankan, perintah verifikasi, dan tabel status. Semua tautan lokal diverifikasi ada.
+- `.gitattributes` (baru): normalisasi EOL, penanda binari, dan `linguist-documentation` supaya statistik bahasa repo tidak menyesatkan.
+- `.gitignore` diperluas: artefak LaTeX lain (`*.bbl`, `*.bcf`, `*.run.xml`), Node/Next (`node_modules/`, `.next/`, `.shots/`), berkas OS/editor, dan `.env`.
+- `git rm` dua gambar mati.
+- Hapus artefak disk yang dapat dibuat ulang (bukan data pengguna). Berkas pribadi `My FromFile Playlist Missing.csv` dan arsip `99-arsip/` **tidak disentuh**.
+
+**Verifikasi:**
+- Renormalisasi EOL menyentuh 6 berkas data (`*.csv`, `*.txt`, `*.svg`). Isi dipastikan **identik** setelah CR dihapus, jadi hanya akhir baris yang berubah.
+- `bash build-papers.sh` → kedua paper tetap tercompile (5 dan 8 halaman, 0 overfull hbox).
+- `node 05-aplikasi/test-algoritma.mjs` → semua lulus, termasuk paritas CSV yang baru dinormalisasi.
+- `npm run build` di `07-webapp` dari keadaan tanpa `.next` → sukses (51 s), rute tetap statis.
+- `git status` bersih; ukuran folder turun dari 547 MB menjadi 474 MB (456 MB di antaranya `node_modules`, yang tidak di-commit).
+
+**Catatan jujur:** satu perintah pembersihan awal tidak berjalan karena `pkill -f 'next start'` mencocokkan baris perintahnya sendiri dan mematikan shell-nya; perintah diulang tanpa `pkill` dan berhasil.
+
+**Open items:**
+- [ ] (Opsional) `npm install` ulang bila `node_modules` ingin dihapus untuk menghemat ruang.
+- [ ] (Opsional) Deploy Vercel + Supabase (butuh kredensial pengguna).
+- [ ] (Opsional) Push branch `main` ke `origin`.
+
 ### 2026-11-14 · Sesi 14 — Audit aksesibilitas webapp (axe-core)
 
 **Konteks:** aksesibilitas belum pernah diaudit pada `07-webapp/`. Audit dijalankan otomatis dengan axe-core pada WCAG 2.1 A/AA.

@@ -56,7 +56,7 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 | Data & sumber (`08-docs/data-dan-sumber.md`) | SELESAI — BPS + E-Office dicatat, data riil + dummy CCTV + sumber |
 | Dokumentasi SE (`08-docs/`) | SELESAI — SRS (FR/NFR/acceptance), traceability, UML Mermaid, mockup desktop/mobile aktual |
 | Migrasi Next.js (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; bug input angka, format, dan `lint` diperbaiki; 3 suite uji LULUS |
-| Git | ter-commit (13 commit s.d. sesi 13); branch `main`; belum di-push |
+| Git | ter-commit (16 commit s.d. sesi 15); branch `main`; belum di-push |
 
 ## 5. Invarian (JANGAN dilanggar tanpa alasan kuat)
 
