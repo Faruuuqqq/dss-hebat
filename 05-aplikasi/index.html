@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSS Prioritisasi Penempatan CCTV — Jatinangor</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#ffffff; --ink:#0f172a; --muted:#64748b;
+    --line:#e2e8f0; --brand:#0d6efd; --brand2:#0aa2a2;
+    --ok:#16a34a; --warn:#d97706; --bad:#dc2626; --soft:#f1f5f9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:#eef2f7;line-height:1.5}
+  header{background:linear-gradient(120deg,#0b2a4a,#0d6efd 70%,#0aa2a2);color:#fff;padding:28px 22px}
+  header h1{margin:0 0 4px;font-size:1.35rem}
+  header p{margin:0;opacity:.9;font-size:.9rem;max-width:70ch}
+  .wrap{max-width:1120px;margin:0 auto;padding:22px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:-38px 0 22px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:0 6px 18px rgba(2,6,23,.06)}
+  .kpi .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .kpi .v{font-size:1.3rem;font-weight:700;margin-top:2px}
+  card{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin:0 0 18px;
+       box-shadow:0 4px 14px rgba(2,6,23,.05)}
+  card h2{font-size:1rem;margin:0 0 4px}
+  card .hint{color:var(--muted);font-size:.82rem;margin:0 0 14px}
+  table{border-collapse:collapse;width:100%;font-size:.85rem}
+  th,td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+  th{background:var(--soft);font-weight:600}
+  td.name{text-align:left;white-space:nowrap}
+  input.cell{width:64px;border:1px solid #cbd5e1;border-radius:6px;padding:3px 5px;text-align:center;font:inherit;font-size:.82rem}
+  input.cell:focus{outline:2px solid var(--brand);border-color:var(--brand)}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.75rem;font-weight:600}
+  .b-ok{background:#dcfce7;color:#166534}.b-bad{background:#fee2e2;color:#991b1b}
+  .rank1{background:#fff7ed;font-weight:700}
+  .bar{height:10px;border-radius:6px;background:linear-gradient(90deg,var(--brand),var(--brand2));display:inline-block;vertical-align:middle}
+  .barwrap{display:flex;align-items:center;gap:8px}
+  .phase{font-size:.78rem;padding:2px 8px;border-radius:6px;background:var(--soft)}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  button{font:inherit;font-size:.82rem;padding:7px 12px;border-radius:8px;border:1px solid var(--line);
+         background:#fff;cursor:pointer}
+  button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  button:hover{filter:brightness(.97)}
+  .grid2{display:grid;grid-template-columns:1fr;gap:18px}
+  @media(min-width:900px){.grid2{grid-template-columns:1.15fr .85fr}}
+  .scroll{overflow-x:auto}
+  .legend{font-size:.78rem;color:var(--muted);margin-top:8px}
+  .muted{color:var(--muted)}
+  .prio{font-weight:700}
+  footer{max-width:1120px;margin:0 auto;padding:8px 22px 40px;color:var(--muted);font-size:.78rem}
+  .pill{font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--muted)}
+  #map svg{width:100%;height:auto;display:block}
+</style>
+</head>
+<body>
+<header>
+  <h1>Sistem Prioritisasi Penempatan CCTV — Permukiman Mahasiswa Jatinangor</h1>
+  <p>Aplikasi DSS berbasis <b>AHP</b> (pembobotan multistakeholder) dan <b>TOPSIS</b> (perankingan alternatif segmen gang),
+     dengan alokasi anggaran bertahap dan analisis sensitivitas. Data: matriks ilustratif terkalibrasi data sekunder
+     (mode <i>hybrid</i>). Buka file ini langsung di browser — tanpa server, tanpa instalasi.</p>
+</header>
+
+<div class="wrap">
+  <div class="kpis">
+    <div class="kpi"><div class="l">Rasio Konsistensi AHP (CR)</div><div class="v" id="kpi-cr">—</div></div>
+    <div class="kpi"><div class="l">Alternatif Segmen</div><div class="v" id="kpi-alt">5</div></div>
+    <div class="kpi"><div class="l">Layak (ambang operasional C9 ≥ 3)</div><div class="v" id="kpi-feasible">—</div></div>
+    <div class="kpi"><div class="l">Prioritas Tertinggi</div><div class="v" id="kpi-top">—</div></div>
+    <div class="kpi"><div class="l">Plafon Anggaran / Tahun</div><div class="v">Rp 15,0 Jt</div></div>
+  </div>
+
+  <div class="grid2">
+    <card>
+      <h2>1. Matriks Keputusan (Kriteria Urgensi C1–C8 &amp; Kelayakan/Biaya)</h2>
+      <p class="hint">Nilai dapat diedit; hasil peringkat terhitung ulang otomatis. Semua kriteria C1–C8 berorientasi <i>benefit</i> terhadap urgensi (skor tinggi = lebih mendesak).</p>
+      <div class="scroll">
+        <table id="tbl-x"></table>
+      </div>
+      <div class="legend">
+        C9 = kesiapan teknis; ambang operasional C9 &lt; 3 ditandai <b>tidak layak</b> dan tidak dialokasikan ke fase · Biaya = estimasi RAB per titik (kendala anggaran).
+      </div>
+    </card>
+
+    <card>
+      <h2>2. Matriks Perbandingan Berpasangan AHP (konsensus 8 kriteria)</h2>
+      <p class="hint">Skala Saaty 1–9. Segitiga atas dapat diedit; segitiga bawah mengikuti sifat resiprokal.</p>
+      <div class="scroll"><table id="tbl-ahp"></table></div>
+      <p style="margin:12px 0 0">
+        Rasio konsistensi: <b id="cr-line">—</b>
+        <span id="cr-badge" class="badge">—</span>
+      </p>
+      <div class="legend">RI = 1,41 (n = 8). Matriks konsisten bila CR &lt; 0,10.</div>
+    </card>
+  </div>
+
+  <card>
+    <h2>3. Bobot Global Kriteria (hasil AHP)</h2>
+    <div class="scroll"><table id="tbl-w"></table></div>
+  </card>
+
+  <card>
+    <h2>4. Hasil Perankingan TOPSIS</h2>
+    <p class="hint">Normalisasi vektor Euclidean → pembobotan → jarak ke solusi ideal → koefisien kedekatan CC&#x1D62;.</p>
+    <div class="scroll"><table id="tbl-topsis"></table></div>
+    <div class="legend">A+ = solusi ideal positif · A− = solusi ideal negatif · CC&#x1D62; ∈ [0,1]; makin tinggi = makin urgen.</div>
+  </card>
+
+  <card>
+    <h2>5. Peta Prioritas (skematik)</h2>
+    <p class="hint">Titik merepresentasikan segmen gang; posisi bersifat relatif (bukan koordinat GPS). Warna dan ukuran mengikuti nilai CC&#x1D62;; label bawah menunjukkan peringkat dan fase anggaran.</p>
+    <div id="map"></div>
+  </card>
+
+  <card>
+    <h2>6. Alokasi Anggaran Bertahap (plafon Rp 15,0 Jt/tahun)</h2>
+    <p class="hint">Hanya alternatif yang memenuhi ambang operasional C9 ≥ 3 dan biaya per titik tidak melebihi plafon yang dialokasikan. Alternatif diurutkan menurut CC&#x1D62;, lalu dikelompokkan ke fase tahunan selama memenuhi plafon.</p>
+    <div class="scroll"><table id="tbl-phase"></table></div>
+  </card>
+
+  <card>
+    <h2>7. Analisis Sensitivitas Bobot ±20% (One-At-A-Time, 16 run)</h2>
+    <p class="hint">Setiap kriteria dinaikkan/diturunkan 20%, bobot lain direnormalisasi proporsional, lalu TOPSIS dihitung ulang.</p>
+    <div class="scroll"><table id="tbl-sens"></table></div>
+    <p class="legend" id="sens-note"></p>
+  </card>
+
+  <div class="toolbar">
+    <label class="pill" for="sel-dataset">Dataset</label>
+    <select id="sel-dataset" style="font:inherit;font-size:.82rem;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:#fff"></select>
+    <button class="primary" id="btn-export">Ekspor hasil (CSV)</button>
+    <button id="btn-reset">Kembalikan data awal</button>
+  </div>
+  <p class="legend" id="dataset-note"></p>
+  <p class="legend">Aplikasi ini adalah demonstrasi prosedural model konseptual DSS; nilainya belum divalidasi dengan survei lapangan.</p>
+</div>
+
+<footer>
+  DSS Prioritisasi CCTV Jatinangor · AHP + TOPSIS · data hybrid (angka riil level desa + estimasi terdokumentasi).
+  Lihat <span class="pill">05-aplikasi/data/</span> untuk dataset &amp; sumber.
+</footer>
+
+<script>
+/* ============================ DATA (mode hybrid) ============================ */
+const CRITERIA = [
+  {code:"C1", name:"Riwayat Kerawanan",     unit:"insiden/km/th"},
+  {code:"C2", name:"Mobilitas Malam",       unit:"orang/jam"},
+  {code:"C3", name:"Defisiensi PJU",        unit:"skor 1–5"},
+  {code:"C4", name:"Efisiensi Coverage",    unit:"m²/titik"},
+  {code:"C5", name:"Kepadatan Kos",         unit:"kamar/km"},
+  {code:"C6", name:"Derajat Simpul",        unit:"cabang"},
+  {code:"C7", name:"Gap CCTV Eksisting",    unit:"meter"},
+  {code:"C8", name:"POI Rentan",            unit:"unit"}
+];
+// Engine bersifat DATA-DRIVEN: jumlah segmen berasal dari dataset, bukan hardcode.
+const DATASETS = {
+  resmi: {
+    label: "5 Segmen (Resmi — sesuai proposal)",
+    note: "Angka terverifikasi; identik dengan naskah yang dikumpulkan ke dosen.",
+    alts: [
+      {code:"A1", name:"Gang Kos Sayang",         desa:"Sayang"},
+      {code:"A2", name:"Ruas Jalan Cikeruh",      desa:"Cikeruh"},
+      {code:"A3", name:"Persimpangan Hegarmanah", desa:"Hegarmanah"},
+      {code:"A4", name:"Gang Cipacing",           desa:"Cipacing"},
+      {code:"A5", name:"Ruas Jalan Cileles",      desa:"Cileles"}
+    ],
+    X: [
+      [4.2,120,4,380,85,2,450, 8],
+      [2.1,350,2,650,40,3,180,12],
+      [3.5,280,3,520,55,5,320,15],
+      [3.8, 80,5,290,60,2,600, 4],
+      [1.5,160,3,420,30,2,250, 5]
+    ],
+    C9:   [4,5,4,3,4],
+    COST: [6.5,5.0,7.5,8.0,5.5],
+    mapPos: { A1:[232,208], A2:[96,258], A3:[402,236], A4:[668,272], A5:[528,110] }
+  },
+  perluasan: {
+    label: "12 Desa (Simulasi — skenario perluasan)",
+    note: "Data SIMULASI, bukan hasil lapangan. Menunjukkan model dapat diskalakan ke banyak segmen tanpa mengubah struktur kriteria.",
+    alts: [
+      {code:"D1", name:"Segmen Cipacing",   desa:"Cipacing"},
+      {code:"D2", name:"Segmen Hegarmanah", desa:"Hegarmanah"},
+      {code:"D3", name:"Segmen Sayang",     desa:"Sayang"},
+      {code:"D4", name:"Segmen Cisempur",   desa:"Cisempur"},
+      {code:"D5", name:"Segmen Cikeruh",    desa:"Cikeruh"},
+      {code:"D6", name:"Segmen Cintamulya", desa:"Cintamulya"},
+      {code:"D7", name:"Segmen Mekargalih", desa:"Mekargalih"},
+      {code:"D8", name:"Segmen Cileles",    desa:"Cileles"},
+      {code:"D9", name:"Segmen Jatiroke",   desa:"Jatiroke"},
+      {code:"D10",name:"Segmen Cibeusi",    desa:"Cibeusi"},
+      {code:"D11",name:"Segmen Cilayung",   desa:"Cilayung"},
+      {code:"D12",name:"Segmen Jatimukti",  desa:"Jatimukti"}
+    ],
+    X: [
+      [3.9,190,4,340,95,3,420,10],
+      [4.0,250,3,480,80,5,300,14],
+      [3.6,220,3,450,70,3,350,11],
+      [2.6,180,3,520,45,2,300, 8],
+      [2.4,330,2,640,42,3,200,12],
+      [2.2,160,3,480,38,2,280, 7],
+      [2.0,150,3,460,35,2,260, 6],
+      [1.8,170,4,430,32,2,270, 5],
+      [1.9,140,3,440,33,2,300, 5],
+      [1.7,130,3,400,28,2,320, 4],
+      [1.6,120,3,380,25,2,340, 4],
+      [1.5,110,3,360,22,2,360, 3]
+    ],
+    C9:   [3,4,4,4,5,4,4,4,4,4,3,4],
+    COST: [8.0,7.0,6.5,6.0,5.0,5.5,5.5,5.5,5.5,5.0,5.5,5.0],
+    mapPos: null   // -> tata letak otomatis
+  }
+};
+
+const A0 = [
+  [1.00,2.00,2.00,3.00,2.00,4.00,2.00,2.00],
+  [0.50,1.00,1.00,2.00,1.00,3.00,2.00,1.00],
+  [0.50,1.00,1.00,2.00,1.00,3.00,2.00,1.00],
+  [0.33,0.50,0.50,1.00,0.50,2.00,1.00,0.50],
+  [0.50,1.00,1.00,2.00,1.00,2.00,1.00,1.00],
+  [0.25,0.33,0.33,0.50,0.50,1.00,0.50,0.50],
+  [0.50,0.50,0.50,1.00,1.00,2.00,1.00,1.00],
+  [0.50,1.00,1.00,2.00,1.00,2.00,1.00,1.00]
+];
+const RI = {1:0,2:0,3:0.58,4:0.90,5:1.12,6:1.24,7:1.32,8:1.41,9:1.45,10:1.49};
+const BUDGET = 15.0; // juta rupiah per tahun
+const C9_MIN = 3;    // ambang kelayakan teknis (C9)
+
+function deepCopy(a){return a.map(r=>r.slice());}
+
+// state dataset aktif (diisi oleh loadDataset)
+let activeKey = "resmi";
+let ALTS = [], X = [], C9 = [], COST = [], MAP_POS = null;
+let A = deepCopy(A0);
+function loadDataset(key){
+  activeKey = key;
+  const d = DATASETS[key];
+  ALTS = d.alts;
+  X = deepCopy(d.X);
+  C9 = d.C9.slice();
+  COST = d.COST.slice();
+  MAP_POS = d.mapPos;
+}
+
+/* ============================ ALGORITMA ============================ */
+// Bobot AHP via power iteration + lambda_max (mean ratio), CI, CR
+function ahp(M){
+  const n = M.length;
+  let w = new Array(n).fill(1/n);
+  for(let it=0; it<5000; it++){
+    const nw = new Array(n).fill(0);
+    for(let i=0;i<n;i++){ let s=0; for(let j=0;j<n;j++) s += M[i][j]*w[j]; nw[i]=s; }
+    const sum = nw.reduce((a,b)=>a+b,0);
+    for(let i=0;i<n;i++) nw[i]/=sum;
+    let diff=0; for(let i=0;i<n;i++) diff += Math.abs(nw[i]-w[i]);
+    w = nw;
+    if(diff < 1e-13) break;
+  }
+  let lam=0;
+  for(let i=0;i<n;i++){ let s=0; for(let j=0;j<n;j++) s += M[i][j]*w[j]; lam += s/w[i]; }
+  lam /= n;
+  const CI = n>2 ? (lam-n)/(n-1) : 0;
+  const cr = (RI[n] && n>2) ? CI/RI[n] : 0;
+  return {w, lam, CI, CR:cr};
+}
+// TOPSIS: normalisasi Euclidean -> terbobot -> jarak ideal -> CC
+function topsis(X, w){
+  const m = X.length, n = X[0].length;
+  const div = [];
+  for(let j=0;j<n;j++){ let s=0; for(let i=0;i<m;i++) s += X[i][j]**2; div[j]=Math.sqrt(s); }
+  const V = X.map(row=>row.map((v,j)=> v/div[j]*w[j]));
+  const Ap=[], Am=[];
+  for(let j=0;j<n;j++){ let mx=-Infinity, mn=Infinity;
+    for(let i=0;i<m;i++){ if(V[i][j]>mx)mx=V[i][j]; if(V[i][j]<mn)mn=V[i][j]; }
+    Ap[j]=mx; Am[j]=mn; }
+  const Dp=[], Dm=[];
+  for(let i=0;i<m;i++){ let sp=0, sm=0;
+    for(let j=0;j<n;j++){ sp += (V[i][j]-Ap[j])**2; sm += (V[i][j]-Am[j])**2; }
+    Dp[i]=Math.sqrt(sp); Dm[i]=Math.sqrt(sm); }
+  const CC = Dp.map((d,i)=> d===0&&Dm[i]===0 ? 0 : Dm[i]/(d+Dm[i]));
+  return {V, Ap, Am, Dp, Dm, CC};
+}
+// Kelayakan teknis: C9 < C9_MIN tidak dialokasikan (kendala, bukan kriteria TOPSIS)
+function feasibleFlags(){
+  return C9.map(v => Number(v) >= C9_MIN);
+}
+// Alokasi fase anggaran: urut CC desc, isi fase selama <= plafon; lewati yang tidak layak
+function allocPhases(cc, cost, feasible){
+  const flags = feasible || cc.map(()=>true);
+  const order = cc.map((c,i)=>i).filter(i=>flags[i]).sort((a,b)=> cc[b]-cc[a]);
+  const assign = new Array(cc.length).fill(null);
+  let phase = 1, used = 0;
+  for(const i of order){
+    if(Number(cost[i]) > BUDGET + 1e-9) continue;
+    if(used>0 && used + cost[i] > BUDGET + 1e-9){ phase++; used = 0; }
+    assign[i] = phase; used += cost[i];
+  }
+  return assign;
+}
+// Sensitivitas OAT +-20% dengan renormalisasi proporsional
+function sensitivity(X, w){
+  const rows = [];
+  const base = topsis(X,w).CC;
+  const baseOrder = base.map((c,i)=>i).sort((a,b)=>base[b]-base[a]); // urut menurun
+  for(let j=0;j<w.length;j++){
+    for(const d of [0.20,-0.20]){
+      const wp = w.slice();
+      wp[j] *= (1+d);
+      const otherSum = w.reduce((a,b)=>a+b,0) - w[j];
+      const newOther = 1 - wp[j];
+      for(let k=0;k<w.length;k++) if(k!==j) wp[k] = w[k]*(newOther/otherSum);
+      const cc = topsis(X, wp).CC;
+      const order = cc.map((c,i)=>i).sort((a,b)=>cc[b]-cc[a]);
+      const ranks = order.map(i=>ALTS[i].code);
+      // hitung pasangan yang bertukar posisi dibanding peringkat dasar
+      let reversals = 0;
+      for(let a=0;a<baseOrder.length;a++) for(let b=a+1;b<baseOrder.length;b++){
+        if(order.indexOf(baseOrder[a]) > order.indexOf(baseOrder[b])) reversals++;
+      }
+      rows.push({j, d, cc, ranks, reversals});
+    }
+  }
+  return {base, rows};
+}
+
+/* ============================ RENDER ============================ */
+const $ = id => document.getElementById(id);
+const fmt = (v,n=4)=> Number(v).toFixed(n).replace('.',',');
+
+// Render penuh: tabel input + seluruh hasil. Dipakai saat load/ganti dataset/reset.
+function render(){
+  renderX();
+  renderAHP();
+  renderResults();
+}
+// Render hasil saja. Dipakai saat mengedit sel agar fokus input tidak hilang.
+function renderResults(){
+  const ahpRes = ahp(A);
+  const w = ahpRes.w;
+  const t = topsis(X, w);
+  const order = t.CC.map((c,i)=>i).sort((a,b)=> t.CC[b]-t.CC[a]);
+  const rank = new Array(X.length); order.forEach((idx,r)=> rank[idx]=r+1);
+  const feasible = feasibleFlags();
+  const phases = allocPhases(t.CC, COST, feasible);
+  const sens = sensitivity(X, w);
+
+  // KPI
+  $('kpi-cr').innerHTML = fmt(ahpRes.CR,4) + (ahpRes.CR<0.10?' <span class="badge b-ok">konsisten</span>':' <span class="badge b-bad">tidak konsisten</span>');
+  $('kpi-alt').textContent = ALTS.length;
+  $('kpi-feasible').textContent = feasible.filter(Boolean).length + "/" + ALTS.length;
+  $('kpi-top').textContent = ALTS[order[0]].code + " · " + ALTS[order[0]].name;
+  const dnote = $('dataset-note');
+  if(dnote) dnote.textContent = "Dataset aktif: " + DATASETS[activeKey].label + " — " + DATASETS[activeKey].note;
+
+  renderWeights(w);
+  renderTopsis(t, rank, feasible, phases);
+  renderMap(t, rank, phases, feasible);
+  renderPhases(t, rank, phases, feasible);
+  renderSens(sens);
+
+  $('cr-line').textContent = "λmax = " + fmt(ahpRes.lam,4) + " · CI = " + fmt(ahpRes.CI,4) + " · CR = " + fmt(ahpRes.CR,4);
+  const b = $('cr-badge'); b.className = "badge " + (ahpRes.CR<0.10?'b-ok':'b-bad');
+  b.textContent = ahpRes.CR<0.10 ? "CR < 0,10 (konsisten)" : "CR ≥ 0,10 (tinjau ulang)";
+}
+
+function renderX(){
+  let h = "<tr><th>Kode</th><th class='name'>Alternatif Segmen</th>";
+  CRITERIA.forEach(c => h += `<th>${c.code}</th>`);
+  h += "<th>C9</th><th>Biaya<br><span class='muted'>(Jt Rp)</span></th></tr>";
+  ALTS.forEach((a,i)=>{
+    h += `<tr><td><b>${a.code}</b></td><td class='name'>${a.name}</td>`;
+    CRITERIA.forEach((c,j)=> h += `<td><input class="cell" data-x="${i}-${j}" type="number" step="any" min="0" value="${X[i][j]}"></td>`);
+    h += `<td><input class="cell" data-c9="${i}" type="number" step="any" min="1" max="5" value="${C9[i]}"></td>`;
+    h += `<td><input class="cell" data-cost="${i}" type="number" step="any" min="0" value="${COST[i]}"></td></tr>`;
+  });
+  $('tbl-x').innerHTML = h;
+}
+
+function renderAHP(){
+  let h = "<tr><th></th>";
+  CRITERIA.forEach(c => h += `<th>${c.code}</th>`);
+  h += "</tr>";
+  A.forEach((row,i)=>{
+    h += `<tr><th>${CRITERIA[i].code}</th>`;
+    row.forEach((v,j)=>{
+      if(j<i){ h += `<td class="muted" id="lo-${i}-${j}">${v.toFixed(2)}</td>`; }
+      else if(i===j){ h += `<td style="background:var(--soft)">1</td>`; }
+      else { h += `<td><input class="cell" data-a="${i}-${j}" type="number" step="any" min="0.05" value="${v}"></td>`; }
+    });
+    h += "</tr>";
+  });
+  $('tbl-ahp').innerHTML = h;
+}
+
+function renderWeights(w){
+  const order = w.map((v,i)=>i).sort((a,b)=>w[b]-w[a]);
+  let h = "<tr><th>Peringkat</th><th class='name'>Kriteria</th><th>Bobot</th><th>Visual</th></tr>";
+  order.forEach((j,r)=>{
+    const pct = w[j]*100;
+    h += `<tr><td>${r+1}</td><td class='name'>${CRITERIA[j].code} · ${CRITERIA[j].name}</td>
+          <td><b>${fmt(pct,2)}%</b></td>
+          <td><div class="barwrap"><span class="bar" style="width:${(pct/Math.max(...w)*100).toFixed(1)}px"></span></div></td></tr>`;
+  });
+  $('tbl-w').innerHTML = h;
+}
+
+function renderTopsis(t, rank, feasible, phases){
+  const maxCC = Math.max(...t.CC);
+  let h = "<tr><th>Peringkat</th><th class='name'>Alternatif</th><th>D⁺</th><th>D⁻</th><th>CC&#x1D62;</th><th>Visual CC</th></tr>";
+  t.CC.map((c,i)=>i).sort((a,b)=>t.CC[b]-t.CC[a]).forEach((i,r)=>{
+    const layak = feasible ? feasible[i] : true;
+    const overBudget = layak && phases && phases[i] === null;
+    const status = !layak
+      ? ` <span class="badge b-bad">C9 &lt; ${C9_MIN}</span>`
+      : overBudget ? ' <span class="badge b-bad">Biaya &gt; plafon</span>' : '';
+    h += `<tr class="${rank[i]===1?'rank1':''}"><td>${r+1}</td>
+          <td class='name'><b>${ALTS[i].code}</b> · ${ALTS[i].name}${status}</td>
+          <td>${fmt(t.Dp[i],4)}</td><td>${fmt(t.Dm[i],4)}</td>
+          <td><b>${fmt(t.CC[i],4)}</b></td>
+          <td><div class="barwrap"><span class="bar" style="width:${(t.CC[i]/maxCC*180).toFixed(1)}px"></span></div></td></tr>`;
+  });
+  $('tbl-topsis').innerHTML = h;
+}
+
+function autoPos(n){
+  const cols = Math.ceil(Math.sqrt(n)), rows = Math.ceil(n/cols), pos = {};
+  ALTS.forEach((a,i)=>{
+    const r = Math.floor(i/cols), c = i%cols;
+    const x = cols>1 ? 110 + c*(580/(cols-1)) : 400;
+    const y = rows>1 ? 100 + r*(250/(rows-1)) : 220;
+    pos[a.code] = [x,y];
+  });
+  return pos;
+}
+function renderMap(t, rank, phases, feasible){
+  const cc = t.CC;
+  const mn = Math.min(...cc), mx = Math.max(...cc), span = (mx-mn)||1;
+  const t01 = i => (cc[i]-mn)/span;                       // 0 = paling rendah, 1 = paling urgen
+  const nodeColor = i => `hsl(${212 - 190*t01(i)}, 82%, ${56 - 8*t01(i)}%)`;
+  const phaseColor = p => ({1:"#0d6efd",2:"#0aa2a2",3:"#7c3aed"}[p] || "#64748b");
+  const pos = MAP_POS || autoPos(ALTS.length);
+  const small = ALTS.length > 6;                          // label lebih kecil bila banyak segmen
+  let nodes = "", labels = "";
+  ALTS.forEach((a,i)=>{
+    const [x,y] = pos[a.code] || [0,0];
+    const k = t01(i), rr = (small?11:15) + (small?20:27)*k;
+    const layak = feasible ? feasible[i] : true;
+    const overBudget = layak && phases[i] === null;
+    const allocated = layak && !overBudget;
+    const fill = allocated ? nodeColor(i) : overBudget ? "#f59e0b" : "#94a3b8";
+    const stroke = allocated ? "#fff" : overBudget ? "#b45309" : "#dc2626";
+    const status = !layak ? `Tidak layak (C9 < ${C9_MIN})` : overBudget ? "Biaya > plafon" : 'Fase '+phases[i];
+    nodes += `<circle cx="${x}" cy="${y}" r="${rr.toFixed(1)}" fill="${fill}" stroke="${stroke}" stroke-width="${allocated?3:2}" ${allocated?'':'stroke-dasharray="4 3"'}/>`
+          +  `<text x="${x}" y="${y+5}" text-anchor="middle" font-size="${13+3*k}" font-weight="700" fill="#fff">${a.code}</text>`;
+    labels += `<text x="${x}" y="${y+rr+15}" text-anchor="middle" font-size="${small?10:12}" font-weight="600" fill="#0f172a">${a.name}</text>`
+           +  `<text x="${x}" y="${y+rr+28}" text-anchor="middle" font-size="${small?9:11}" fill="#475569">CC ${fmt(cc[i],4)} · Peringkat ${rank[i]} · ${status}</text>`;
+  });
+  const corridor = MAP_POS
+    ? `<path d="M 96 258 L 232 208 L 402 236 L 668 272" fill="none" stroke="#cbd5e1" stroke-width="11" stroke-linecap="round"/>
+       <path d="M 402 236 L 528 110" fill="none" stroke="#cbd5e1" stroke-width="11" stroke-linecap="round" stroke-dasharray="2 13"/>`
+    : "";
+  const svg = `<svg viewBox="0 0 800 440" role="img" aria-label="Peta prioritas skematik segmen CCTV Jatinangor">
+      <rect x="1" y="1" width="798" height="438" rx="14" fill="#f8fafc" stroke="#e2e8f0"/>
+      <text x="22" y="28" font-size="13" font-weight="700" fill="#334155">Kecamatan Jatinangor — skematik (posisi relatif, bukan GPS)</text>
+      ${corridor}
+      ${nodes}${labels}
+    </svg>`;
+  $('map').innerHTML = svg + `<div class="legend" style="margin-top:6px">
+    Warna &amp; ukuran titik &prop; CC&#x1D62; (merah = paling urgen) · label bawah = peringkat &amp; fase · titik abu putus-putus = tidak layak (C9 &lt; ${C9_MIN}) · titik kuning putus-putus = Biaya &gt; plafon${MAP_POS ? " · jalur abu = koridor jalan utama (skematik)" : ""}.</div>`;
+}
+
+function renderPhases(t, rank, phases, feasible){
+  let h = "<tr><th>Fase</th><th class='name'>Alternatif</th><th>CC&#x1D62;</th><th>Biaya (Jt Rp)</th><th>Subtotal Fase</th></tr>";
+  const valid = phases.filter(p=>p!==null);
+  const maxPhase = valid.length ? Math.max(...valid) : 0;
+  for(let p=1;p<=maxPhase;p++){
+    const members = t.CC.map((c,i)=>i).filter(i=>phases[i]===p).sort((a,b)=>t.CC[b]-t.CC[a]);
+    const subtotal = members.reduce((s,i)=>s+COST[i],0);
+    members.forEach((i,k)=>{
+      h += `<tr>` + (k===0?`<td rowspan="${members.length}"><span class="phase">Fase ${p}</span></td>`:"")
+        + `<td class='name'><b>${ALTS[i].code}</b> · ${ALTS[i].name}</td>`
+        + `<td>${fmt(t.CC[i],4)}</td><td>${COST[i].toFixed(1)}</td>`
+        + (k===0?`<td rowspan="${members.length}"><b>${subtotal.toFixed(1)}</b> ${subtotal<=BUDGET?'<span class="badge b-ok">≤ plafon</span>':'<span class="badge b-bad">&gt; plafon</span>'}</td>`:"")
+        + `</tr>`;
+    });
+  }
+  const excludedC9 = t.CC.map((c,i)=>i).filter(i => feasible && !feasible[i]);
+  const excludedBudget = t.CC.map((c,i)=>i).filter(i => feasible && feasible[i] && phases[i] === null);
+  if(excludedC9.length){
+    h += `<tr><td colspan="5" class="muted">Tidak dialokasikan (C9 &lt; ${C9_MIN}): `
+       + excludedC9.map(i=>`${ALTS[i].code} · ${ALTS[i].name} (C9 ${C9[i]})`).join('; ') + `</td></tr>`;
+  }
+  if(excludedBudget.length){
+    h += `<tr><td colspan="5" class="muted">Tidak dialokasikan (Biaya &gt; plafon Rp ${BUDGET.toFixed(1)} Jt): `
+       + excludedBudget.map(i=>`${ALTS[i].code} · ${ALTS[i].name} (Rp ${COST[i].toFixed(1)} Jt)`).join('; ') + `</td></tr>`;
+  }
+  $('tbl-phase').innerHTML = h;
+}
+
+function renderSens(sens){
+  let h = "<tr><th>Kriteria</th><th>Variasi</th>";
+  ALTS.forEach(a=> h += `<th>${a.code}</th>`);
+  h += "<th>Susunan Peringkat</th></tr>";
+  sens.rows.forEach(r=>{
+    const changed = r.reversals>0;
+    h += `<tr><td>${CRITERIA[r.j].code}</td><td>${r.d>0?'+20%':'−20%'}</td>`;
+    r.cc.forEach(c => h += `<td>${fmt(c,4)}</td>`);
+    h += `<td style="${changed?'color:var(--warn);font-weight:600':''}">${r.ranks.join(' > ')}${changed?' *':''}</td></tr>`;
+  });
+  $('tbl-sens').innerHTML = h;
+  const flips = sens.rows.filter(r=>r.reversals>0).length;
+  $('sens-note').textContent = `Tanda * / warna kuning = terjadi pembalikan peringkat (rank reversal) pada ${flips} dari ${sens.rows.length} skenario.`;
+}
+
+/* ============================ INTERAKSI ============================ */
+document.addEventListener('input', e=>{
+  const el = e.target; if(!el.classList || !el.classList.contains('cell')) return;
+  if(el.dataset.x){ const [i,j]=el.dataset.x.split('-').map(Number); X[i][j]=num(el.value); }
+  else if(el.dataset.c9!==undefined){ C9[+el.dataset.c9]=num(el.value); }
+  else if(el.dataset.cost!==undefined){ COST[+el.dataset.cost]=num(el.value); }
+  else if(el.dataset.a){
+    const [i,j]=el.dataset.a.split('-').map(Number);
+    const v = Math.max(0.05, num(el.value));
+    A[i][j]=v; A[j][i]=+(1/v).toFixed(6);
+    const lo = document.getElementById(`lo-${j}-${i}`);
+    if(lo) lo.textContent = A[j][i].toFixed(2);
+  }
+  renderResults();
+});
+function num(v){ const n=parseFloat(v); return isFinite(n)?n:0; }
+
+$('btn-reset').onclick = ()=>{ loadDataset(activeKey); A=deepCopy(A0); render(); };
+
+$('btn-export').onclick = ()=>{
+  const w = ahp(A).w;
+  const t = topsis(X, w);
+  const order = t.CC.map((c,i)=>i).sort((a,b)=>t.CC[b]-t.CC[a]);
+  const feasible = feasibleFlags();
+  const phases = allocPhases(t.CC, COST, feasible);
+  let csv = "Peringkat,Kode,Alternatif,CC,Biaya_JutaRp,Fase,Kelayakan,C9\n";
+  order.forEach((i,r)=>{ csv += `${r+1},${ALTS[i].code},"${ALTS[i].name}",${t.CC[i].toFixed(4)},${COST[i]},${phases[i] ?? "Tidak layak"},${feasible[i]?"Layak":"Tidak layak"},${C9[i]}\n`; });
+  csv += "\nKriteria,Bobot\n";
+  CRITERIA.forEach((c,j)=>{ csv += `${c.code},${w[j].toFixed(4)}\n`; });
+  dl(csv, "hasil-dss-cctv-jatinangor.csv");
+};
+function dl(text, name){
+  const b = new Blob([text], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(b); a.download = name; a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ---- inisialisasi dataset & kontrol ----
+(function(){
+  const sel = $('sel-dataset');
+  sel.innerHTML = Object.keys(DATASETS).map(k=>`<option value="${k}">${DATASETS[k].label}</option>`).join('');
+  sel.addEventListener('change', ()=>{ loadDataset(sel.value); render(); });
+  loadDataset('resmi');
+})();
+
+render();
+</script>
+</body>
+</html>
