@@ -1,0 +1,105 @@
+% ============================================================================
+% Arsitektur konseptual empat lapis DSS prioritisasi CCTV Jatinangor.
+% SUMBER TUNGGAL gambar arsitektur untuk 04-paper dan 06-paper-hasil.
+%
+% Status: KANONIK (14 Nov 2026). Isi sudah diselaraskan dengan
+% dss_revisi_markdown/dss_revisi.md: model AHP datar 8x8 (28 perbandingan),
+% C1-C8 sebagai kriteria urgensi TOPSIS, C9 dan RAB sebagai kendala alokasi.
+%
+% Versi PNG lama (gambar-3-arsitektur.png / img/arsitektur.png) adalah
+% artefak historis yang masih memuat "hierarki 3 kluster (10 pasang)" dan
+% tidak boleh dipakai lagi.
+%
+% Prasyarat di preamble pemanggil: \usepackage{tikz}
+%                                    \usetikzlibrary{arrows.meta}
+%                                    \newcommand{\cost}{\mathit{Cost}}
+% Pemakaian: dimuat di dalam lingkungan figure* (lebar penuh).
+% ============================================================================
+\begin{tikzpicture}[
+    font=\footnotesize,
+    layer/.style={
+        draw, rounded corners=2pt, inner sep=3pt, line width=0.5pt,
+        anchor=north west
+    },
+    head/.style={
+        align=center, text width=3.72cm, text=white, font=\scriptsize\bfseries,
+        inner sep=3.5pt, rounded corners=2pt, anchor=north west,
+        minimum height=0.95cm
+    },
+    flow/.style={-{Latex[length=1.6mm]}, line width=0.8pt, draw=black!65}
+]
+
+% ---- judul lapisan -------------------------------------------------------
+\node[head, fill=black!62]      (h1) at (0.00,0)  {LAPISAN 1\\INPUT DATA DISKRIT LOKAL};
+\node[head, fill=blue!55!black] (h2) at (4.50,0)  {LAPISAN 2\\\textit{PREPROCESSING} DATA};
+\node[head, fill=violet!75!black] (h3) at (9.00,0){LAPISAN 3\\\textit{DECISION ENGINE}};
+\node[head, fill=red!55!black]  (h4) at (13.50,0) {LAPISAN 4\\OUTPUT REKOMENDASI};
+
+% ---- isi lapisan (parbox Tinggi tetap -> kotak seragam, teks rata atas) ---
+\node[layer, fill=black!4, draw=black!62] at (0.00,-1.08) {%
+  \parbox[t][6.70cm][t]{3.72cm}{\raggedright%
+    \textbf{Modul urgensi risiko (C1--C8):}\\[1pt]
+    C1 rekap insiden Polsek/RT (kejadian/km/tahun)\\
+    C2 mobilitas pejalan malam (orang/jam)\\
+    C3 defisiensi PJU malam (skor 1--5)\\
+    C4 luas \textit{coverage} jalan (m$^2$/titik)\\
+    C5 kepadatan kos (kamar/km)\\
+    C6 derajat simpul jalan (cabang)\\
+    C7 \textit{gap coverage} CCTV eksisting (m)\\
+    C8 fasilitas rentan radius 150 m (unit)\\[4pt]
+    \textbf{Modul kelayakan \& biaya:}\\[1pt]
+    C9 kesiapan tiang/PLN (skor 1--5)\\
+    RAB pengadaan \& instalasi (juta Rp)%
+  }%
+};
+
+\node[layer, fill=blue!4, draw=blue!55!black] at (4.50,-1.08) {%
+  \parbox[t][6.70cm][t]{3.72cm}{\raggedright%
+    \textbf{Kodifikasi \& verifikasi:}\\[1pt]
+    kodifikasi segmen kandidat A1--A5 menurut tipologi gang permukiman\\
+    verifikasi kelengkapan data diskrit\\[4pt]
+    \textbf{Normalisasi vektor Euclidean:}\\[1pt]
+    $r_{ij}=x_{ij}\big/\sqrt{\sum_{k=1}^{m}x_{kj}^{2}}$\\[2pt]
+    menyamakan skala campuran (rasio dan ordinal) menjadi takberdimensi\\[4pt]
+    \textbf{Penetapan batas kelayakan:}\\[1pt]
+    ambang operasional C9 dan plafon anggaran $B_k$%
+  }%
+};
+
+\node[layer, fill=violet!4, draw=violet!75!black] at (9.00,-1.08) {%
+  \parbox[t][6.70cm][t]{3.72cm}{\raggedright%
+    \textbf{Pembobotan AHP:}\\[1pt]
+    matriks perbandingan berpasangan \textbf{8$\times$8} atas C1--C8 (28 perbandingan unik)\\
+    agregasi \textit{geometric mean} tiga kelompok pemangku kepentingan\\
+    bobot global kriteria urgensi $w_j$\\
+    evaluasi konsistensi $\mathit{CR}<0{,}10$\\[4pt]
+    \textbf{Perankingan TOPSIS:}\\[1pt]
+    $v_{ij}=w_j r_{ij}$\\
+    solusi ideal positif dan negatif $A^{+},A^{-}$\\
+    jarak $D_i^{+},D_i^{-}$\\
+    \textit{closeness coefficient} $CC_i$\\[4pt]
+    \textbf{Alokasi anggaran bertahap:}\\[1pt]
+    filter kelayakan C9 \& plafon biaya $B_k$%
+  }%
+};
+
+\node[layer, fill=red!4, draw=red!55!black] at (13.50,-1.08) {%
+  \parbox[t][6.70cm][t]{3.72cm}{\raggedright%
+    \textbf{Keluaran keputusan:}\\[1pt]
+    peringkat prioritas urgensi ($CC_i$)\\
+    peta prioritas spasial berbasis GIS ringan\\
+    jadwal pemasangan bertahap:\\
+    Fase 1 (segera) bila $\sum \cost \le B_1$\\
+    Fase 2 (menengah) bila $\sum \cost \le B_2$\\
+    Fase 3 (berkala) bila $\sum \cost \le B_3$\\[4pt]
+    \textbf{Rekomendasi tata kelola:}\\[1pt]
+    papan peringkat terbuka \& retensi UU PDP No.~27/2022%
+  }%
+};
+
+% ---- panah alur antar lapisan -------------------------------------------
+\draw[flow] (3.87,-4.43) -- (4.40,-4.43);
+\draw[flow] (8.37,-4.43) -- (8.90,-4.43);
+\draw[flow] (12.87,-4.43) -- (13.40,-4.43);
+
+\end{tikzpicture}
