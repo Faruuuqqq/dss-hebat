@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-10-17T14:50:00.000Z" agent="Antigravity IDE" version="24.0.0" type="device">
+  <diagram id="diag_arsitektur_4_lapisan_dss" name="Arsitektur 4 Lapisan DSS">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="920" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot; color=&quot;#1e3a8a&quot;&gt;&lt;b&gt;ARSITEKTUR KONSEPTUAL EMPAT LAPISAN DSS PRIORITISASI CCTV JATINANGOR&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot; color=&quot;#4b5563&quot;&gt;Pemisahan Tegas Antara Kriteria Urgensi Risiko (C1–C8) dan Kendala Kelayakan Fisik &amp; Anggaran Belanja (C9 &amp; RAB)&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="250" y="15" width="800" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1120" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_badge" value="LAPISAN 1: INPUT DATA DISKRIT LOKAL" style="text;html=1;fontStyle=1;fontSize=12;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="55" y="78" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_urgensi" value="&lt;b&gt;Modul Kriteria Urgensi Risiko (C1–C8) [Benefit-Oriented]&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#334155&quot; style=&quot;font-size:10.5px;&quot;&gt;• &lt;b&gt;C1: Riwayat Kerawanan&lt;/b&gt; (kejadian/km/th) [Rekap Polsek / Ketua RT]&lt;br&gt;• &lt;b&gt;C2: Volume Mobilitas Malam&lt;/b&gt; (orang &amp; motor/jam) [Counting manual malam]&lt;br&gt;• &lt;b&gt;C3: Defisiensi Penerangan&lt;/b&gt; (skor lux 1–5: makin gelap makin butuh) [Survei visibilitas]&lt;br&gt;• &lt;b&gt;C4: Efisiensi Coverage&lt;/b&gt; (m²/titik: luas pandang terawasi) [OpenStreetMap &amp; geometri]&lt;br&gt;• &lt;b&gt;C5: Kepadatan Kos&lt;/b&gt; (kamar aktif/km) [Data desa &amp; paguyuban kos]&lt;br&gt;• &lt;b&gt;C6: Derajat Simpul&lt;/b&gt; (jumlah cabang persimpangan gang) [Graf jalan OpenStreetMap]&lt;br&gt;• &lt;b&gt;C7: Coverage Gap CCTV&lt;/b&gt; (jarak meter ke kamera aktif terdekat) [Survei GPS kamera]&lt;br&gt;• &lt;b&gt;C8: Fasilitas Rentan&lt;/b&gt; (unit POI indekos, ATM, halte radius 150m) [OSM POI]&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;align=left;spacingLeft=10;spacingRight=10;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="55" y="105" width="680" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_kelayakan" value="&lt;b&gt;Modul Kelayakan &amp; Anggaran Fisik&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#334155&quot; style=&quot;font-size:10.5px;&quot;&gt;• &lt;b&gt;C9: Kelayakan Implementasi Teknis&lt;/b&gt;&lt;br&gt;  (skor 1–5: kesiapan tiang fisik, pasokan listrik PLN, dan sinyal internet)&lt;br&gt;• &lt;b&gt;Estimasi Biaya Pengadaan (RAB):&lt;/b&gt;&lt;br&gt;  (Rp 5–8 Juta/titik: kamera IP outdoor, braket tiang PJU/PLN, kabel daya &amp; adaptor)&lt;br&gt;• &lt;b&gt;Pagu Plafon Anggaran Belanja Tahunan:&lt;/b&gt;&lt;br&gt;  ($B_k \le \text{Rp } 15.000.000$,- per tahun alokasi)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;align=left;spacingLeft=10;spacingRight=10;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="750" y="105" width="395" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="275" width="1120" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_badge" value="LAPISAN 2: PREPROCESSING &amp; KODIFIKASI DATA" style="text;html=1;fontStyle=1;fontSize=12;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="55" y="283" width="350" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_p1" value="&lt;b&gt;Kodifikasi Alternatif&lt;/b&gt;&lt;br&gt;5 Tipologi Spasial Gang&lt;br&gt;(Sayang, Cikeruh, Hegarmanah,&lt;br&gt;Cipacing, Cileles / A1–A5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;strokeWidth=1.2;align=center;verticalAlign=middle;fontSize=10.5;fontColor=#1E293B;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="55" y="310" width="255" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_p2" value="&lt;b&gt;Pembersihan &amp; Validasi&lt;/b&gt;&lt;br&gt;Penyeragaman satuan rasio,&lt;br&gt;agregasi koordinat GPS,&lt;br&gt;&amp; validasi silang data Polsek/RT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;strokeWidth=1.2;align=center;verticalAlign=middle;fontSize=10.5;fontColor=#1E293B;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="310" width="255" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_p3" value="&lt;b&gt;Normalisasi Vektor Euclidean&lt;/b&gt;&lt;br&gt;Transformasi nir-dimensi C1–C8:&lt;br&gt;&lt;font color=&quot;#2563EB&quot;&gt;$r_{ij} = x_{ij} / \sqrt{\sum_{k=1}^m x_{kj}^2}$&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;strokeWidth=1.2;align=center;verticalAlign=middle;fontSize=10.5;fontColor=#1E293B;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="605" y="310" width="265" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_p4" value="&lt;b&gt;Filter Batas Kelayakan Teknis&lt;/b&gt;&lt;br&gt;Eliminasi segmen dengan daya/tiang nihil:&lt;br&gt;&lt;font color=&quot;#D97706&quot;&gt;Ambang batas $C9_i \ge 3$&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;strokeWidth=1.2;align=center;verticalAlign=middle;fontSize=10.5;fontColor=#1E293B;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="890" y="310" width="255" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="445" width="1120" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_badge" value="LAPISAN 3: DECISION ENGINE (MCDM HYBRID &amp; ANGGARAN)" style="text;html=1;fontStyle=1;fontSize=12;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="55" y="453" width="400" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_ahp" value="&lt;b&gt;Engine 1: AHP Hierarki 3 Kluster&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#4C1D95&quot;&gt;• &lt;b&gt;Kluster Risiko:&lt;/b&gt; C1 (24,31%), C3 (14,58%)&lt;br&gt;• &lt;b&gt;Kluster Paparan:&lt;/b&gt; C2 (14,20%), C5 (12,35%), C8 (12,35%)&lt;br&gt;• &lt;b&gt;Kluster Spasial:&lt;/b&gt; C7 (9,56%), C4 (7,61%), C6 (5,05%)&lt;br&gt;• 10 Perbandingan berpasangan (hemat dari 28 pasang)&lt;br&gt;• Konsensus Geometric Mean 3 Kelompok (Pemda, Kampus, RT)&lt;br&gt;• Teruji konsisten per matriks: &lt;b&gt;CR = 0,0000 &amp;lt; 0,10&lt;/b&gt;&lt;br&gt;• Formula Bobot Global: $w_j = W_k \times w_{j|k}$&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;align=left;spacingLeft=10;spacingRight=10;verticalAlign=middle;fontSize=10.5;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="55" y="480" width="370" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_topsis" value="&lt;b&gt;Engine 2: Perankingan TOPSIS&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#1E40AF&quot;&gt;• Pembobotan Matriks: $v_{ij} = w_j \cdot r_{ij}$&lt;br&gt;• Solusi Ideal Positif: $A^+ = \{\max_i(v_{ij})\}$&lt;br&gt;• Solusi Ideal Negatif: $A^- = \{\min_i(v_{ij})\}$&lt;br&gt;• Jarak Euclidean: $D_i^+$ dan $D_i^-$&lt;br&gt;• Skor Kedekatan Relatif: &lt;font color=&quot;#2563EB&quot;&gt;&lt;b&gt;$CC_i = \frac{D_i^-}{D_i^+ + D_i^-}$&lt;/b&gt;&lt;/font&gt;&lt;br&gt;• Hasil: A3 (0,6441) &amp;gt; A1 (0,5809) &amp;gt; A4 (0,5036) &amp;gt; A2 (0,4608) &amp;gt; A5 (0,1819)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#2563EB;strokeWidth=1.5;align=left;spacingLeft=10;spacingRight=10;verticalAlign=middle;fontSize=10.5;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="445" y="480" width="360" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_budget" value="&lt;b&gt;Engine 3: Kendala Anggaran &amp; OAT&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#78350F&quot;&gt;• &lt;b&gt;Partisi Fase Anggaran:&lt;/b&gt; $\sum \text{Cost}_i \le B_k$&lt;br&gt;• Plafon belanja Rp 15 Jt/tahun (Dana Desa / Swadaya RW)&lt;br&gt;• &lt;b&gt;Rasio Efisiensi Urgensi-Biaya:&lt;/b&gt; $CC_i / \text{Cost}_i$&lt;br&gt;  (Panduan pendukung keputusan bila ada selisih biaya tajam)&lt;br&gt;• &lt;b&gt;Uji Sensitivitas OAT $\pm 20\%$ (16 Run):&lt;/b&gt;&lt;br&gt;  Peringkat A3 &amp; A1 kokoh di posisi 1 &amp; 2;&lt;br&gt;  Dinamika A4 vs A2 memvalidasi penggabungan di Fase 2&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#D97706;strokeWidth=1.5;align=left;spacingLeft=10;spacingRight=10;verticalAlign=middle;fontSize=10.5;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="825" y="480" width="320" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="l4_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="705" width="1120" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="l4_badge" value="LAPISAN 4: KELUARAN TINDAKAN (ACTIONABLE OUTPUT)" style="text;html=1;fontStyle=1;fontSize=12;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="55" y="713" width="400" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l4_rank" value="&lt;b&gt;Peringkat Urgensi CCTV&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;2&quot; color=&quot;#15803D&quot;&gt;1. A3 (Persimpangan Hegarmanah): $CC=0,6441$&lt;br&gt;2. A1 (Gang Kos Sayang): $CC=0,5809$&lt;br&gt;3. A4 (Gang Cipacing): $CC=0,5036$&lt;br&gt;4. A2 (Ruas Jalan Cikeruh): $CC=0,4608$&lt;br&gt;5. A5 (Ruas Jalan Cileles): $CC=0,1819$&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#16A34A;strokeWidth=1.5;align=center;verticalAlign=middle;fontSize=11;fontColor=#14532D;" vertex="1" parent="1">
+          <mxGeometry x="55" y="740" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l4_gis" value="&lt;b&gt;Peta Zonasi Spasial GIS&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;2&quot; color=&quot;#1D4ED8&quot;&gt;• WebGIS / QGIS Layer Prioritas Gang&lt;br&gt;• Penandaan Titik Pasang Kamera Eksisting &amp; Baru&lt;br&gt;• Visualisasi Blind Zone &amp; Area Pengawasan CPTED&lt;br&gt;• Papan Peringatan Fisik Sesuai UU PDP No. 27/2022&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#2563EB;strokeWidth=1.5;align=center;verticalAlign=middle;fontSize=11;fontColor=#1E40AF;" vertex="1" parent="1">
+          <mxGeometry x="415" y="740" width="360" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l4_phase" value="&lt;b&gt;Rencana Alokasi Belanja Bertahap&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;2&quot; color=&quot;#92400E&quot;&gt;• &lt;b&gt;Fase 1 (Tahun 1):&lt;/b&gt; A3 (Rp 7,5 Jt) + A1 (Rp 6,5 Jt) = Rp 14 Jt&lt;br&gt;• &lt;b&gt;Fase 2 (Tahun 2):&lt;/b&gt; A4 (Rp 8,0 Jt) + A2 (Rp 5,0 Jt) = Rp 13 Jt&lt;br&gt;• &lt;b&gt;Fase 3 (Tahun 3):&lt;/b&gt; A5 (Rp 5,5 Jt) = Rp 5,5 Jt&lt;br&gt;&lt;b&gt;Status: Terlaksana di bawah pagu Rp 15 Juta/tahun&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=1.5;align=center;verticalAlign=middle;fontSize=11;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="795" y="740" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="el1_l2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;endArrow=classic;endFill=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="l1_container" target="l2_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="el2_l3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;endArrow=classic;endFill=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="l2_container" target="l3_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="el3_l4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;endArrow=classic;endFill=1;;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="l3_container" target="l4_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_eng1" value="Bobot w_j" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=1.5;dashed=1;endArrow=classic;endFill=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="l3_ahp" target="l3_topsis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_eng2" value="Skor CC_i" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=1.5;dashed=1;endArrow=classic;endFill=1;;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="l3_topsis" target="l3_budget">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

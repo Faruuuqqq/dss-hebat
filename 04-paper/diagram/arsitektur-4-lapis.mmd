@@ -1,19 +1,112 @@
-%% Gambar 3 — Arsitektur konseptual empat lapis DSS prioritas CCTV Jatinangor.
-%% Memisahkan kriteria urgensi C1-C8 dari kelayakan teknis/biaya C9.
-flowchart LR
-    subgraph L1["LAPISAN INPUT (Data Diskrit Lokal)"]
-        I1["Urgensi Risiko C1-C8:<br/>• C1 Rekap insiden<br/>• C2 Mobilitas malam<br/>• C3 Defisiensi PJU<br/>• C4/C6/C7 Geometri & gap<br/>• C5/C8 Kosan & POI"]
-        I2["Kelayakan & Biaya:<br/>• C9 Kesiapan tiang/PLN<br/>• Estimasi RAB (Biaya)"]
+%% Gambar 3 — Arsitektur konseptual empat lapisan DSS prioritisasi CCTV Jatinangor.
+%% Alur terintegrasi: Input -> Preprocessing -> Decision Engine (GIS, AHP, TOPSIS) -> Actionable Output.
+%% Memisahkan kriteria urgensi C1-C8 dari kelayakan teknis C9 dan batasan anggaran (RAB).
+
+flowchart TB
+    %% ===================================================
+    %% LAPISAN 1: INPUT DATA DISKRIT LOKAL
+    %% ===================================================
+    subgraph L1["LAPISAN 1: INPUT DATA DISKRIT LOKAL"]
+        direction TB
+        subgraph L1_A["Kriteria Urgensi Risiko C1–C8 (Benefit-Oriented)"]
+            I_C1["C1: Riwayat Kerawanan<br/><i>(Rekap insiden Polsek / RT)</i>"]
+            I_C2["C2: Mobilitas Malam<br/><i>(Counting pejalan & motor)</i>"]
+            I_C3["C3: Defisiensi PJU<br/><i>(Survei observasi lux malam)</i>"]
+            I_C4["C4: Efisiensi Coverage<br/><i>(Luas m²/titik OpenStreetMap)</i>"]
+            I_C5["C5: Kepadatan Indekos<br/><i>(Kamar aktif/km profil desa)</i>"]
+            I_C6["C6: Derajat Simpul Jalan<br/><i>(Graf persimpangan jalan)</i>"]
+            I_C7["C7: Coverage Gap CCTV<br/><i>(Jarak GPS ke kamera aktif)</i>"]
+            I_C8["C8: Kedekatan Fasilitas POI<br/><i>(Indekos, ATM, halte r=150m)</i>"]
+        end
+
+        subgraph L1_B["Kendala Kelayakan Fisik & Plafon Anggaran"]
+            I_C9["C9: Kelayakan Implementasi Teknis<br/><i>(Kesiapan tiang, daya listrik PLN, sinyal)</i>"]
+            I_RAB["Estimasi RAB Pengadaan<br/><i>(Rp 5–8 Juta per titik kamera IP outdoor)</i>"]
+            I_BUD["Plafon Anggaran Tahunan<br/><i>(B_k ≤ Rp 15.000.000 / tahun)</i>"]
+        end
     end
-    subgraph L2["PREPROCESSING"]
-        P["Pembersihan data<br/>Kodifikasi segmen A1-A5<br/>Normalisasi vektor Euclidean"]
+
+    %% ===================================================
+    %% LAPISAN 2: PREPROCESSING & KODIFIKASI DATA
+    %% ===================================================
+    subgraph L2["LAPISAN 2: PREPROCESSING & KODIFIKASI DATA"]
+        P_KOD["<b>Kodifikasi 5 Alternatif Spasial (A1–A5):</b><br/>A1 Kos Sayang, A2 Jl. Cikeruh, A3 Hegarmanah,<br/>A4 Gang Cipacing, A5 Jl. Cileles"]
+        P_CLEAN["<b>Pembersihan & Validasi Spasial:</b><br/>Penyeragaman skala, validasi silang insiden,<br/>dan georeferensi koordinat GPS"]
+        P_NORM["<b>Normalisasi Vektor Euclidean:</b><br/>Transformasi matriks takberdimensi:<br/>r_ij = x_ij / √(∑ x_kj²) untuk C1–C8"]
+        P_FILT["<b>Filter Batas Kelayakan Teknis:</b><br/>Uji prasyarat fisik: C9 ≥ 3<br/><i>(Memastikan ketersediaan tiang & daya)</i>"]
     end
-    subgraph L3["DECISION ENGINE"]
-        A["AHP Multistakeholder:<br/>Bobot konsensus C1-C8<br/>Uji Konsistensi (CR < 0,1)"]
-        T["TOPSIS Urgensi:<br/>Jarak ideal positif/negatif<br/>Closeness score (Ci)"]
-        B["Modul Alokasi Anggaran:<br/>Filter kelayakan C9<br/>Plafon biaya per fase"]
+
+    %% ===================================================
+    %% LAPISAN 3: DECISION ENGINE
+    %% ===================================================
+    subgraph L3["LAPISAN 3: DECISION ENGINE (GIS, AHP, TOPSIS & ANGGARAN)"]
+        direction TB
+        subgraph L3_ENG["Modul Analitik & Optimasi Keputusan"]
+            E_GIS["<b>1. GIS & Analisis Spasial</b><br/>• Pemodelan liputan graf jalan (C6)<br/>• Buffer radius pandang CPTED (C4)<br/>• Kalkulasi blind-spot & gap kamera (C7)"]
+            
+            E_AHP["<b>2. AHP Hierarki Multistakeholder</b><br/>• Struktur hierarki 3 kluster (Risiko, Paparan, Spasial)<br/>• 10 perbandingan berpasangan (hemat dari 28 pasang)<br/>• Geometric mean konsensus: Pemda, Kampus, RT/Warga<br/>• Uji konsistensi: CR = 0,0000 < 0,10 → Bobot w_j"]
+            
+            E_TOP["<b>3. TOPSIS Urgensi Multikriteria</b><br/>• Matriks terbobot: v_ij = w_j · r_ij<br/>• Solusi ideal positif A+ dan negatif A-<br/>• Jarak Euclidean: D_i+ dan D_i-<br/>• Koefisien kedekatan relatif: CC_i = D_i- / (D_i+ + D_i-)"]
+            
+            E_ALL["<b>4. Alokasi Anggaran & Uji Sensitivitas</b><br/>• Partisi fase belanja: ∑ Cost_i ≤ B_k (Plafon Rp 15 Jt/th)<br/>• Trade-off rasio urgensi-biaya (CC_i / Cost_i)<br/>• Uji sensitivitas OAT ±20% (16 run: peringkat 1 kokoh)"]
+        end
     end
-    subgraph L4["OUTPUT REKOMENDASI"]
-        O["Peringkat urgensi A1-A5<br/>Rasio manfaat-biaya<br/>Peta prioritas spasial<br/>Jadwal pemasangan bertahap<br/>(Fase 1, 2, dan 3)"]
+
+    %% ===================================================
+    %% LAPISAN 4: ACTIONABLE OUTPUT
+    %% ===================================================
+    subgraph L4["LAPISAN 4: KELUARAN TINDAKAN (ACTIONABLE OUTPUT)"]
+        O_RANK["<b>Peringkat Urgensi CCTV:</b><br/>1. A3 Simpang Hegarmanah (CC = 0,6441)<br/>2. A1 Gang Kos Sayang (CC = 0,5809)<br/>3. A4 Gang Cipacing (CC = 0,5036)<br/>4. A2 Ruas Cikeruh (CC = 0,4608)<br/>5. A5 Ruas Cileles (CC = 0,1819)"]
+        
+        O_MAP["<b>Peta Prioritas Spasial WebGIS:</b><br/>• Visualisasi zonasi merah/kuning/hijau<br/>• Titik kamera eksisting vs usulan baru<br/>• Koridor pengawasan alami & blind spot<br/>• Kepatuhan privasi UU PDP No. 27/2022"]
+        
+        O_PHASE["<b>Rencana Belanja Bertahap:</b><br/>• <b>Fase 1 (Th 1):</b> A3 & A1 (Rp 14,0 Juta)<br/>• <b>Fase 2 (Th 2):</b> A4 & A2 (Rp 13,0 Juta)<br/>• <b>Fase 3 (Th 3):</b> A5 (Rp 5,5 Juta)<br/><i>(Sepenuhnya di bawah pagu Rp 15 Juta/th)</i>"]
     end
-    L1 --> L2 --> L3 --> L4
+
+    %% ===================================================
+    %% HUBUNGAN ANTAR-LAPISAN & ALIRAN DATA
+    %% ===================================================
+    I_C1 & I_C2 & I_C3 & I_C5 & I_C8 --> P_CLEAN
+    I_C4 & I_C6 & I_C7 --> P_CLEAN
+    P_CLEAN --> P_KOD --> P_NORM
+    
+    I_C9 --> P_FILT
+    I_RAB & I_BUD --> E_ALL
+
+    P_NORM --> E_TOP
+    P_FILT --> E_ALL
+    
+    P_CLEAN -.-> E_GIS
+    E_GIS --> P_NORM
+    
+    E_AHP -->|Bobot w_j| E_TOP
+    E_TOP -->|Skor CC_i| E_ALL
+
+    E_TOP --> O_RANK
+    E_GIS & E_TOP --> O_MAP
+    E_ALL --> O_PHASE
+
+    %% ===================================================
+    %% STYLING DAN WARNA
+    %% ===================================================
+    classDef inputStyle fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a;
+    classDef kelayakanStyle fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#92400e;
+    classDef prepStyle fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a;
+    classDef engineGis fill:#ecfeff,stroke:#06b6d4,stroke-width:1.5px,color:#155e75;
+    classDef engineAhp fill:#f5f3ff,stroke:#7c3aed,stroke-width:1.5px,color:#4c1d95;
+    classDef engineTop fill:#eef2ff,stroke:#4f46e5,stroke-width:1.5px,color:#312e81;
+    classDef engineBud fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f;
+    classDef outRank fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#14532d;
+    classDef outMap fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e40af;
+    classDef outPhase fill:#fefce8,stroke:#ca8a04,stroke-width:2px,color:#713f12;
+
+    class I_C1,I_C2,I_C3,I_C4,I_C5,I_C6,I_C7,I_C8 inputStyle;
+    class I_C9,I_RAB,I_BUD kelayakanStyle;
+    class P_KOD,P_CLEAN,P_NORM,P_FILT prepStyle;
+    class E_GIS engineGis;
+    class E_AHP engineAhp;
+    class E_TOP engineTop;
+    class E_ALL engineBud;
+    class O_RANK outRank;
+    class O_MAP outMap;
+    class O_PHASE outPhase;

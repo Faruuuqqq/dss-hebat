@@ -1,1203 +1,413 @@
-\documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
+\documentclass[10pt,twocolumn,a4paper]{article}
 
-\usepackage{cite}
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{graphicx}
-\usepackage{array}
+% STATUS: diselaraskan dengan dss_revisi_markdown/dss_revisi.md (AHP datar 8x8; PRISMA 582-416-121-12; C9 filter).
+
+% Tata letak (rekonstruksi gaya konferensi IEEE, dua kolom, A4)
+\usepackage[a4paper,top=19mm,bottom=25mm,left=16mm,right=16mm,columnsep=6mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{microtype}
+\usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{tabularx}
-\usepackage{textcomp}
-\usepackage{multirow}
-\usepackage{url}
-\usepackage{placeins}
-\usepackage{stfloats}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[font=footnotesize,labelsep=period]{caption}
+\usepackage{cite}
 \usepackage{balance}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{positioning,fit,backgrounds,arrows.meta}
 
-% Menyeragamkan label caption dengan bahasa Indonesia
-\renewcommand{\tablename}{TABEL}
 \renewcommand{\figurename}{Gambar}
+\renewcommand{\tablename}{Tabel}
+\renewcommand{\thetable}{\Roman{table}}
+\captionsetup[table]{textfont=sc,labelfont=sc,labelsep=newline,justification=centering,skip=3pt}
+\captionsetup[figure]{skip=3pt}
 
-% Tipe kolom rata kiri dengan pemenggalan kata otomatis
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\titleformat{\section}{\centering\normalfont\small\scshape}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\small\itshape}{\thesubsection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.4ex plus .3ex minus .2ex}{0.8ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{1.1ex plus .3ex minus .2ex}{0.5ex plus .2ex}
 
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\dblfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovedisplayskip}{3pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{3pt plus 1pt minus 1pt}
+\setlist{nosep,leftmargin=*,itemsep=1pt}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\hyphenpenalty=3000
+\tolerance=1500
+\emergencystretch=1.5em
+\pagestyle{empty}
+
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\cost}{\mathit{Cost}}
+\newcommand{\auth}[5]{\parbox[t]{0.31\textwidth}{\centering{\normalsize #1}\\[1pt]{\footnotesize #2\\#3\\#4\\\textit{#5}}}}
 
 \begin{document}
 
-\title{Decision Support Systems for Urban Surveillance and Public Safety
-Facility Placement: A Scoping Review and Conceptual Framework for CCTV
-Prioritization in Jatinangor Student Settlements}
+% Judul dan penulis
+\twocolumn[{%
+\centering
+{\fontsize{17}{19}\selectfont Decision Support Systems for Urban Surveillance and Public Safety Facility Placement: A Scoping Review and Conceptual Framework for CCTV Prioritization in Jatinangor Student Settlements\par}
+\vspace{8pt}
+\auth{Marvel Evan T.}{Program Studi Teknik Informatika}{Universitas Padjadjaran}{Sumedang, Indonesia}{marvel24001@mail.unpad.ac.id}\hfill
+\auth{Kezia Tabhita Smith}{Program Studi Teknik Informatika}{Universitas Padjadjaran}{Sumedang, Indonesia}{kezia24001@mail.unpad.ac.id}\hfill
+\auth{Ibnaty Farah Rabbany}{Program Studi Teknik Informatika}{Universitas Padjadjaran}{Sumedang, Indonesia}{ibnaty24001@mail.unpad.ac.id}\\[6pt]
+\auth{Achmad Faruq M.}{Program Studi Teknik Informatika}{Universitas Padjadjaran}{Sumedang, Indonesia}{achmad24007@mail.unpad.ac.id}\hspace{0.06\textwidth}
+\auth{Gabriella Marie Keira Wibawa}{Program Studi Teknik Informatika}{Universitas Padjadjaran}{Sumedang, Indonesia}{gabriella24003@mail.unpad.ac.id}
+\vspace{8pt}
+}]
 
-\author{
-\IEEEauthorblockN{1\textsuperscript{st} Marvel Evan T.}
-\IEEEauthorblockA{\textit{Program Studi Teknik Informatika} \\
-\textit{Universitas Padjadjaran}\\
-Sumedang, Indonesia \\
-140810240012@mail.unpad.ac.id}
-\and
-\IEEEauthorblockN{2\textsuperscript{nd} Kezia Tabhita Smith}
-\IEEEauthorblockA{\textit{Program Studi Teknik Informatika} \\
-\textit{Universitas Padjadjaran}\\
-Sumedang, Indonesia \\
-140810240020@mail.unpad.ac.id}
-\and
-\IEEEauthorblockN{3\textsuperscript{rd} Ibnaty Farah Rabbany}
-\IEEEauthorblockA{\textit{Program Studi Teknik Informatika} \\
-\textit{Universitas Padjadjaran}\\
-Sumedang, Indonesia \\
-140810240022@mail.unpad.ac.id}
-\and
-\IEEEauthorblockN{4\textsuperscript{th} Achmad Faruq M.}
-\IEEEauthorblockA{\textit{Program Studi Teknik Informatika} \\
-\textit{Universitas Padjadjaran}\\
-Sumedang, Indonesia \\
-140810240080@mail.unpad.ac.id}
-\and
-\IEEEauthorblockN{5\textsuperscript{th} Gabriella Marie Keira Wibawa}
-\IEEEauthorblockA{\textit{Program Studi Teknik Informatika} \\
-\textit{Universitas Padjadjaran}\\
-Sumedang, Indonesia \\
-140810240086@mail.unpad.ac.id}
-}
+% Abstrak
+\noindent{\footnotesize\textbf{\textit{Abstrak}}: Permukiman mahasiswa di Jatinangor memiliki gang sempit, penerangan jalan terbatas, mobilitas malam hari yang tinggi, dan pemasangan CCTV yang masih sporadis akibat keterbatasan anggaran. Kondisi ini menuntut prioritisasi alokasi fasilitas pengawasan yang terukur. Penelitian ini memetakan literatur tentang \textit{Decision Support System} (DSS) untuk pengawasan perkotaan dan penempatan fasilitas keselamatan publik melalui \textit{scoping review} berbasis PRISMA-ScR pada basis data Scopus (TITLE-ABS-KEY; 2021--2026; tipe artikel; bahasa Inggris). Seleksi menghasilkan 582 rekaman teridentifikasi, 416 laporan yang dicari, 121 laporan yang dinilai kelayakannya, dan 12 studi primer yang disertakan. Sintesis menunjukkan lima pola arsitektur DSS (GIS-MCDM, optimasi cakupan, berbasis pakar, simulasi-DSS, dan kebijakan-MCDA), dominasi kombinasi AHP untuk pembobotan dan TOPSIS untuk perankingan, serta taksonomi kriteria \textit{benefit}, \textit{cost}, dan bergantung konteks. Berdasarkan sintesis tersebut, dirumuskan model DSS konseptual untuk Jatinangor yang terdiri atas lima alternatif segmen gang (A1--A5), sembilan kriteria keselamatan (C1--C9), pembobotan AHP oleh tiga kelompok pemangku kepentingan, dan perankingan TOPSIS dengan alokasi CCTV bertahap di bawah batasan anggaran. Model diuji secara numerik dengan data ilustratif, belum dengan data lapangan. Delapan dari sembilan kriteria didukung oleh minimal dua studi primer, sehingga model memiliki landasan konseptual yang transparan untuk menerjemahkan bukti \textit{scoping review} menjadi model keputusan lokal.\par}
+\vspace{3pt}
+\noindent{\footnotesize\textbf{\textit{Kata Kunci}}: \textit{Decision Support System}, \textit{Multi-Criteria Decision Making}, \textit{Scoping Review}, PRISMA-ScR, AHP, TOPSIS, penempatan CCTV, \textit{Smart Living and Safety}, Jatinangor\par}
 
-\maketitle
+% ================= I. PENDAHULUAN =================
+\section{Pendahuluan}
+Kecamatan Jatinangor, Kabupaten Sumedang, merupakan kawasan pendidikan tinggi seluas 26,20~km$^2$ yang mencakup 12 desa dengan penduduk lebih dari 98.000 jiwa dan kepadatan rata-rata di atas 3.740 jiwa/km$^2$. Kepadatan tersebut melampaui 9.300 jiwa/km$^2$ di kantong permukiman mahasiswa sekitar empat perguruan tinggi utama (Unpad, ITB, IPDN, dan IKOPIN) \cite{bps}. Pertumbuhan hunian padat ini belum diimbangi kapasitas pengawasan lingkungan: gang permukiman sempit (lebar 1,5--3~m), cakupan Penerangan Jalan Umum (PJU) belum merata, dan mobilitas malam hari antara kampus, indekos, dan simpul layanan tinggi. Akibatnya, keselamatan warga, terutama mahasiswa, menjadi persoalan nyata dalam konteks \textit{Smart Living and Safety} di Jatinangor.
 
-\begin{abstract}
-Student settlements in Jatinangor are characterized by narrow alleys,
-limited street lighting, high nighttime mobility, and sporadic CCTV
-deployment caused by budget constraints, so the allocation of
-surveillance facilities requires measurable prioritization. This study
-maps the literature on Decision Support Systems (DSS) for urban
-surveillance and public safety facility placement through a Scoping
-Review based on PRISMA-ScR in the Scopus database (TITLE-ABS-KEY;
-2021--2026; article type; English), producing a selection flow of 582
-records identified, 416 reports sought for retrieval, 121 reports
-assessed for eligibility, and 12 primary studies included. The synthesis
-identifies five architectural patterns of DSS (GIS-MCDM, coverage
-optimization, expert-driven, simulation-DSS, and policy-MCDA), a
-distribution of MCDM methods highlighting the prominent combination of
-AHP for weighting and TOPSIS for ranking, and a taxonomy of criteria
-into benefit, cost, and context-dependent. Based on this synthesis, a
-conceptual DSS model is formulated for Jatinangor consisting of alley
-segment alternatives (A1--A5), a nine-criteria safety matrix (C1--C9),
-an AHP weighting scheme across three stakeholder groups, and a TOPSIS
-ranking that produces a phased CCTV placement priority map under budget
-constraints. Eight of nine criteria are supported by at least two
-studies, providing a transparent conceptual foundation for translating
-scoping review evidence into a local decision model.
-\end{abstract}
+Dari sudut pandang kriminologi lingkungan, pengawasan ruang publik bertumpu pada \textit{Crime Prevention Through Environmental Design} (CPTED) \cite{crowe} dan \textit{Routine Activity Theory} \cite{cohen}. Keduanya menyatakan bahwa kehadiran pengawas yang cakap (\textit{capable guardian}) dan visibilitas lingkungan dapat mengurangi peluang bertemunya pelaku potensial dengan target yang rentan. Namun, penempatan \textit{Closed-Circuit Television} (CCTV) di permukiman padat terkendala anggaran publik, ketersediaan tiang, pasokan listrik, dan jaringan internet. Pemasangan yang sporadis atau reaktif berisiko menimbulkan titik buta (\textit{blind zone}), investasi perangkat yang tidak efisien, dan pelanggaran privasi warga sebagaimana diatur dalam UU PDP No.~27/2022. Karena itu, alokasi fasilitas pengawasan memerlukan pendekatan kuantitatif yang terukur dan objektif.
 
-\begin{IEEEkeywords}
-Decision Support System, Multi-Criteria Decision Making, Scoping Review,
-PRISMA-ScR, AHP, TOPSIS, CCTV placement, Smart Living and Safety,
-Jatinangor
-\end{IEEEkeywords}
-
-% =====================================================================
-\section{PENDAHULUAN}
-% =====================================================================
-
-Kawasan Kecamatan Jatinangor, Kabupaten Sumedang, merupakan kawasan
-pendidikan tinggi strategis seluas $26{,}20\text{ km}^2$ yang terbagi
-ke dalam 12 desa dengan populasi melampaui 98.000 jiwa serta kepadatan
-rata-rata di atas $3.740\text{ jiwa/km}^2$---bahkan melampaui
-$9.300\text{ jiwa/km}^2$ pada kantong permukiman mahasiswa di sekitar
-empat perguruan tinggi utama (Unpad, ITB, IPDN, dan IKOPIN) \cite{bps_jatinangor}.
-Pertumbuhan hunian padat ini tidak diimbangi kapasitas pengawasan
-lingkungan: gang permukiman sempit (lebar $1{,}5$--$3$ m), jangkauan
-Penerangan Jalan Umum (PJU) belum merata, dan mobilitas malam hari
-tinggi antara kampus, indekos, dan simpul layanan. Kondisi tersebut
-menempatkan isu keselamatan dan keamanan warga, khususnya mahasiswa,
-sebagai persoalan \textit{Smart Living and Safety} yang nyata di
-Jatinangor.
-
-Dari perspektif kriminologi lingkungan, intervensi pengawasan ruang
-publik berakar pada teori \textit{Crime Prevention Through Environmental
-Design} (CPTED) \cite{crowe2000} dan \textit{Routine Activity Theory}
-\cite{cohen1979}, di mana kehadiran pengawas yang cakap (\textit{capable
-guardian}) dan visibilitas lingkungan mampu menekan peluang bertemunya
-pelaku potensial dengan target yang rentan. Namun, penempatan fasilitas
-seperti Closed-Circuit Television (CCTV) di lingkungan permukiman padat
-menghadapi kendala nyata: keterbatasan anggaran publik, ketersediaan
-tiang, pasokan listrik, dan jaringan internet. Penempatan kamera yang
-bersifat sporadis atau reaktif justru menghasilkan titik buta
-(\textit{blind zone}), inefisiensi investasi alat, serta potensi
-pelanggaran privasi warga sebagaimana diatur dalam Undang-Undang
-Perlindungan Data Pribadi (UU PDP No. 27/2022). Oleh karena itu,
-pengambilan keputusan alokasi fasilitas pengawasan memerlukan pendekatan
-kuantitatif yang terukur dan objektif.
-
-Decision Support System (DSS) berbasis Multi-Criteria Decision Making
-(MCDM) menawarkan instrumen yang tepat untuk mengevaluasi trade-off
-antar-faktor keselamatan dan kelayakan fisik secara simultan. Dalam
-literatur pengambilan keputusan, Analytic Hierarchy Process (AHP)
-lazim digunakan untuk menurunkan bobot kriteria berbasis penilaian
-berpasangan pakar \cite{saaty1980}, sedangkan Technique for Order
-Preference by Similarity to Ideal Solution (TOPSIS) digunakan untuk
-memeringkat alternatif berdasarkan jarak terhadap solusi ideal
-\cite{hwang1981}.
-
-Meskipun demikian, sebagian besar literatur penempatan fasilitas
-keamanan dan sensor perkotaan berfokus pada kota metropolitan dengan
-infrastruktur sensor kontinu dan anggaran besar. Terdapat kesenjangan
-penelitian (\textit{research gap}) yang nyata mengenai bagaimana model
-DSS dapat dirancang secara realistis untuk permukiman padat berkendala
-anggaran dengan hanya memanfaatkan data diskrit lokal (data tabular,
-spasial statis OpenStreetMap, dan penilaian pemangku kepentingan).
-Makalah ini mengisi celah tersebut melalui pendekatan hibrida: melakukan
-\textit{scoping review} berbasis PRISMA-ScR untuk memetakan arsitektur
-dan metode literatur, kemudian mentranslasikannya ke dalam rancangan
-model konseptual DSS penempatan CCTV di Jatinangor.
-
-Penelitian ini dipandu oleh tiga pertanyaan penelitian:
+DSS berbasis \textit{Multi-Criteria Decision Making} (MCDM) sesuai untuk mengevaluasi \textit{trade-off} antara faktor keselamatan dan kelayakan fisik secara bersamaan. \textit{Analytic Hierarchy Process} (AHP) lazim digunakan untuk menurunkan bobot kriteria dari penilaian berpasangan pakar \cite{saaty}, sedangkan \textit{Technique for Order Preference by Similarity to Ideal Solution} (TOPSIS) memeringkat alternatif berdasarkan jaraknya terhadap solusi ideal \cite{hwang}. Meski demikian, sebagian besar literatur penempatan fasilitas keamanan dan sensor perkotaan berfokus pada kota metropolitan dengan infrastruktur sensor kontinu dan anggaran besar. Terdapat kesenjangan penelitian (\textit{research gap}) mengenai perancangan DSS yang realistis untuk permukiman padat berkendala anggaran dengan hanya memanfaatkan data diskrit lokal (data tabular, data spasial statis OpenStreetMap, dan penilaian pemangku kepentingan). Makalah ini mengisi celah tersebut melalui pendekatan hibrida: \textit{scoping review} berbasis PRISMA-ScR untuk memetakan arsitektur dan metode dalam literatur, kemudian merancang model konseptual DSS penempatan CCTV di Jatinangor. Penelitian dipandu oleh tiga pertanyaan penelitian:
 \begin{itemize}
-\item \textbf{RQ1 (Pemetaan Arsitektur DSS):} Bagaimana arsitektur DSS
-\textit{Smart Living \& Safety} dipetakan dari literatur (alur input
-data heterogen ke \textit{engine} MCDM/analitik lalu output keputusan),
-dan pola mana yang paling \textit{transferable} terhadap keterbatasan
-data Jatinangor?
-\item \textbf{RQ2 (Sebaran Metode \& Taksonomi Kriteria MCDM):} Metode
-MCDM apa yang digunakan dalam DSS \textit{Smart Living \& Safety},
-bagaimana skema pembobotan dan perankingannya diterapkan, serta
-bagaimana kriteria keputusan diklasifikasikan berdasarkan atribut
-\textit{benefit} dan \textit{cost}?
-\item \textbf{RQ3 (Formulasi Model Konseptual Jatinangor):} Model
-konseptual DSS seperti apa yang paling layak diterapkan untuk
-prioritisasi CCTV di permukiman mahasiswa Jatinangor, mencakup
-representasi segmen gang sebagai alternatif, struktur sembilan kriteria
-keselamatan, skema pembobotan AHP \textit{multistakeholder} dan
-perankingan TOPSIS, serta elemen literatur apa yang sengaja tidak
-diadopsi beserta alasannya?
+\item \textbf{RQ1 (Pemetaan Arsitektur DSS):} Bagaimana arsitektur DSS \textit{Smart Living \& Safety} dipetakan dari literatur (alur input data heterogen, \textit{engine} MCDM/analitik, output keputusan), dan pola mana yang paling \textit{transferable} terhadap keterbatasan data Jatinangor?
+\item \textbf{RQ2 (Sebaran Metode dan Taksonomi Kriteria MCDM):} Metode MCDM apa yang digunakan dalam DSS \textit{Smart Living \& Safety}, bagaimana skema pembobotan dan perankingannya diterapkan, dan bagaimana kriteria keputusan diklasifikasikan menurut atribut \textit{benefit} dan \textit{cost}?
+\item \textbf{RQ3 (Formulasi Model Konseptual Jatinangor):} Model konseptual DSS seperti apa yang paling layak untuk prioritisasi CCTV di permukiman mahasiswa Jatinangor, mencakup representasi segmen gang sebagai alternatif, struktur sembilan kriteria keselamatan, skema pembobotan AHP multistakeholder dan perankingan TOPSIS, serta elemen literatur yang sengaja tidak diadopsi beserta alasannya?
+\end{itemize}
+Kontribusi kajian ini adalah sebagai berikut.
+\begin{itemize}
+\item \textbf{Kontribusi 1 (RQ1):} pemetaan lima pola arsitektur DSS keselamatan perkotaan beserta kebutuhan datanya. Pola GIS-MCDM, optimasi \textit{coverage}, dan berbasis pakar dinilai paling \textit{transferable} untuk Jatinangor, sedangkan pola simulasi-DSS ditolak karena kebutuhan kalibrasi sensor yang tidak realistis di tingkat lokal.
+\item \textbf{Kontribusi 2 (RQ2):} taksonomi peran metode MCDM (pembobotan subjektif dan objektif, perankingan, struktural, dan evaluasi spasial) serta klasifikasi kriteria ke dalam atribut \textit{benefit}, \textit{cost}, dan \textit{context-dependent} sebagai dasar konseptual model Jatinangor.
+\item \textbf{Kontribusi 3 (RQ3):} model konseptual prioritisasi CCTV berupa alternatif segmen gang A1--A5, matriks kriteria C1--C9 yang memisahkan urgensi risiko dari kendala kelayakan dan biaya, skema AHP tiga kelompok pemangku kepentingan, perankingan TOPSIS dengan alokasi anggaran bertahap, serta uji numerik ilustratif atas konsistensi AHP dan sensitivitas $\pm 20\%$.
 \end{itemize}
 
-Kontribusi kajian ini terhadap jawaban ketiga RQ tersebut adalah:
-\begin{itemize}
-\item \textbf{Kontribusi pertama (RQ1):} pemetaan lima pola arsitektur
-DSS keselamatan perkotaan beserta penanda kebutuhan datanya, sehingga
-teridentifikasi pola GIS-MCDM dan optimasi \textit{coverage} sebagai
-arsitektur paling \textit{transferable} untuk Jatinangor, sementara
-pola simulasi-DSS ditolak dengan argumen kebutuhan kalibrasi sensor
-yang tidak realistis di tingkat lokal.
-\item \textbf{Kontribusi kedua (RQ2):} taksonomi sebaran metode MCDM
-(peran pembobotan subjektif/objektif, perankingan, struktural, dan
-evaluasi spasial) serta klasifikasi kriteria keputusan ke dalam atribut
-\textit{benefit}, \textit{cost}, dan \textit{context-dependent} sebagai
-dasar konseptual model Jatinangor.
-\item \textbf{Kontribusi ketiga (RQ3):} model konseptual prioritisasi
-CCTV berupa alternatif segmen gang A1--A5, matriks kriteria C1--C9 yang
-memisahkan urgensi risiko dari kendala kelayakan/biaya, skema AHP tiga
-kelompok pemangku kepentingan teruji konsistensinya ($CR < 0{,}10$),
-perankingan TOPSIS dengan mekanisme alokasi anggaran bertahap, serta
-analisis sensitivitas $\pm 20\%$.
-\end{itemize}
-
-% =====================================================================
-\section{METODOLOGI REVIU (SCR PROTOCOL)}
-% =====================================================================
-
-Kajian ini menggunakan pendekatan \textit{Scoping Review} dengan
-seleksi studi mengikuti alur \textit{Preferred Reporting Items for
-Systematic Reviews and Meta-Analyses Extension for Scoping Reviews}
-(PRISMA-ScR) \cite{tricco2018}. Protokol ditetapkan sebelum pencarian,
-mencakup strategi pencarian, kriteria inklusi-eksklusi, tahapan
-seleksi, dan ekstraksi data.
+% ================= II. METODOLOGI =================
+\section{Metodologi Reviu (Protokol ScR)}
+Kajian ini menggunakan pendekatan \textit{scoping review} dengan alur seleksi \textit{Preferred Reporting Items for Systematic Reviews and Meta-Analyses Extension for Scoping Reviews} (PRISMA-ScR) \cite{tricco}. Protokol ditetapkan sebelum pencarian dan mencakup strategi pencarian, kriteria inklusi-eksklusi, tahapan seleksi, dan ekstraksi data.
 
 \subsection{Strategi Pencarian Literatur}
+Pencarian dilakukan pada basis data Scopus dengan \textit{advanced search} pada bidang TITLE-ABS-KEY. Kata kunci disusun dari tiga blok konsep yang dihubungkan operator AND, sedangkan sinonim dalam tiap blok dihubungkan operator OR (Tabel~\ref{tab:search}), sehingga setiap rekaman memuat minimal satu istilah dari masing-masing blok. Protokol menetapkan dokumen bertipe \textit{Article}, berbahasa Inggris, terbit 2021--2026, dengan teks lengkap yang dapat diakses; penerapan batasan ini dilaporkan pada Seksi~II-C. Pencarian dijalankan pada 28 Maret 2026 dan menghasilkan 582 rekaman awal.
 
-Pencarian dilakukan pada basis data Scopus dengan sintaks
-\textit{advanced search} pada bidang TITLE-ABS-KEY. Kata kunci disusun
-dari tiga blok konsep yang dihubungkan operator AND, sedangkan sinonim
-dalam setiap blok dihubungkan operator OR. Sintaks lengkap ditampilkan
-pada Tabel~\ref{tab:search} untuk menjamin reproduksibilitas pencarian.
-
-\begin{table}[!htbp]
-\caption{SINTAKS PENCARIAN PADA SCOPUS}
-\label{tab:search}
+\begin{table*}[!t]
 \centering
+\caption{Sintaks Pencarian pada Scopus}\label{tab:search}
 \footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{L{1.1cm}L{6.2cm}}
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Blok} & \textbf{Kata Kunci} \\
+Blok & Kata Kunci \\
 \midrule
-Konteks &
-``smart city'' OR ``smart cities'' OR ``smart living'' OR
-``urban intelligence'' OR ``smart environment*'' OR ``safe city'' OR
-``smart campus'' \\
-DSS/MCDM &
-``decision support system*'' OR ``decision support'' OR
-``decision-making support'' OR ``decision support tool*'' OR
-``decision support framework*'' OR ``decision support model*'' OR
-DSS OR MCDM OR ``multi-criteria decision*'' \\
-Keselamatan &
-safet* OR secur* OR surveillanc* OR crime* OR ``public safety'' OR
-``safety management'' OR ``risk assessment'' OR CCTV OR
-``closed-circuit television'' OR ``surveillance camera*'' OR
-``camera placement'' OR ``sensor placement'' OR ``facility location'' OR
-``site selection'' OR ``street lighting'' OR monitor* \\
+Konteks & ``smart city'' OR ``smart cities'' OR ``smart living'' OR ``urban intelligence'' OR ``smart environment*'' OR ``safe city'' OR ``smart campus'' \\
+DSS/MCDM & ``decision support system*'' OR ``decision support'' OR ``decision-making support'' OR ``decision support tool*'' OR ``decision support framework*'' OR ``decision support model*'' OR DSS OR MCDM OR ``multi-criteria decision*'' \\
+Keselamatan & safet* OR secur* OR surveillanc* OR crime* OR ``public safety'' OR ``safety management'' OR ``risk assessment'' OR CCTV OR ``closed-circuit television'' OR ``surveillance camera*'' OR ``camera placement'' OR ``sensor placement'' OR ``facility location'' OR ``site selection'' OR ``street lighting'' OR monitor* \\
 \bottomrule
-\end{tabular}
-\end{table}
-
-Tabel~\ref{tab:search} menunjukkan bahwa ketiga blok dihubungkan
-operator AND sehingga setiap rekaman harus memuat minimal satu sinonim
-dari masing-masing blok. Protokol membatasi dokumen bertipe
-\textit{Article}, berbahasa Inggris, terbit 2021--2026, dengan teks
-lengkap yang dapat diakses. Pencarian dieksekusi pada 28 Maret 2026 dan
-menghasilkan 582 rekaman awal. Penerapan filter otomatis basis data
-untuk rentang tahun publikasi (2021--2026), jenis dokumen
-(\textit{Article}), dan bahasa (Inggris) menyisakan 181 laporan untuk
-tahap pengunduhan teks lengkap.
+\end{tabularx}
+\end{table*}
 
 \subsection{Kriteria Inklusi dan Eksklusi}
+Enam kriteria inklusi dan eksklusi (I1--I6) dirumuskan sebelum penyaringan untuk meminimalkan bias seleksi. Kriteria tersebut mencakup tipe dokumen, topik, metode, konteks penerapan, jenis publikasi, dan ketersediaan teks lengkap (Tabel~\ref{tab:criteria}). Menurut protokol, I1, I5, dan I6 diterapkan pada tahap \textit{screening}, sedangkan I2, I3, dan I4 diverifikasi pada tahap \textit{full-text review}. Kombinasi ini memastikan bahwa setiap studi yang disertakan membahas DSS atau kerangka keputusan terstruktur dengan metode MCDM eksplisit dalam konteks urban.
 
-Kriteria inklusi dan eksklusi dirumuskan sebelum penyaringan untuk
-meminimalkan bias seleksi. Kriteria disusun dalam enam butir (I1--I6)
-yang mencakup tipe dokumen, topik, metode, konteks penerapan, jenis
-publikasi, dan ketersediaan teks lengkap, sebagaimana ditunjukkan pada
-Tabel~\ref{tab:inklusi}.
-
-\begin{table}[!htbp]
-\caption{KRITERIA INKLUSI DAN EKSKLUSI STUDI}
-\label{tab:inklusi}
+\begin{table*}[!t]
 \centering
+\caption{Kriteria Inklusi dan Eksklusi Studi}\label{tab:criteria}
 \footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{C{0.6cm} L{3.6cm} L{3.6cm}}
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Kode} & \textbf{Kriteria Inklusi} & \textbf{Kriteria Eksklusi} \\
+Kode & Kriteria Inklusi & Kriteria Eksklusi \\
 \midrule
-I1 & Artikel jurnal primer (\textit{Article}), terbit 2021--2026,
-berbahasa Inggris. & Prosiding/bab buku, terbit sebelum 2021, atau
-berbahasa non-Inggris. \\
-I2 & Membahas DSS atau kerangka pengambilan keputusan dalam konteks
-keselamatan, keamanan, atau pemantauan urban/\textit{smart city}. &
-Domain di luar keselamatan/keamanan publik perkotaan (mis. medis
-klinis, energi, limbah, atau pertanian). \\
-I3 & Menggunakan metode MCDM/MCDA eksplisit, atau model analitik
-keputusan terstruktur (optimasi cakupan berbobot/simulasi risiko)
-dengan alur input--engine--output yang jelas. & Hanya membahas deteksi
-objek/\textit{computer vision} murni, perangkat keras jaringan IoT,
-atau \textit{machine learning} tanpa mekanisme alokasi/keputusan. \\
-I4 & Konteks spasial perkotaan, kampus, atau permukiman yang
-\textit{transferable}. & Konteks mikro/non-urban (pertambangan,
-keamanan siber murni, atau internal perusahaan). \\
-I5 & Penelitian primer (\textit{original research}) dengan studi
-kasus/simulasi empiris. & Artikel \textit{review}, survei literatur
-sekunder, atau editorial. \\
-I6 & Naskah teks lengkap (\textit{full-text}) dapat diakses dan bukan
-duplikat kasus. & Teks lengkap tidak dapat diakses (\textit{paywall})
-atau duplikasi studi kasus yang sama. \\
+I1 & Artikel jurnal primer (\textit{Article}), terbit 2021--2026, berbahasa Inggris. & Prosiding/bab buku, terbit sebelum 2021, atau berbahasa non-Inggris. \\
+I2 & Membahas DSS atau kerangka pengambilan keputusan dalam konteks keselamatan, keamanan, atau pemantauan urban/\textit{smart city}. & Domain di luar keselamatan/keamanan publik perkotaan (mis. medis klinis, energi, limbah, atau pertanian). \\
+I3 & Menggunakan metode MCDM/MCDA eksplisit, atau model analitik keputusan terstruktur (optimasi cakupan berbobot/simulasi risiko) dengan alur input--\textit{engine}--output yang jelas. & Hanya membahas deteksi objek/\textit{computer vision} murni, perangkat keras jaringan IoT, atau \textit{machine learning} tanpa mekanisme alokasi/keputusan. \\
+I4 & Konteks spasial perkotaan, kampus, atau permukiman yang \textit{transferable}. & Konteks mikro/non-urban (pertambangan, keamanan siber murni, atau internal perusahaan). \\
+I5 & Penelitian primer (\textit{original research}) dengan studi kasus/simulasi empiris. & Artikel \textit{review}, survei literatur sekunder, atau editorial. \\
+I6 & Naskah teks lengkap (\textit{full-text}) dapat diakses dan bukan duplikat kasus. & Teks lengkap tidak dapat diakses (\textit{paywall}) atau duplikasi studi kasus yang sama. \\
 \bottomrule
-\end{tabular}
-\end{table}
-
-Kriteria pada Tabel~\ref{tab:inklusi} diterapkan secara berlapis:
-I1, I5, dan I6 menyaring pada tahap \textit{screening}, sedangkan I2,
-I3, dan I4 diverifikasi pada tahap \textit{full-text review}. Kombinasi
-ini memastikan setiap studi yang disertakan benar-benar membahas DSS
-atau kerangka pengambilan keputusan terstruktur dengan metode MCDM
-eksplisit dalam konteks urban.
+\end{tabularx}
+\end{table*}
 
 \subsection{Proses Seleksi Studi}
-
-Seleksi studi dilakukan mengikuti empat tahapan standar PRISMA-ScR
-sebagaimana divisualisasikan pada Gambar~\ref{fig:prisma}:
-\begin{enumerate}
-\item \textbf{Identifikasi:} Pencarian sistematis pada basis data Scopus
-menghasilkan 582 rekaman awal tanpa rekaman duplikat otomatis.
-\item \textbf{Penyaringan Metadata Awal:} Dari 582 rekaman, penyaringan
-berdasarkan batas tahun penerbitan (2021--2026) mengeksklusi 166
-rekaman yang terbit sebelum 2021, menyisakan 416 laporan yang dicari
-untuk diambil teks lengkapnya (\textit{reports sought for retrieval}).
-Termasuk di dalam 166 rekaman yang gugur adalah satu studi penempatan
-fasilitas berbasis AHP-GIS-Fuzzy TOPSIS terbitan akhir 2020 yang secara
-substantif relevan namun secara disiplin digugurkan sesuai protokol.
-\item \textbf{Pengambilan Teks Lengkap:} Dari 416 laporan, sebanyak 295
-laporan dieksklusi pada tahap pengambilan karena berbahasa non-Inggris
-($n=2$), bukan artikel jurnal primer ($n=233$), serta teks lengkap tidak
-dapat diunduh karena batasan akses langganan institusi ($n=60$). Dengan
-demikian, diperoleh 121 artikel teks lengkap untuk penilaian kelayakan
-substansi (\textit{reports assessed for eligibility}).
-\item \textbf{Penilaian Kelayakan Substantif:} Sebanyak 121 laporan
-ditelaah secara mendalam terhadap kriteria inklusi--eksklusi (Tabel~\ref{tab:inklusi}).
-Tahap ini mengeksklusi 109 laporan dengan rincian: tidak memuat model
-keputusan/MCDM atau hanya \textit{computer vision}/optimasi murni
-($n=63$), berada di luar domain keselamatan perkotaan atau permukiman
-($n=28$), berfokus pada indeks komparasi makro antar-kota tanpa
-mekanisme alokasi fasilitas lokal ($n=10$), publikasi tinjauan pustaka
-sekunder ($n=5$), serta konteks spesifik yang tidak dapat ditransfer ke
-lingkungan permukiman ($n=3$).
+Seleksi mengikuti empat tahap standar PRISMA-ScR (Gambar~\ref{fig:prisma}).
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Identifikasi:} pencarian pada Scopus menghasilkan 582 rekaman awal tanpa rekaman duplikat otomatis.
+\item \textbf{Penyaringan metadata:} batas tahun terbit 2021--2026 mengeksklusi 166 rekaman yang terbit sebelum 2021, sehingga tersisa 416 laporan yang dicari teks lengkapnya (\textit{reports sought for retrieval}).
+\item \textbf{Pengambilan teks lengkap:} 295 dari 416 laporan dieksklusi karena berbahasa non-Inggris ($n=2$), bukan artikel jurnal primer ($n=233$), atau teks lengkap tidak dapat diunduh akibat batasan akses langganan institusi ($n=60$). Dengan demikian, 121 laporan masuk penilaian kelayakan (\textit{reports assessed for eligibility}).
+\item \textbf{Penilaian kelayakan substantif:} 121 laporan ditelaah terhadap Tabel~\ref{tab:criteria} dan 109 dieksklusi karena tidak memuat model keputusan/MCDM atau hanya \textit{computer vision}/optimasi murni ($n=63$), berada di luar domain keselamatan perkotaan atau permukiman ($n=28$), berfokus pada indeks komparasi makro antarkota tanpa mekanisme alokasi fasilitas lokal ($n=10$), berupa tinjauan pustaka sekunder ($n=5$), atau berkonteks spesifik yang tidak dapat ditransfer ke lingkungan permukiman ($n=3$).
 \end{enumerate}
+Proses ini menghasilkan 12 studi primer yang memenuhi seluruh kriteria protokol dan disertakan dalam sintesis (\textit{studies included}).
 
-Dengan demikian, diperoleh tepat 12 studi primer yang memenuhi seluruh
-kriteria protokol untuk disertakan dalam sintesis (\textit{studies
-included}). Seluruh proses penyaringan dilakukan oleh lima penelaah
-independen anggota tim; perbedaan pendapat diselesaikan melalui diskusi
-konsensus yang dipimpin oleh koordinator protokol (A1). Perangkat
-Generative AI digunakan secara terbatas sebagai asisten pengelompokan
-kata kunci awal pada tahap penyaringan abstrak, namun seluruh keputusan
-inklusi dan eksklusi diverifikasi penuh secara manual.
-
-\begin{figure}[!htbp]
+\begin{figure}[!t]
 \centering
-\includegraphics[width=\columnwidth]{prisma-diagram.png}
-\caption{Diagram alir seleksi studi berdasarkan protokol PRISMA-ScR
-(582 rekaman teridentifikasi $\rightarrow$ 416 laporan dicari teks
-lengkap $\rightarrow$ 121 dinilai kelayakan substantif $\rightarrow$
-12 studi primer disertakan). Tanggal pencarian: 28 Maret 2026.}
-\label{fig:prisma}
+\includegraphics[width=\columnwidth]{../dss_revisi_markdown/assets/gambar_1_prisma.png}
+\caption{Diagram alir seleksi studi berdasarkan protokol PRISMA-ScR (582 rekaman teridentifikasi $\rightarrow$ 416 laporan dicari teks lengkapnya $\rightarrow$ 121 dinilai kelayakan substantif $\rightarrow$ 12 studi primer disertakan).}\label{fig:prisma}
 \end{figure}
 
 \subsection{Ekstraksi dan Analisis Literatur}
+Studi yang disertakan di-\textit{chart} ke dalam tabel ekstraksi dengan kolom penulis, domain permasalahan, komponen DSS, metode MCDM, kriteria utama, dan relevansi terhadap studi kasus Jatinangor. Hasil \textit{charting} menjadi dasar analisis RQ1 (pemetaan arsitektur), RQ2 (sebaran metode dan taksonomi kriteria), dan penyusunan model konseptual RQ3. Sintesis dilakukan secara tematik, yaitu dengan mengelompokkan pola arsitektur, peran metode, dan orientasi kriteria.
 
-Studi yang disertakan kemudian di-\textit{charting} ke dalam tabel
-ekstraksi dengan kolom: penulis, domain permasalahan, komponen DSS,
-metode MCDM, kriteria utama, dan relevansi terhadap studi kasus
-Jatinangor. Hasil \textit{charting} menjadi dasar analisis RQ1
-(pemetaan arsitektur), RQ2 (sebaran metode dan taksonomi kriteria), dan
-penyusunan model konseptual RQ3. Sintesis dilakukan dengan pendekatan
-tematik, yaitu pengelompokan pola arsitektur, peran metode, dan
-orientasi kriteria.
-
-% =====================================================================
-\section{HASIL DAN PEMBAHASAN}
-% =====================================================================
-
+% ================= III. HASIL =================
+\section{Hasil dan Pembahasan}
 \subsection{Analisis RQ1: Pemetaan Kerangka dan Arsitektur DSS}
+Hasil \textit{data charting} terhadap 12 studi primer \cite{wang,gonz,feiz,ahmed,choi,kanj,kab,baddour,alma,shid,zheng,yuhang} dirangkum pada Tabel~\ref{tab:charting}, yang menjadi rujukan tunggal bagi seluruh analisis pada seksi ini. Komponen DSS dalam tabel tersebut dapat dipetakan ke tiga lapisan umum: lapisan \textit{input} (data spasial, observasi, survei pakar, data historis, citra/sensor), \textit{decision engine} (MCDM, \textit{machine learning}, \textit{fuzzy logic}, jaringan Bayesian, simulasi, optimasi), dan \textit{decision output} (peta risiko, skor, perankingan, rute, prioritas intervensi). Keberagaman domain tidak diadopsi sebagai variabel fisik, melainkan diabstraksi menjadi pola arsitektur dan logika keputusan yang \textit{domain-agnostic}.
 
-\noindent\textbf{RQ1:} \textit{Bagaimana arsitektur DSS
-\textit{Smart Living \& Safety} dipetakan dari literatur (alur input
-data heterogen ke \textit{engine} MCDM/analitik lalu output keputusan),
-dan pola mana yang paling \textit{transferable} terhadap keterbatasan
-data Jatinangor?}
-
-Hasil ekstraksi data (\textit{data charting}) terhadap 12 studi primer
-yang disertakan \cite{wang2025,gonzalez2024,feizizadeh2025,ahmed2022,choi2025,kanj2024,kabashkin2025,baddour2026,almassawa2024,shiddiqy2025,zheng2025,yuhang2025}
-dirangkum secara berurutan pada Tabel~\ref{tab:charting}. Tabel ini
-memetakan setiap studi ke dalam kolom penulis, domain permasalahan,
-komponen DSS, metode MCDM, kriteria utama, dan relevansi terhadap studi
-kasus Jatinangor, sehingga dapat digunakan sebagai rujukan tunggal
-untuk seluruh analisis pada seksi ini.
-
-\begin{table*}[!htbp]
-\caption{EKSTRAKSI LITERATUR (DATA CHARTING)}
-\label{tab:charting}
-\setlength{\tabcolsep}{3pt}
+\begin{table*}[!t]
 \centering
-\footnotesize
-\begin{tabular}{C{0.4cm}L{1.5cm}L{1.7cm}L{3.4cm}L{2.1cm}L{1.9cm}L{2.7cm}}
+\caption{Ekstraksi Literatur (Data Charting)}\label{tab:charting}
+\scriptsize
+\begin{tabular}{@{}P{0.35cm}P{1.45cm}P{2.1cm}P{4.2cm}P{2.3cm}P{2.6cm}P{2.7cm}@{}}
 \toprule
-\textbf{No.} & \textbf{Penulis} & \textbf{Domain} & \textbf{Komponen DSS}
-& \textbf{Metode MCDM} & \textbf{Kriteria Utama} & \textbf{Relevansi
-Jatinangor} \\
+No. & Penulis & Domain & Komponen DSS & Metode MCDM & Kriteria utama & Relevansi Jatinangor \\
 \midrule
-1 & Wang et al. \cite{wang2025} & Penempatan kamera jalan, Wuwei RRT &
-Input simpul jalan + model \textit{coverage}; \textit{engine} MWVC +
-\textit{greedy}; output titik kamera & Optimasi \textit{coverage} MWVC &
-\textit{Coverage} jalan (benefit); jumlah tiang dan kamera (cost) &
-Jangkar argumen anggaran (tiang 62 ke 33, kamera 196 ke 98, coverage
-100\%); C4/C6/C7/C9 \\
-2 & Gonzalez-Villa et al. \cite{gonzalez2024} & \textit{Counter-terrorism}
-dan infrastruktur kritis & Input pergerakan + model ancaman;
-\textit{engine} prediktif-probabilistik; output evakuasi dan rute &
-DSS simulasi terintegrasi & Probabilitas ancaman, \textit{egress time},
-estimasi korban & Pembanding arsitektur; pola simulasi ditolak untuk
-model operasional \\
-3 & Feizizadeh \& Omarzadeh \cite{feizizadeh2025} & Pemetaan risiko
-pesepeda, Berlin & Input \textit{crowd-sensor} + guna lahan;
-\textit{engine} statistik spasial + MCDA-GIS; output peta risiko &
-Spatial-MCDA berbasis GIS & Volume lalu lintas, kondisi jalur,
-lingkungan, guna lahan, sosiodemografi & Template peta prioritas gang;
-C1/C2/C5/C8 \\
-4 & Ahmed et al. \cite{ahmed2022} & \textit{Smart campus}, UAE & Input
-survei 4 kelompok pengguna; \textit{engine} AHP antar-\textit{stakeholder}
-+ \textit{utility}; output tool investasi & AHP \textit{multistakeholder}
-+ \textit{utility function} & \textit{Smart security and safety},
-navigasi kampus, \textit{adaptive learning} & Skema AHP tiga kelompok;
-bukti \textit{safety} terpenting; C8/C9 \\
-5 & Choi et al. \cite{choi2025} & Teknologi hunian padat, Korea Selatan &
-Input 16 teknologi + panel 22 ahli; \textit{engine} MCDM +
-\textit{expected utility} 3 skenario; output prioritas teknologi & MCDM
-terintegrasi + \textit{expected utility} & \textit{Importance} dan
-\textit{utility} per domain; \textit{smart safety} teratas & Legitimasi
-fokus \textit{safety} hunian padat; C5/C8 \\
-6 & Kanj et al. \cite{kanj2024} & Rute barang berbahaya, \textit{smart
-city} & Input data \textit{cloud} + cost/duration/risk; \textit{engine}
-Fuzzy AHP + Fuzzy TOPSIS; output rute teraman & Fuzzy AHP (bobot) +
-Fuzzy TOPSIS (ranking) & Cost, duration, risk & Justifikasi rujukan
-AHP-TOPSIS; C1/C9 \\
-7 & Kabashkin et al. \cite{kabashkin2025} & Monitoring lalu lintas UAV,
-Astana & Input video 30 titik kritis; \textit{engine} simulasi +
-kerangka MCDM; output evaluasi 6 skenario & MCDM evaluasi skenario &
-Flow, kecepatan, delay, kriteria skenario & Sampling titik kritis
-menjadi logika segmen gang; C2 \\
-8 & Baddour et al. \cite{baddour2026} & Perencanaan \textit{diplomatic
-quarter} & Input dataset urban publik; \textit{engine} BWM + CoCoSo
-dengan komparasi AHP/TOPSIS/VIKOR; output ranking skenario & BWM
-(bobot) + CoCoSo (ranking) & Security, accessibility, infrastructure,
-sustainability, resilience & Komparasi metode; alasan memilih
-AHP-TOPSIS; C1/C3/C8/C9 \\
-9 & Almassawa et al. \cite{almassawa2024} & Kebijakan \textit{smart
-mobility}, South Tangerang & Input indikator availability/security/
-comfort; \textit{engine} PROMETHEE; output strategi kebijakan &
-PROMETHEE & Availability, security, comfort & Variasi metode; konteks
-Indonesia; C1/C2 \\
-10 & Shiddiqy et al. \cite{shiddiqy2025} & Arsitektur pertahanan IKN,
-Indonesia & Input dokumen kebijakan sekunder; \textit{engine} SWOT +
-AHP; output prioritas komponen & SWOT + AHP & C4ISR, AI-surveillance,
-keamanan infrastruktur, kolaborasi & Bukti AHP dari data sekunder;
-C4/C7 \\
-11 & Zheng et al. \cite{zheng2025} & Risiko banjir komunitas, Guangzhou &
-Input faktor alam-sosial + IoT + ArcGIS; \textit{engine} DEMATEL-ISM +
-Bayesian Network; output risiko dan evaluasi intervensi & DEMATEL-ISM +
-Bayesian Network & Faktor alam dan sosial; kapasitas drainase & Logika
-intervensi terukur; C3/C9 \\
-12 & Yuhang et al. \cite{yuhang2025} & Penempatan sensor grid, Guangzhou &
-Input proximity + kepadatan penduduk (EWM); \textit{engine} BCSLP +
-\textit{genetic algorithm}; output strategi \textit{balanced} & EWM
-(bobot objektif) + optimasi \textit{coverage} & Primary coverage, backup
-coverage, risiko, biaya & EWM sebagai validasi silang bobot;
-C4/C5/C7/C9 \\
+1 & Wang \textit{et al.} \cite{wang} & Penempatan kamera jalan, Wuwei RRT & Input simpul jalan + model \textit{coverage}; engine MWVC + \textit{greedy}; output titik kamera & Optimasi \textit{coverage} MWVC & \textit{Coverage} jalan (\textit{benefit}); jumlah tiang dan kamera (\textit{cost}) & Jangkar argumen anggaran (tiang 62 ke 33, kamera 196 ke 98, \textit{coverage} 100\%); C4/C6/C7/C9 \\
+2 & Gonz\'alez-Villa \textit{et al.} \cite{gonz} & \textit{Counter-terrorism} dan infrastruktur kritis & Input pergerakan + model ancaman; engine prediktif-probabilistik; output evakuasi dan rute & DSS simulasi terintegrasi & Probabilitas ancaman, \textit{egress time}, estimasi korban & Pembanding arsitektur; pola simulasi ditolak untuk model operasional \\
+3 & Feizizadeh \& Omarzadeh \cite{feiz} & Pemetaan risiko pesepeda, Berlin & Input \textit{crowd-sensor} + guna lahan; engine statistik spasial + MCDA-GIS; output peta risiko & \textit{Spatial-MCDA} berbasis GIS & Volume lalu lintas, kondisi jalur, lingkungan, guna lahan, sosiodemografi & Templat peta prioritas gang; C1/C2/C5/C8 \\
+4 & Ahmed \textit{et al.} \cite{ahmed} & \textit{Smart campus}, UAE & Input survei 4 kelompok pengguna; engine AHP antar-\textit{stakeholder} + \textit{utility}; output \textit{tool} investasi & AHP multistakeholder + \textit{utility function} & \textit{Smart security and safety}, navigasi kampus, \textit{adaptive learning} & Skema AHP tiga kelompok; bukti \textit{safety} terpenting; C8/C9 \\
+5 & Choi \textit{et al.} \cite{choi} & Teknologi hunian padat, Korea Selatan & Input 16 teknologi + panel 22 ahli; engine MCDM + \textit{expected utility} 3 skenario; output prioritas teknologi & MCDM terintegrasi + \textit{expected utility} & \textit{Importance} dan \textit{utility} per domain; \textit{smart safety} teratas & Legitimasi fokus \textit{safety} hunian padat; C5/C8 \\
+6 & Kanj \textit{et al.} \cite{kanj} & Rute barang berbahaya, \textit{smart city} & Input data \textit{cloud} + \textit{cost}/\textit{duration}/\textit{risk}; engine Fuzzy AHP + Fuzzy TOPSIS; output rute teraman & Fuzzy AHP (bobot) + Fuzzy TOPSIS (\textit{ranking}) & \textit{Cost}, \textit{duration}, \textit{risk} & Justifikasi rujukan AHP-TOPSIS; C1/C9 \\
+7 & Kabashkin \textit{et al.} \cite{kab} & Monitoring lalu lintas UAV, Astana & Input video 30 titik kritis; engine simulasi + kerangka MCDM; output evaluasi 6 skenario & MCDM evaluasi skenario & \textit{Flow}, kecepatan, \textit{delay}, kriteria skenario & Sampling titik kritis menjadi logika segmen gang; C2 \\
+8 & Baddour \textit{et al.} \cite{baddour} & Perencanaan \textit{diplomatic quarter} & Input dataset urban publik; engine BWM + CoCoSo dengan komparasi AHP/TOPSIS/VIKOR; output \textit{ranking} skenario & BWM (bobot) + CoCoSo (\textit{ranking}) & \textit{Security}, \textit{accessibility}, \textit{infrastructure}, \textit{sustainability}, \textit{resilience} & Komparasi metode; alasan memilih AHP-TOPSIS; C1/C3/C8/C9 \\
+9 & Almassawa \textit{et al.} \cite{alma} & Kebijakan \textit{smart mobility}, South Tangerang & Input indikator \textit{availability}/\textit{security}/\textit{comfort}; engine PROMETHEE; output strategi kebijakan & PROMETHEE & \textit{Availability}, \textit{security}, \textit{comfort} & Variasi metode; konteks Indonesia; C1/C2 \\
+10 & Shiddiqy \textit{et al.} \cite{shid} & Arsitektur pertahanan IKN, Indonesia & Input dokumen kebijakan sekunder; engine SWOT + AHP; output prioritas komponen & SWOT + AHP & C4ISR, \textit{AI-surveillance}, keamanan infrastruktur, kolaborasi & Bukti AHP dari data sekunder; C4/C7 \\
+11 & Zheng \textit{et al.} \cite{zheng} & Risiko banjir komunitas, Guangzhou & Input faktor alam-sosial + IoT + ArcGIS; engine DEMATEL-ISM + \textit{Bayesian Network}; output risiko dan evaluasi intervensi & DEMATEL-ISM + \textit{Bayesian Network} & Faktor alam dan sosial; kapasitas drainase & Logika intervensi terukur; C3/C9 \\
+12 & Yuhang \textit{et al.} \cite{yuhang} & Penempatan sensor grid, Guangzhou & Input \textit{proximity} + kepadatan penduduk (EWM); engine BCSLP + \textit{genetic algorithm}; output strategi \textit{balanced} & EWM (bobot objektif) + optimasi \textit{coverage} & \textit{Primary coverage}, \textit{backup coverage}, risiko, biaya & EWM sebagai validasi silang bobot; C4/C5/C7/C9 \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Berdasarkan Tabel~\ref{tab:charting}, komponen DSS dapat dipetakan ke
-tiga lapisan umum: lapisan \textit{input} (data spasial, observasi,
-survei pakar, data historis, citra/sensor), \textit{decision engine}
-(MCDM, \textit{machine learning}, \textit{fuzzy logic}, jaringan
-Bayesian, simulasi, optimasi), dan \textit{decision output} (peta
-risiko, skor, perankingan, rute, prioritas intervensi). Keberagaman
-domain tidak diadopsi sebagai variabel fisiknya, melainkan diabstraksi
-menjadi pola arsitektur dan logika keputusan yang
-\textit{domain-agnostic}.
+Berdasarkan kesamaan \textit{engine} dan output, arsitektur DSS pada Tabel~\ref{tab:charting} dikelompokkan menjadi lima pola: (1) GIS-MCDM dan evaluasi skenario spasial \cite{feiz,kab,zheng}, (2) optimasi \textit{coverage} \cite{wang,yuhang}, (3) \textit{expert-driven} \cite{ahmed,choi,baddour}, (4) simulasi-DSS operasional \cite{gonz}, dan (5) \textit{policy-MCDA} \cite{alma,shid} (Gambar~\ref{fig:patterns}). Pola \textit{hybrid} (kombinasi lebih dari satu \textit{engine}) dominan dalam literatur, tetapi kebutuhan datanya berbeda jauh. Pola yang bergantung pada simulasi \textit{real-time}, citra berbiaya, atau \textit{machine learning} memerlukan data berdensitas tinggi, sedangkan GIS-MCDM, optimasi \textit{coverage}, dan \textit{expert-driven} dapat berjalan di atas data tabular, data spasial statis, dan penilaian pakar. Berdasarkan kriteria \textit{transferability}, ketiga pola yang disebut terakhir menjadi \textit{baseline} yang paling realistis bagi Jatinangor. Empat dari lima pola diadopsi, sedangkan simulasi-DSS operasional ditolak karena membutuhkan data kalibrasi berbiaya tinggi.
 
-Selanjutnya, berdasarkan kesamaan pola \textit{engine} dan output,
-arsitektur DSS pada Tabel~\ref{tab:charting} dikelompokkan menjadi lima
-pola: (1) GIS-MCDM dan evaluasi skenario spasial
-\cite{feizizadeh2025,kabashkin2025,zheng2025}, (2) optimasi
-\textit{coverage} \cite{wang2025,yuhang2025}, (3) \textit{expert-driven}
-\cite{ahmed2022,choi2025,baddour2026}, (4) simulasi-DSS operasional
-\cite{gonzalez2024}, dan (5) \textit{policy-MCDA}
-\cite{almassawa2024,shiddiqy2025}. Distribusi kelima pola beserta
-status adopsinya pada model Jatinangor diilustrasikan pada
-Gambar~\ref{fig:taksonomi}.
-
-\begin{figure*}[!htbp]
+\begin{figure}[!t]
 \centering
-\includegraphics[width=0.92\textwidth]{gambar-2-taksonomi.png}
-\caption{Taksonomi lima pola arsitektur DSS dan status adopsinya pada
-model Jatinangor. Angka dalam kurung siku merujuk pada nomor studi
-pada Tabel~\ref{tab:charting}.}
-\label{fig:taksonomi}
-\end{figure*}
+\includegraphics[width=\columnwidth]{gambar-2-taksonomi.png}
+\caption{Taksonomi lima pola arsitektur DSS dan status adopsinya pada model Jatinangor.}\label{fig:patterns}
+\end{figure}
 
-Gambar~\ref{fig:taksonomi} menunjukkan bahwa empat dari lima pola
-diadopsi untuk model Jatinangor, sedangkan pola simulasi-DSS
-operasional ditolak karena membutuhkan data kalibrasi berbiaya tinggi.
-Pola \textit{hybrid} (kombinasi lebih dari satu \textit{engine})
-dominan dalam literatur, namun kebutuhan data antarpola berbeda jauh.
-Pola yang bergantung pada simulasi \textit{real-time}, citra berbiaya,
-atau \textit{machine learning} membutuhkan data berdensitas tinggi,
-sedangkan pola GIS-MCDM, optimasi \textit{coverage}, dan
-\textit{expert-driven} dapat berjalan di atas data tabular, data
-spasial statis, dan penilaian pakar. Dengan kriteria
-\textit{transferability}, tiga pola terakhir merupakan
-\textit{baseline} yang paling realistis untuk Jatinangor.
-
-\textbf{Jawaban RQ1:} arsitektur DSS \textit{Smart Living \& Safety}
-dalam literatur terpetakan ke lima pola dengan alur umum input
-heterogen, \textit{decision engine}, lalu output keputusan; pola yang
-paling \textit{transferable} untuk Jatinangor adalah kombinasi GIS-MCDM,
-optimasi \textit{coverage}, dan \textit{expert-driven}. \textbf{Celah
-yang teridentifikasi:} hampir seluruh studi menguji arsitektur pada
-lingkungan berdata lengkap, sedangkan penempatan fasilitas pengawasan
-pada hunian padat beranggaran terbatas dengan data diskrit praktis
-belum dirancang sebagai satu model utuh; celah inilah yang dijawab pada
-Seksi~\ref{sec:rq3}.
+\noindent\textbf{Jawaban RQ1:} arsitektur DSS \textit{Smart Living \& Safety} dalam literatur terpetakan ke lima pola dengan alur umum input heterogen, \textit{decision engine}, lalu output keputusan. Pola yang paling \textit{transferable} untuk Jatinangor adalah kombinasi GIS-MCDM, optimasi \textit{coverage}, dan \textit{expert-driven}. \textbf{Celah:} hampir semua studi menguji arsitektur pada lingkungan berdata lengkap, sedangkan penempatan fasilitas pengawasan pada hunian padat beranggaran terbatas dengan data diskrit praktis belum dirancang sebagai satu model utuh. Celah inilah yang dijawab pada Seksi~IV.
 
 \subsection{Analisis RQ2: Sebaran Metode MCDM dan Taksonomi Kriteria}
+Metode MCDM dalam 12 studi dikelompokkan menurut perannya dalam alur keputusan (Tabel~\ref{tab:methods}), yaitu pembobotan subjektif, pembobotan objektif, perankingan alternatif, dan pemodelan struktural/spasial, ditambah dua studi analitik non-MCDM sebagai pembanding. Frekuensi dihitung berdasarkan penggunaan sebagai \textit{engine} utama pada tiap studi, sedangkan komparasi metode pada \cite{baddour} dicatat terpisah. Sepuluh studi memakai kerangka berbasis MCDM/MCDA, dengan AHP/Fuzzy AHP sebagai metode pembobotan primer terbanyak (3 studi: \cite{ahmed,kanj,shid}) dan \textit{Spatial-MCDA}/multiskenario pada 3 studi \cite{feiz,choi,kab}. Dua studi non-MCDM menggunakan optimasi \textit{coverage} MWVC \cite{wang} dan simulasi operasional terintegrasi \cite{gonz}. Kombinasi AHP dan TOPSIS digunakan bersama secara eksplisit pada \cite{kanj} dan didukung uji komparasi empiris pada \cite{baddour}.
 
-\noindent\textbf{RQ2:} \textit{Metode MCDM apa yang digunakan dalam DSS
-\textit{Smart Living \& Safety}, bagaimana skema pembobotan dan
-perankingannya diterapkan, serta bagaimana kriteria keputusan
-diklasifikasikan berdasarkan atribut \textit{benefit} dan \textit{cost}?}
-
-Dari 12 studi pada Tabel~\ref{tab:charting}, metode MCDM yang muncul
-dapat dikelompokkan berdasarkan perannya dalam alur keputusan.
-Tabel~\ref{tab:metode_gabungan} merangkum secara komprehensif peran
-metode, frekuensi pemakaian primer, kelebihan utama, keterbatasan, dan
-perlakuan pada model yang diusulkan.
-
-\begin{table*}[!htbp]
-\caption{SEBARAN PERAN, FREKUENSI PEMAKAIAN PRIMER, DAN KARAKTERISTIK METODE PADA KORPUS LITERATUR}
-\label{tab:metode_gabungan}
+\begin{table*}[!t]
 \centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{L{2.8cm} L{2.6cm} C{1.2cm} L{3.6cm} L{3.4cm} L{2.8cm}}
+\caption{Sebaran Peran, Frekuensi Pemakaian Primer, dan Karakteristik Metode pada Korpus Literatur}\label{tab:methods}
+\scriptsize
+\begin{tabular}{@{}P{2.2cm}P{3.0cm}P{1.0cm}P{3.4cm}P{3.3cm}P{3.5cm}@{}}
 \toprule
-\textbf{Peran dalam DSS} & \textbf{Metode} & \textbf{Frek. Primer} &
-\textbf{Kelebihan Utama} & \textbf{Keterbatasan} & \textbf{Perlakuan di
-Model Jatinangor} \\
+Peran dalam DSS & Metode & Frek. primer & Kelebihan utama & Keterbatasan & Perlakuan di model Jatinangor \\
 \midrule
-Pembobotan subjektif (pakar) & AHP / Fuzzy AHP \cite{ahmed2022,kanj2024,shiddiqy2025}
-& 3 studi & Menangani penilaian multipakar; rasio konsistensi (CR)
-teraudit & Subjektif; jumlah pasang kuadratik & \textbf{Diadopsi} untuk
-bobot kriteria C1--C9 \\
- & BWM \cite{baddour2026} & 1 studi & Perbandingan berpasangan lebih
- hemat daripada AHP & Membutuhkan penentuan kriteria terbaik/terburuk
- di awal & Tidak diadopsi (selisih kinerja kecil thd AHP
- \cite{baddour2026}) \\
-Pembobotan objektif (data) & Entropy Weight Method (EWM)
-\cite{yuhang2025} & 1 studi & Objektif murni dari dispersi data
-lapangan & Bergantung penuh pada kelengkapan data numerik &
-\textbf{Diadopsi} sebagai validasi silang bobot \\
-Perankingan alternatif & TOPSIS / Fuzzy TOPSIS \cite{kanj2024} &
-1 studi & Komputasi ringkas; kompromi jarak solusi ideal intuitif &
-Memerlukan bobot eksternal dan normalisasi skala & \textbf{Diadopsi}
-untuk perankingan segmen A1--A5 \\
- & CoCoSo \cite{baddour2026} & 1 studi & Menggabungkan kompromi
- eksponensial dan aditif & Formulasi lebih kompleks bagi pemangku
- kepentingan lokal & Tidak diadopsi \\
- & PROMETHEE \cite{almassawa2024} & 1 studi & Kaya akan fungsi
- preferensi per kriteria & Penentuan parameter ambang preferensi rumit
- & Tidak diadopsi \\
-Pemodelan struktural / kausal & DEMATEL-ISM + Bayesian Network
-\cite{zheng2025} & 1 studi & Memetakan kausalitas antar-faktor dan
-inferensi probabilistik & Fokus pada struktur hubungan, bukan
-perankingan lokasi langsung & Tidak diadopsi \\
-Evaluasi spasial & Spatial-MCDA GIS \cite{feizizadeh2025};
-Multi-skenario \cite{choi2025,kabashkin2025} & 3 studi & Integrasi
-langsung dengan peta risiko dan skenario intervensi & Sensitif terhadap
-resolusi data spasial & \textbf{Diadopsi} untuk visualisasi peta
-prioritas \\
-Analitik non-MCDM (pembanding) & Optimasi MWVC \cite{wang2025};
-Simulasi-DSS \cite{gonzalez2024} & 2 studi & Efisiensi cakupan jaringan
-\cite{wang2025}; respons evakuasi \textit{real-time} \cite{gonzalez2024}
-& Simulasi \cite{gonzalez2024} menuntut kalibrasi sensor berbiaya
-tinggi & Logika cakupan \cite{wang2025} diserap ke C4/C6/C7; simulasi
-\cite{gonzalez2024} ditolak \\
+Pembobotan subjektif (pakar) & AHP/Fuzzy AHP \cite{ahmed,kanj,shid} & 3 studi & Menangani penilaian multipakar; rasio konsistensi (CR) teraudit & Subjektif; jumlah pasangan kuadratik & Diadopsi untuk bobot kriteria urgensi \\
+ & BWM \cite{baddour} & 1 studi & Perbandingan berpasangan lebih hemat daripada AHP & Perlu menentukan kriteria terbaik/terburuk di awal & Tidak diadopsi (selisih kinerja kecil terhadap AHP \cite{baddour}) \\
+\cmidrule{1-6}
+Pembobotan objektif (data) & \textit{Entropy Weight Method} (EWM) \cite{yuhang} & 1 studi & Objektif murni dari dispersi data lapangan & Bergantung penuh pada kelengkapan data numerik & Diadopsi sebagai validasi silang bobot \\
+\cmidrule{1-6}
+Perankingan alternatif & TOPSIS/Fuzzy TOPSIS \cite{kanj} & 1 studi & Komputasi ringkas; kompromi jarak solusi ideal intuitif & Memerlukan bobot eksternal dan normalisasi skala & Diadopsi untuk perankingan segmen A1--A5 \\
+ & CoCoSo \cite{baddour} & 1 studi & Menggabungkan kompromi eksponensial dan aditif & Formulasi lebih kompleks bagi pemangku kepentingan lokal & Tidak diadopsi \\
+ & PROMETHEE \cite{alma} & 1 studi & Kaya fungsi preferensi per kriteria & Penentuan parameter ambang preferensi rumit & Tidak diadopsi \\
+\cmidrule{1-6}
+Pemodelan struktural/kausal & DEMATEL-ISM + \textit{Bayesian Network} \cite{zheng} & 1 studi & Memetakan kausalitas antarfaktor dan inferensi probabilistik & Fokus pada struktur hubungan, bukan perankingan lokasi langsung & Tidak diadopsi \\
+\cmidrule{1-6}
+Evaluasi spasial & \textit{Spatial-MCDA} GIS \cite{feiz}; multiskenario \cite{choi,kab} & 3 studi & Integrasi langsung dengan peta risiko dan skenario intervensi & Sensitif terhadap resolusi data spasial & Diadopsi untuk visualisasi peta prioritas \\
+\cmidrule{1-6}
+Analitik non-MCDM (pembanding) & Optimasi MWVC \cite{wang}; simulasi-DSS \cite{gonz} & 2 studi & Efisiensi cakupan jaringan \cite{wang}; respons evakuasi \textit{real-time} \cite{gonz} & Simulasi \cite{gonz} menuntut kalibrasi sensor berbiaya tinggi & Logika cakupan \cite{wang} diserap ke C4/C6/C7; simulasi \cite{gonz} ditolak \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Tabel~\ref{tab:metode_gabungan} merangkum empat peran utama metode MCDM
-(pembobotan subjektif, pembobotan objektif, perankingan alternatif, dan
-pemodelan struktural/spasial) beserta dua studi analitik non-MCDM
-sebagai pembanding. Frekuensi dihitung berdasarkan penggunaan sebagai
-\textit{engine} utama pada masing-masing studi, sedangkan komparasi
-metode pada \cite{baddour2026} dicatat secara terpisah. Sepuluh studi
-menggunakan kerangka berbasis MCDM/MCDA---dengan AHP/Fuzzy AHP sebagai
-metode pembobotan primer terbanyak (3 studi:
-\cite{ahmed2022,kanj2024,shiddiqy2025}) dan Spatial-MCDA/multi-skenario
-pada 3 studi (\cite{feizizadeh2025,choi2025,kabashkin2025})---sementara
-dua studi non-MCDM menggunakan optimasi \textit{coverage} MWVC
-\cite{wang2025} dan simulasi operasional terintegrasi
-\cite{gonzalez2024}. Kombinasi AHP dan TOPSIS merupakan pasangan
-metode bobot--perankingan yang secara eksplisit terbukti bekerja
-bersama pada korpus (\cite{kanj2024}) serta didukung oleh uji
-komparasi empiris pada \cite{baddour2026}.
+Kriteria keputusan dari seluruh studi disintesis menjadi tiga kelompok (Tabel~\ref{tab:taxonomy}). \textit{Benefit} dan \textit{cost} merupakan sifat kriteria dalam suatu model keputusan, bukan sifat absolut dari nama variabel. Karena itu, klasifikasi dilakukan terhadap tujuan keputusan studi sumber, dan kriteria yang arah preferensinya tidak tercatat eksplisit pada \textit{charting} dikelompokkan sebagai \textit{context-dependent}. Seluruh arah kriteria pada model Jatinangor dirumuskan terhadap urgensi, yaitu skor yang lebih tinggi menandakan prioritas pemasangan yang lebih besar.
 
-Selanjutnya, kriteria keputusan dari seluruh studi disintesis menjadi
-tiga kelompok: \textit{benefit}, \textit{cost}, dan
-\textit{context-dependent}. Tabel~\ref{tab:taksonomi} merangkum
-taksonomi ini beserta perlakuan di model yang diusulkan.
-
-\begin{table}[!htbp]
-\caption{TAKSONOMI KRITERIA KEPUTUSAN}
-\label{tab:taksonomi}
+\begin{table*}[!t]
 \centering
+\caption{Taksonomi Kriteria Keputusan}\label{tab:taxonomy}
 \footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{L{1.1cm}L{1.9cm}L{2.5cm}L{2.0cm}}
+\begin{tabular}{@{}P{1.9cm}P{3.6cm}P{6.4cm}P{4.6cm}@{}}
 \toprule
-\textbf{Kelompok} & \textbf{Orientasi} & \textbf{Contoh dari Literatur}
-& \textbf{Perlakuan di Model} \\
+Kelompok & Orientasi & Contoh dari literatur & Perlakuan di model \\
 \midrule
-Benefit & Semakin tinggi semakin diprioritaskan & Volume mobilitas
-\cite{feizizadeh2025}; cakupan pengawasan \cite{wang2025,yuhang2025};
-keamanan \cite{baddour2026} & Kriteria urgensi C1--C8 (skor tinggi = makin mendesak) \\
-Cost & Semakin rendah semakin dikehendaki & Jumlah perangkat
-\cite{wang2025}; risiko kecelakaan \cite{kabashkin2025}; biaya
-\cite{baddour2026} & Biaya instalasi & RAB dipisahkan sebagai batasan anggaran \\
-Context-dependent & Arah preferensi bergantung formulasi & Parameter arus
-lalu lintas \& delay \cite{kabashkin2025}; faktor hidrologis drainase
-\cite{zheng2025} & Tidak dipaksa biner; disesuaikan tujuan keputusan \\
+\textit{Benefit} & Semakin tinggi semakin diprioritaskan & Volume mobilitas \cite{feiz}; cakupan pengawasan \cite{wang,yuhang}; keamanan \cite{baddour} & Kriteria urgensi C1--C8 (skor tinggi berarti makin mendesak) \\
+\textit{Cost} & Semakin rendah semakin dikehendaki & Jumlah perangkat \cite{wang}; risiko kecelakaan \cite{kab}; biaya \cite{baddour} & Biaya instalasi (RAB) dipisahkan sebagai batasan anggaran \\
+\textit{Context-dependent} & Arah preferensi bergantung formulasi & Parameter arus lalu lintas dan \textit{delay} \cite{kab}; faktor hidrologis drainase \cite{zheng} & Tidak dipaksa biner; disesuaikan dengan tujuan keputusan \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
-Taksonomi pada Tabel~\ref{tab:taksonomi} penting karena
-\textit{benefit} dan \textit{cost} merupakan sifat kriteria dalam
-suatu model keputusan, bukan sifat absolut dari nama variabel.
-Klasifikasi seluruh kriteria dilakukan terhadap tujuan keputusan paper
-sumber; ketika arah preferensi tidak eksplisit tercatat pada
-\textit{charting}, kriteria dipisahkan sebagai
-\textit{context-dependent}. Seluruh arah kriteria pada model Jatinangor
-dirumuskan terhadap urgensi, yaitu skor yang lebih tinggi menandakan
-prioritas pemasangan yang lebih besar.
-
-\textbf{Jawaban RQ2:} metode yang muncul dalam literatur terbagi atas
-empat peran, yaitu pembobotan subjektif (AHP, Fuzzy AHP, BWM),
-pembobotan objektif (EWM), perankingan (TOPSIS, CoCoSo, PROMETHEE),
-dan pemodelan struktural (DEMATEL-ISM, Bayesian); pola kombinasi AHP
-untuk bobot lalu TOPSIS untuk peringkat adalah yang paling langsung
-dapat diadopsi. \textbf{Celah yang teridentifikasi:} (a) komparasi
-bobot objektif berbasis data dengan bobot subjektif berbasis pakar
-jarang dilakukan dalam satu studi yang sama, (b) SAW dan WP tidak
-ditemukan eksplisit pada korpus ini, dan (c) klasifikasi
-\textit{benefit}/\textit{cost} kerap dilakukan hanya dari nama variabel
-tanpa memeriksa arah preferensi.
+\noindent\textbf{Jawaban RQ2:} metode dalam literatur terbagi atas empat peran, yaitu pembobotan subjektif (AHP, Fuzzy AHP, BWM), pembobotan objektif (EWM), perankingan (TOPSIS, CoCoSo, PROMETHEE), dan pemodelan struktural (DEMATEL-ISM, Bayesian). Pola AHP untuk bobot lalu TOPSIS untuk peringkat adalah yang paling langsung dapat diadopsi. \textbf{Celah:} (a) komparasi bobot objektif berbasis data dengan bobot subjektif berbasis pakar jarang dilakukan dalam satu studi, (b) SAW dan WP tidak ditemukan secara eksplisit pada korpus ini, dan (c) klasifikasi \textit{benefit}/\textit{cost} kerap dilakukan hanya dari nama variabel tanpa memeriksa arah preferensi.
 
 \subsection{Sintesis RQ1 dan RQ2}
+Temuan RQ1 dan RQ2 diterjemahkan menjadi keputusan perancangan berikut. Untuk arsitektur, dipakai \textit{baseline} GIS-MCDM, optimasi \textit{coverage}, dan \textit{expert-driven} karena pola \textit{hybrid} dominan dalam literatur. Untuk input, data diskrit lokal sudah memadai karena literatur memakai data spasial, observasi, survei pakar, dan data historis. Untuk \textit{decision engine}, MCDM dipilih karena transparan dibandingkan \textit{machine learning}, \textit{fuzzy}, simulasi, atau optimasi. Pembobotan menggunakan AHP tiga kelompok pemangku kepentingan karena banyak studi berbasis pakar (AHP, BWM), sedangkan perankingan menggunakan TOPSIS karena ringkas dan sejalan dengan pasangan AHP-TOPSIS pada \cite{kanj}. Kriteria C1--C8 diorientasikan terhadap urgensi (\textit{benefit}: cakupan, aktivitas, keamanan, kepadatan), biaya dan kelayakan diperlakukan sebagai kendala (\textit{cost}: biaya, risiko, jumlah perangkat), dan kriteria \textit{context-dependent} tidak dipaksa menjadi biner. Output berupa peta prioritas segmen gang dan urutan pemasangan bertahap, dan \textit{transferability} model diuji pada tiga dimensi (Seksi~IV-E). Dengan demikian, setiap elemen model Jatinangor memiliki dasar dari literatur yang dapat ditelusuri pada tabel-tabel di atas.
 
-Untuk menutup analisis pada Seksi III, temuan RQ1 dan RQ2 disintesis
-menjadi implikasi langsung bagi perancangan model Jatinangor.
-Tabel~\ref{tab:sintesis} memetakan sepuluh aspek keputusan beserta
-implikasinya.
-
-\begin{table}[!htbp]
-\caption{SINTESIS TEMUAN LITERATUR DAN IMPLIKASI}
-\label{tab:sintesis}
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{L{1.4cm}L{2.9cm}L{3.0cm}}
-\toprule
-\textbf{Aspek} & \textbf{Temuan Literatur} & \textbf{Implikasi untuk
-Jatinangor} \\
-\midrule
-Arsitektur & Lima pola; \textit{hybrid} dominan & Pakai
-\textit{baseline} GIS-MCDM + optimasi \textit{coverage} +
-\textit{expert-driven} \\
-Input & Spasial, observasi, survei pakar, data historis & Cukup data
-diskrit lokal \\
-\textit{Decision engine} & MCDM, ML, fuzzy, simulasi, optimasi & MCDM
-dipilih karena transparan \\
-Pembobotan & Banyak berbasis pakar (AHP, BWM) & AHP tiga kelompok
-pemangku kepentingan \\
-Perankingan & TOPSIS, CoCoSo, PROMETHEE & TOPSIS karena ringkas dan
-sejalan pola pemenang \cite{kanj2024} \\
-Benefit & Cakupan, aktivitas, keamanan, kepadatan & Orientasi skor
-C1--C9 terhadap urgensi \\
-Cost & Biaya, risiko, jumlah perangkat & Kendala anggaran dan kriteria
-kelayakan \\
-\textit{Context-dependent} & Bergantung formulasi model & Tidak dipaksa
-biner \\
-Output & Peta risiko, skor, peringkat & Peta prioritas segmen gang +
-urutan bertahap \\
-\textit{Transferability} & Bergantung kebutuhan data & Diuji pada tiga
-dimensi (Seksi IV-E) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Tabel~\ref{tab:sintesis} menjadi jembatan antara analisis literatur
-(Seksi III) dan perancangan model (Seksi IV). Sepuluh aspek pada tabel
-menunjukkan bahwa setiap elemen model Jatinangor memiliki justifikasi
-langsung dari literatur, bukan dari asumsi tim. Konsekuensinya, model
-pada Seksi~\ref{sec:rq3} dapat diuji ulang secara independen oleh
-pembaca yang mengacu pada tabel yang sama.
-
-% =====================================================================
-\FloatBarrier
-\section{PERANCANGAN MODEL KONSEPTUAL DSS JATINANGOR}
-\label{sec:rq3}
-% =====================================================================
-
-\noindent\textbf{RQ3:} \textit{Model konseptual DSS seperti apa yang
-paling layak diterapkan untuk prioritisasi CCTV di permukiman mahasiswa
-Jatinangor, mencakup representasi segmen gang sebagai alternatif,
-struktur sembilan kriteria keselamatan, skema pembobotan AHP
-\textit{multistakeholder} dan perankingan TOPSIS, serta elemen literatur
-apa yang sengaja tidak diadopsi beserta alasannya?}
-
+% ================= IV. MODEL =================
+\section{Perancangan Model Konseptual DSS Jatinangor (Analisis RQ3)}
 \subsection{Profil Lokasi dan Perumusan Alternatif}
+Profil umum kawasan telah diuraikan pada Seksi~I. Puluhan ribu mahasiswa komuter dan penghuni indekos terkonsentrasi di koridor Desa Sayang, Cikeruh, Hegarmanah, Cipacing, dan Cileles \cite{bps}, dengan kepadatan penduduk di desa-desa penyangga kampus mencapai 6.000 hingga lebih dari 9.300 jiwa/km$^2$ \cite{bps}. Kepadatan ini memicu pertumbuhan ratusan bangunan indekos di sepanjang gang sempit berlebar 1,5--3~m yang minim PJU dan pengawasan kamera. Karena tingkat kerawanan dan kapasitas tiang/jaringan berbeda tajam antargang, unit keputusan yang tepat bukan tingkat desa, melainkan segmen jalan atau gang yang menjadi kandidat penempatan satu titik CCTV.
 
-Kecamatan Jatinangor memiliki luas $26{,}20\text{ km}^2$ dengan lebih
-dari 98.000 penduduk tetap dan puluhan ribu mahasiswa komuter maupun
-penghuni indekos yang terkonsentrasi di koridor Desa Sayang, Cikeruh,
-Hegarmanah, Cipacing, dan Cileles \cite{bps_jatinangor}. Kepadatan
-penduduk di desa-desa penyangga kampus mencapai $6.000$ hingga lebih
-dari $9.300\text{ jiwa/km}^2$ \cite{bps_jatinangor}, memicu
-pertumbuhan ratusan bangunan indekos di sepanjang gang sempit
-berlebar $1{,}5$--$3$ m yang minim Penerangan Jalan Umum (PJU) dan
-pengawasan kamera. Karena tingkat kerawanan dan kapasitas infrastruktur
-tiang/jaringan berbeda tajam antargang, unit keputusan yang paling
-tepat bukanlah tingkat desa secara makro, melainkan segmen jalan atau
-gang yang menjadi kandidat penempatan satu titik kamera pengawas (CCTV).
+Lima alternatif segmen dirumuskan berdasarkan tipologi kerawanan dan karakteristik spasial di permukiman mahasiswa Jatinangor (Tabel~\ref{tab:alt}). Pemilihan kelima segmen bersumber dari pengamatan lapangan terhadap lima tipologi spasial, sedangkan \cite{wang,feiz} dirujuk hanya sebagai landasan metodologis untuk memodelkan unit keputusan berbasis segmen graf jalan. Model diilustrasikan pada lima segmen representatif agar perhitungan matematisnya transparan. Secara konseptual, kerangka ini dapat diperluas ke puluhan hingga ratusan segmen tanpa mengubah struktur sembilan kriteria, tetapi perluasan tersebut belum diuji dalam kajian ini.
 
-Lima alternatif segmen dirumuskan berdasarkan tipologi kerawanan dan
-karakteristik spasial nyata di kawasan permukiman mahasiswa Jatinangor.
-Tabel~\ref{tab:alternatif} merinci kelima alternatif beserta ciri
-spasial dan dasar pemilihannya.
-
-\begin{table}[!htbp]
-\caption{ALTERNATIF SEGMEN LOKASI PRIORITAS (A1--A5)}
-\label{tab:alternatif}
+\begin{table*}[!t]
 \centering
+\caption{Alternatif Segmen Lokasi Prioritas (A1--A5)}\label{tab:alt}
 \footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{C{0.6cm}L{2.0cm}L{2.0cm}L{2.7cm}}
+\begin{tabular}{@{}P{0.9cm}P{3.0cm}P{5.2cm}P{7.5cm}@{}}
 \toprule
-\textbf{Kode} & \textbf{Segmen} & \textbf{Karakteristik Spasial} &
-\textbf{Dasar Pemilihan Lapangan} \\
+Kode & Segmen & Karakteristik spasial & Dasar pemilihan lapangan \\
 \midrule
-A1 & Gang Kos Sayang & Gang residensial sempit (1,5--2,5 m), padat indekos &
-Konsentrasi indekos tertinggi; akses jalan buntu; minim PJU; rawan pencurian \\
-A2 & Ruas Jalan Cikeruh & Koridor jalan aktif (lebar 3--4 m) dekat kampus &
-Jalur mobilitas pejalan kaki dan motor mahasiswa malam hari (pukul 21.00--24.00) \\
-A3 & Persimpangan Hegarmanah & Simpul jalan multi-cabang (5 cabang pertemuan) &
-Titik temu sirkulasi utama; konsentrasi gerai ATM, minimarket, dan halte \\
-A4 & Gang Cipacing & Gang residensial panjang dengan kontur berliku &
-Defisiensi penerangan parah (gelap gulita); jarak ke CCTV aktif sangat jauh \\
-A5 & Ruas Jalan Cileles & Ruas jalan sekunder lingkar timur kampus &
-Jalur perlintasan alternatif; penerangan seadanya; kepadatan hunian moderat \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Pemilihan kelima segmen tersebut berakar langsung pada hasil observasi
-lapangan terhadap lima tipologi spasial di Jatinangor
-(Tabel~\ref{tab:alternatif}), sedangkan literatur \cite{wang2025,feizizadeh2025}
-dirujuk murni sebagai landasan metodologis untuk memodelkan unit
-keputusan berbasis segmen graf jalan. Meskipun model ini diilustrasikan
-pada lima segmen representatif untuk mendemonstrasikan transparansi
-perhitungan matematis, kerangka MCDM yang dirancang memiliki skalabilitas
-penuh untuk diperluas ke puluhan hingga ratusan segmen gang di seluruh
-wilayah Jatinangor tanpa perlu mengubah struktur sembilan kriteria keputusan.
-
-\subsection{Matriks Kriteria Keselamatan C1--C9}
-
-Untuk menyelesaikan kerancuan antara aspek urgensi dan aspek kelayakan
-fisik, model ini membagi kriteria menjadi dua domain fungsi:
-\begin{enumerate}
-\item \textbf{Kriteria Urgensi Risiko (C1--C8):} Seluruhnya diformulasikan
-searah terhadap urgensi (\textit{benefit-oriented toward urgency}); skor
-yang lebih tinggi menandakan kebutuhan pengawasan yang semakin mendesak
-dan diproses langsung di dalam mesin perankingan TOPSIS.
-\item \textbf{Kriteria Kelayakan Teknis (C9) dan Biaya Finansial:}
-C9 (kesiapan tiang, listrik, dan jaringan) bersama estimasi biaya
-(Rencana Anggaran Biaya / RAB) dipisahkan dari perankingan urgensi dan
-berfungsi sebagai kendala kelayakan serta batas anggaran
-(\textit{budget ceiling constraint}) untuk membagi alternatif ke dalam
-fase-fase pemasangan bertahap.
-\end{enumerate}
-
-Tabel~\ref{tab:kriteria_lengkap} merangkum struktur kriteria keselamatan,
-definisi operasional, skala, sumber data, dan rujukan studi pendukung.
-
-\begin{table*}[!htbp]
-\caption{MATRIKS STRUKTUR, SKALA PENGUKURAN, SUMBER DATA, DAN FREKUENSI DUKUNGAN KRITERIA KESELAMATAN (C1--C9)}
-\label{tab:kriteria_lengkap}
-\centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{C{0.6cm} L{2.4cm} L{4.4cm} L{1.8cm} L{1.3cm} L{3.0cm} C{0.8cm} L{2.1cm}}
-\toprule
-\textbf{Kode} & \textbf{Kriteria} & \textbf{Definisi Operasional (Arah Preferensi)} &
-\textbf{Satuan} & \textbf{Skala} & \textbf{Sumber Data (Utama / Fallback)} &
-\textbf{Frek.} & \textbf{Rujukan Studi} \\
-\midrule
-C1 & Riwayat kerawanan segmen & Jumlah insiden kriminalitas/kecelakaan per km per tahun (Benefit thd Urgensi) &
-kejadian/km/th & Rasio & Rekap insiden Polsek/desa / wawancara RT & 4 &
-\cite{feizizadeh2025,kanj2024,baddour2026,almassawa2024} \\
-C2 & Volume mobilitas malam & Rata-rata pejalan kaki \& kendaraan melintas pukul 18.00--24.00 (Benefit thd Urgensi) &
-orang/jam & Rasio & \textit{Counting} manual lapangan / CCTV eksisting & 3 &
-\cite{feizizadeh2025,kabashkin2025,almassawa2024} \\
-C3 & Defisiensi penerangan & Tingkat kekurangan cahaya PJU pada malam hari (Benefit thd Urgensi: makin gelap makin mendesak) &
-skor 1--5 & Ordinal & Survei observasi malam / data Dishub & 2 &
-\cite{baddour2026,zheng2025} \\
-C4 & Efisiensi \textit{coverage} & Estimasi luas area jalan yang terjangkau pandang per titik kamera (Benefit thd Urgensi) &
-$\text{m}^2$/titik & Rasio & Geometri jalan OpenStreetMap + uji pandang & 3 &
-\cite{wang2025,shiddiqy2025,yuhang2025} \\
-C5 & Kepadatan penghuni & Estimasi jumlah kamar indekos aktif per km panjang segmen (Benefit thd Urgensi) &
-kamar/km & Rasio & Pendataan indekos / profil desa \cite{bps_jatinangor} & 3 &
-\cite{feizizadeh2025,choi2025,yuhang2025} \\
-C6 & Derajat simpul jalan & Jumlah cabang persimpangan yang bertemu pada segmen gang (Benefit thd Urgensi) &
-cabang & Rasio & Ekstraksi jaringan OpenStreetMap + observasi & 1 &
-\cite{wang2025} \\
-C7 & \textit{Coverage gap} CCTV & Jarak terdekat dari titik tengah segmen ke unit CCTV aktif eksisting (Benefit thd Urgensi) &
-meter & Rasio & Pemetaan koordinat GPS kamera eksisting & 3 &
-\cite{wang2025,shiddiqy2025,yuhang2025} \\
-C8 & Kedekatan fasilitas rentan & Jumlah POI rawan (indekos, ATM, warung 24 jam, gerbang) dalam radius 150 m (Benefit thd Urgensi) &
-unit POI & Rasio & Observasi lapangan + data OpenStreetMap POI & 4 &
-\cite{feizizadeh2025,ahmed2022,choi2025,baddour2026} \\
-C9 & Kelayakan implementasi & Kesiapan fisik tiang, pasokan listrik PLN, dan sinyal internet (Atribut Kelayakan Teknis) &
-skor 1--5 & Ordinal & Survei teknis lapangan + estimasi RAB & 6 &
-\cite{wang2025,ahmed2022,kanj2024,baddour2026,zheng2025,yuhang2025} \\
+A1 & Gang Kos Sayang & Gang residensial sempit (1,5--2,5~m), padat indekos & Konsentrasi indekos tertinggi; akses jalan buntu; minim PJU; rawan pencurian \\
+A2 & Ruas Jalan Cikeruh & Koridor jalan aktif (lebar 3--4~m) dekat kampus & Jalur mobilitas pejalan kaki dan motor mahasiswa malam hari (pukul 21.00--24.00) \\
+A3 & Persimpangan Hegarmanah & Simpul jalan multicabang (5 cabang pertemuan) & Titik temu sirkulasi utama; konsentrasi gerai ATM, minimarket, dan halte \\
+A4 & Gang Cipacing & Gang residensial panjang dengan kontur berliku & Defisiensi penerangan parah (gelap gulita); jarak ke CCTV aktif sangat jauh \\
+A5 & Ruas Jalan Cileles & Ruas jalan sekunder lingkar timur kampus & Jalur perlintasan alternatif; penerangan seadanya; kepadatan hunian moderat \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Validasi rujukan pada Tabel~\ref{tab:kriteria_lengkap} membuktikan bahwa
-delapan dari sembilan kriteria didukung oleh minimal dua studi primer
-pada korpus: C9 didukung oleh 6 studi (\cite{wang2025,ahmed2022,kanj2024,baddour2026,zheng2025,yuhang2025});
-C1 (\cite{feizizadeh2025,kanj2024,baddour2026,almassawa2024}) dan C8
-(\cite{feizizadeh2025,ahmed2022,choi2025,baddour2026}) masing-masing
-didukung oleh 4 studi; C2 (\cite{feizizadeh2025,kabashkin2025,almassawa2024}),
-C4 (\cite{wang2025,shiddiqy2025,yuhang2025}), C5 (\cite{feizizadeh2025,choi2025,yuhang2025}),
-dan C7 (\cite{wang2025,shiddiqy2025,yuhang2025}) masing-masing didukung
-oleh 3 studi; serta C3 (\cite{baddour2026,zheng2025}) didukung oleh 2
-studi. Hanya C6 (derajat simpul jalan) yang bersumber tunggal dari model
-\textit{vertex cover} \cite{wang2025} dan dicatat secara transparan apa
-adanya.
+\subsection{Matriks Kriteria Keselamatan C1--C9}
+Untuk memisahkan aspek urgensi dari aspek kelayakan fisik, kriteria dibagi menjadi dua domain fungsi.
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Kriteria urgensi risiko (C1--C8):} seluruhnya diformulasikan searah terhadap urgensi (\textit{benefit-oriented toward urgency}). Skor yang lebih tinggi menandakan kebutuhan pengawasan yang lebih mendesak, dan kriteria ini diproses langsung dalam mesin perankingan TOPSIS.
+\item \textbf{Kriteria kelayakan teknis (C9) dan biaya finansial:} C9 (kesiapan tiang, listrik, dan jaringan) bersama estimasi biaya (Rencana Anggaran Biaya/RAB) dipisahkan dari perankingan urgensi. Keduanya berfungsi sebagai kendala kelayakan dan batas anggaran (\textit{budget ceiling constraint}) untuk membagi alternatif ke dalam fase pemasangan bertahap.
+\end{enumerate}
+Tabel~\ref{tab:criteriaC} merangkum definisi operasional, skala, sumber data, dan rujukan studi pendukung setiap kriteria. Delapan dari sembilan kriteria didukung oleh minimal dua studi primer: C9 didukung enam studi, C1 dan C8 masing-masing empat, C2, C4, C5, dan C7 masing-masing tiga, serta C3 dua studi. Hanya C6 (derajat simpul jalan) yang bersumber tunggal dari model \textit{vertex cover} \cite{wang}, dan hal ini dicatat apa adanya.
 
-Perlu ditegaskan bahwa frekuensi kemunculan pada korpus literatur lintas
-domain tidak otomatis mencerminkan urutan kepentingan di lapangan.
-Sebagai contoh, kriteria defisiensi penerangan (C3) hanya muncul pada
-dua studi korpus (\cite{baddour2026,zheng2025}), namun merupakan faktor
-krusial pemicu kerawanan di Jatinangor. Oleh karena itu, bobot prioritas
-kriteria sepenuhnya ditentukan melalui penilaian konsensus pemangku
-kepentingan via AHP, di mana defisiensi penerangan terbukti memperoleh
-bobot signifikan bersama riwayat kerawanan.
+Frekuensi kemunculan pada korpus lintas domain tidak otomatis mencerminkan urutan kepentingan di lapangan. Sebagai contoh, defisiensi penerangan (C3) hanya muncul pada dua studi \cite{baddour,zheng}, tetapi penulis menilainya sebagai faktor krusial pemicu kerawanan di Jatinangor. Oleh karena itu, bobot kriteria sepenuhnya ditentukan melalui penilaian konsensus pemangku kepentingan dengan AHP. Pada uji numerik ilustratif (Seksi~IV-C), C3 termasuk tiga bobot teratas bersama riwayat kerawanan (C1) dan mobilitas malam (C2).
+
+\begin{table*}[!t]
+\centering
+\caption{Matriks Struktur, Skala Pengukuran, Sumber Data, dan Frekuensi Dukungan Kriteria Keselamatan (C1--C9). C1--C8 berorientasi benefit terhadap urgensi; C9 adalah atribut kelayakan teknis}\label{tab:criteriaC}
+\scriptsize
+\begin{tabular}{@{}P{0.55cm}P{2.2cm}P{4.8cm}P{1.8cm}P{4.2cm}P{2.8cm}@{}}
+\toprule
+Kode & Kriteria & Definisi operasional & Satuan (skala) & Sumber data (utama; cadangan) & Rujukan (jumlah studi) \\
+\midrule
+C1 & Riwayat kerawanan segmen & Jumlah insiden kriminalitas/kecelakaan per km per tahun & kejadian/km/th (rasio) & Rekap insiden Polsek/desa; wawancara RT & \cite{feiz,kanj,baddour,alma} (4) \\
+C2 & Volume mobilitas malam & Rata-rata pejalan kaki dan kendaraan melintas pukul 18.00--24.00 & orang/jam (rasio) & Counting manual lapangan; CCTV eksisting & \cite{feiz,kab,alma} (3) \\
+C3 & Defisiensi penerangan & Tingkat kekurangan cahaya PJU pada malam hari (makin gelap makin mendesak) & skor 1--5 (ordinal) & Survei observasi malam; data Dishub & \cite{baddour,zheng} (2) \\
+C4 & Efisiensi \textit{coverage} & Estimasi luas area jalan yang terjangkau pandang per titik kamera & m$^2$/titik (rasio) & Geometri jalan OpenStreetMap; uji pandang & \cite{wang,shid,yuhang} (3) \\
+C5 & Kepadatan penghuni & Estimasi jumlah kamar indekos aktif per km panjang segmen & kamar/km (rasio) & Pendataan indekos; profil desa \cite{bps} & \cite{feiz,choi,yuhang} (3) \\
+C6 & Derajat simpul jalan & Jumlah cabang persimpangan yang bertemu pada segmen gang & cabang (rasio) & Ekstraksi jaringan OpenStreetMap; observasi & \cite{wang} (1) \\
+C7 & \textit{Coverage gap} CCTV & Jarak terdekat dari titik tengah segmen ke unit CCTV aktif eksisting & meter (rasio) & Pemetaan koordinat GPS kamera eksisting & \cite{wang,shid,yuhang} (3) \\
+C8 & Kedekatan fasilitas rentan & Jumlah POI rawan (indekos, ATM, warung 24 jam, gerbang) dalam radius 150~m & unit POI (rasio) & Observasi lapangan; POI OpenStreetMap & \cite{feiz,ahmed,choi,baddour} (4) \\
+C9 & Kelayakan implementasi & Kesiapan fisik tiang, pasokan listrik PLN, dan sinyal internet & skor 1--5 (ordinal) & Survei teknis lapangan; estimasi RAB & \cite{wang,ahmed,kanj,baddour,zheng,yuhang} (6) \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \subsection{Skema Pembobotan AHP dan Perankingan TOPSIS}
-
-\textbf{Pembobotan AHP Multistakeholder} mengadopsi skema pembobotan
-lintas kelompok pemangku kepentingan \cite{ahmed2022}:
-\begin{enumerate}
-\item \textbf{Responden Tiga Kelompok:} (a) Pemerintah Daerah (Kecamatan
-Jatinangor, Satpol PP, Dishub Sumedang), (b) Pengelola Kampus
-(Direktorat Keamanan / Sarana Prasarana PTN Jatinangor), dan (c)
-Komunitas Warga (Ketua RT/RW dan paguyuban pengusaha indekos).
-\item \textbf{Struktur Hierarki untuk Mitigasi Inkonsistensi:} Untuk
-menghindari kejenuhan responden akibat 28 perbandingan berpasangan pada
-matriks $8 \times 8$ (yang rawan menghasilkan CR $>$ 0,10), kriteria
-urgensi dikelompokkan ke dalam tiga kluster: Kluster Risiko (C1, C3),
-Kluster Paparan Aktivitas (C2, C5, C8), dan Kluster Karakteristik
-Spasial (C4, C6, C7). Skema hierarki ini memangkas total perbandingan
-berpasangan menjadi hanya 10 perbandingan.
-\item \textbf{Agregasi Preferensi:} Matriks perbandingan tiap responden
-diuji konsistensinya terlebih dahulu. Penilaian antar-kelompok kemudian
-diagregasi menggunakan rata-rata geometrik (\textit{geometric mean}):
+\textbf{Pembobotan AHP multistakeholder} mengadopsi skema lintas kelompok pemangku kepentingan \cite{ahmed}.
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Responden tiga kelompok:} (a) pemerintah daerah (Kecamatan Jatinangor, Satpol PP, Dishub Sumedang), (b) pengelola kampus (Direktorat Keamanan/Sarana Prasarana PTN Jatinangor), dan (c) komunitas warga (Ketua RT/RW dan paguyuban pengusaha indekos).
+\item \textbf{Matriks perbandingan $8\times8$:} delapan kriteria urgensi (C1--C8) dibandingkan berpasangan pada skala Saaty 1--9 (28 perbandingan unik). Setiap kelompok responden mengisi matriks, diuji konsistensinya, lalu diagregasi. Beban 28 perbandingan dikelola melalui pengisian segitiga atas dan sifat resiprokal.
+\item \textbf{Agregasi preferensi:} matriks tiap responden diuji konsistensinya terlebih dahulu, lalu penilaian antarkelompok diagregasi dengan rata-rata geometrik (Persamaan~\eqref{eq:gm})
 \begin{equation}
-a_{jk} = \left( \prod_{p=1}^P a_{jk}^{(p)} \right)^{1/P},
-\label{eq:geom_mean}
+a_{jk}=\Bigl(\prod_{p=1}^{P} a_{jk}^{(p)}\Bigr)^{1/P},\label{eq:gm}
 \end{equation}
-dengan $P$ adalah jumlah responden pemangku kepentingan.
-\item \textbf{Uji Konsistensi Rasio:} Konsistensi matriks perbandingan
-dievaluasi melalui
+dengan $P$ jumlah responden pemangku kepentingan.
+\item \textbf{Uji konsistensi rasio} (Persamaan~\eqref{eq:cr}):
 \begin{equation}
-\text{CI} = \frac{\lambda_{\max} - n}{n - 1}, \quad \text{CR} = \frac{\text{CI}}{\text{RI}},
-\label{eq:cons}
+\mathit{CI}=\frac{\lambda_{\max}-n}{n-1},\qquad \mathit{CR}=\frac{\mathit{CI}}{\mathit{RI}},\label{eq:cr}
 \end{equation}
-dengan $\lambda_{\max}$ nilai \textit{eigenvalue} maksimum, $n = 8$
-kriteria urgensi, dan nilai acak $RI = 1{,}41$ \cite{saaty1980}. Matriks
-dinyatakan konsisten apabila $\text{CR} < 0{,}10$.
+dengan $\lambda_{\max}$ eigenvalue maksimum, $n=8$ kriteria urgensi, dan nilai acak $\mathit{RI}=1{,}41$ \cite{saaty}. Matriks dinyatakan konsisten apabila $\mathit{CR}<0{,}10$.
+\end{enumerate}
+\textbf{Perankingan TOPSIS dan alokasi bertahap} memproses matriks keputusan urgensi $X=[x_{ij}]_{m\times n}$ ($m=5$ alternatif, $n=8$ kriteria) melalui tahap berikut.
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Normalisasi vektor Euclidean} (Persamaan~\eqref{eq:norm}) mengubah skala campuran (rasio dan ordinal) menjadi matriks takberdimensi $R=[r_{ij}]$:
+\begin{equation}
+r_{ij}=\frac{x_{ij}}{\sqrt{\sum_{k=1}^{m}x_{kj}^{2}}},\quad i=1,\dots,m;\; j=1,\dots,n.\label{eq:norm}
+\end{equation}
+\item \textbf{Pembobotan matriks} (Persamaan~\eqref{eq:weight}) mengalikan kolom ternormalisasi dengan bobot AHP $w_j$:
+\begin{equation}
+v_{ij}=w_j\, r_{ij},\qquad \sum_{j=1}^{n}w_j=1.\label{eq:weight}
+\end{equation}
+\item \textbf{Solusi ideal} (Persamaan~\eqref{eq:ideal}): karena seluruh kriteria C1--C8 diarahkan sebagai \textit{benefit} terhadap urgensi,
+\begin{equation}
+\begin{aligned}
+A^{+}&=\{\max_i v_{ij}\mid j=1,\dots,n\},\\
+A^{-}&=\{\min_i v_{ij}\mid j=1,\dots,n\}.
+\end{aligned}\label{eq:ideal}
+\end{equation}
+\item \textbf{Jarak Euclidean} (Persamaan~\eqref{eq:dist}) tiap alternatif ke solusi ideal positif ($D_i^{+}$) dan negatif ($D_i^{-}$):
+\begin{equation}
+D_i^{+}=\sqrt{\sum_{j=1}^{n}(v_{ij}-v_j^{+})^{2}},\quad D_i^{-}=\sqrt{\sum_{j=1}^{n}(v_{ij}-v_j^{-})^{2}}.\label{eq:dist}
+\end{equation}
+\item \textbf{Koefisien kedekatan relatif} (\textit{closeness coefficient}, Persamaan~\eqref{eq:cc}):
+\begin{equation}
+\mathit{CC}_i=\frac{D_i^{-}}{D_i^{+}+D_i^{-}},\qquad 0\le \mathit{CC}_i\le 1.\label{eq:cc}
+\end{equation}
+Alternatif dengan $\mathit{CC}_i$ mendekati 1 memiliki urgensi keselamatan tertinggi untuk dipasangi CCTV.
+\item \textbf{Alokasi bertahap di bawah kendala anggaran:} urutan peringkat $\mathit{CC}_i$ dipadukan dengan kelayakan C9 dan estimasi biaya per titik $\cost_i$. Implementasi memakai ambang kelayakan operasional $C9_i\ge3$ pada skala 1--5. Ambang ini bukan aturan numerik eksplisit dalam \texttt{dss\_revisi.md}, melainkan kebijakan implementasi terdokumentasi atas peran C9 sebagai kendala kelayakan. Pemasangan dibagi ke dalam fase tahunan di bawah plafon anggaran belanja $B_k$ (Persamaan~\eqref{eq:budget}):
+\begin{equation}
+\sum_{i\in \text{Fase }k}\cost_i\le B_k.\label{eq:budget}
+\end{equation}
+Rasio efisiensi biaya urgensi ($\mathit{CC}_i/\cost_i$) dipakai sebagai instrumen pendukung jika terdapat alternatif dengan urgensi berdekatan tetapi selisih biaya implementasi yang tajam.
+\item \textbf{Uji sensitivitas $\pm 20\%$:} variasi bobot dilakukan secara \textit{One-At-A-Time} (OAT) sebesar $+20\%$ dan $-20\%$ pada setiap kriteria dengan renormalisasi proporsional, untuk memeriksa ketahanan peringkat terhadap fluktuasi preferensi pakar.
 \end{enumerate}
 
-\textbf{Perankingan TOPSIS dan Alokasi Bertahap} memproses matriks
-keputusan urgensi $X = [x_{ij}]_{m \times n}$ ($m=5$ alternatif, $n=8$
-kriteria) melalui tahapan matematis berikut:
-\begin{enumerate}
-\item \textbf{Normalisasi Vektor Euclidean:} Mengubah skala campuran
-(rasio dan ordinal) ke dalam matriks nir-dimensi $R = [r_{ij}]$:
-\begin{equation}
-r_{ij} = \frac{x_{ij}}{\sqrt{\sum_{k=1}^m x_{kj}^2}}, \quad i=1,\dots,m; \ j=1,\dots,n.
-\label{eq:vec_norm}
-\end{equation}
-\item \textbf{Pembobotan Matriks:} Mengalikan kolom ternormalisasi
-dengan bobot AHP $w_j$:
-\begin{equation}
-v_{ij} = w_j \cdot r_{ij}, \quad \text{dengan } \sum_{j=1}^n w_j = 1.
-\label{eq:weighted_norm}
-\end{equation}
-\item \textbf{Penentuan Solusi Ideal:} Karena seluruh kriteria C1--C8
-diarahkan sebagai \textit{benefit} terhadap urgensi:
-\begin{equation}
-A^+ = \{\max_i(v_{ij}) \mid j=1,\dots,n\}, \quad A^- = \{\min_i(v_{ij}) \mid j=1,\dots,n\}.
-\label{eq:ideal_sol}
-\end{equation}
-\item \textbf{Jarak Euclidean:} Menghitung jarak pemisah tiap alternatif
-ke solusi ideal positif ($D_i^+$) dan solusi ideal negatif ($D_i^-$):
-\begin{equation}
-D_i^+ = \sqrt{\sum_{j=1}^n (v_{ij} - v_j^+)^2}, \quad D_i^- = \sqrt{\sum_{j=1}^n (v_{ij} - v_j^-)^2}.
-\label{eq:distances}
-\end{equation}
-\item \textbf{Nilai Kedekatan Relatif (\textit{Closeness Coefficient}):}
-\begin{equation}
-C_i = \frac{D_i^-}{D_i^+ + D_i^-}, \quad 0 \le C_i \le 1.
-\label{eq:topsis}
-\end{equation}
-Alternatif dengan skor $C_i$ mendekati 1 memiliki tingkat urgensi
-keselamatan tertinggi untuk dipasangi kamera pengawas.
-\item \textbf{Mekanisme Alokasi Bertahap di Bawah Kendala Anggaran:}
-Urutan peringkat $C_i$ dipadukan dengan kriteria kelayakan C9 dan
-estimasi biaya per titik $\text{Cost}_i$. Pemasangan dibagi ke dalam fase
-tahunan di bawah plafon anggaran belanja $B_k$:
-\begin{equation}
-\sum_{i \in \text{Fase } k} \text{Cost}_i \le B_k.
-\label{eq:budget_phase}
-\end{equation}
-Rasio efisiensi biaya urgensi ($C_i / \text{Cost}_i$) digunakan sebagai
-instrumen pendukung jika terdapat alternatif dengan urgensi berdekatan
-namun selisih biaya implementasi yang tajam.
-\item \textbf{Uji Sensitivitas $\pm$20\%:} Dilakukan pengujian variasi
-bobot secara \textit{One-At-A-Time} (OAT) sebesar $+20\%$ dan $-20\%$
-pada setiap kriteria dengan renormalisasi proporsional untuk memverifikasi
-ketahanan peringkat terhadap fluktuasi preferensi pakar.
-\end{enumerate}
-
-\textbf{Validasi Model Melalui Pilot Dummy Numerik:} Model matematis di
-atas telah diuji dan divalidasi menggunakan dataset ilustratif lapangan
-yang realistis untuk Jatinangor. Hasil pembobotan AHP menghasilkan nilai
-$\lambda_{\max} = 8{,}1031$, $\text{CI} = 0{,}0147$, dan rasio
-konsistensi $\text{CR} = \mathbf{0{,}0104} < 0{,}10$, membuktikan
-struktur pembobotan sangat konsisten. Bobot kriteria menempatkan riwayat
-kerawanan C1 ($23{,}95\%$), defisiensi penerangan C3 ($14{,}29\%$), dan
-mobilitas malam C2 ($14{,}29\%$) sebagai tiga prioritas teratas.
-
-Pada tahap TOPSIS, perankingan menghasilkan urutan urgensi:
-$\text{A3 (Simpul Hegarmanah, } C_3 = 0{,}6445\text{)} > \text{A1 (Gang Kos Sayang, } C_1 = 0{,}5774\text{)} > \text{A4 (Gang Cipacing, } C_4 = 0{,}4995\text{)} > \text{A2 (Ruas Cikeruh, } C_2 = 0{,}4638\text{)} > \text{A5 (Ruas Cileles, } C_5 = 0{,}1820\text{)}$.
-Dengan simulasi plafon anggaran Rp 15.000.000,- per tahun anggaran dan
-estimasi biaya pemasangan per titik berkisar Rp 5--8 juta, Alternatif A3
-dan A1 didanai penuh pada **Fase 1 (Segera)** dengan total belanja Rp
-14,0 juta; Alternatif A4 dan A2 dialokasikan pada **Fase 2**; sedangkan
-A5 pada **Fase 3**. Uji sensitivitas membuktikan bahwa peringkat teratas
-(A3) kokoh dan tidak mengalami pembalikan peringkat (\textit{rank
-reversal}) pada seluruh simulasi perturbasi bobot $\pm 20\%$. Hasil ini
-membuktikan bahwa model konseptual yang diusulkan bekerja secara runtut
-dan dapat dieksekusi secara numerik.
+\textbf{Uji numerik ilustratif (\textit{pilot dummy}).} Model di atas diuji secara numerik dengan dataset ilustratif untuk Jatinangor. Dataset ini bukan hasil survei lapangan, sehingga uji tersebut belum merupakan validasi empiris. Pembobotan AHP menghasilkan $\lambda_{\max}=8{,}1031$, $\mathit{CI}=0{,}0147$, dan $\mathit{CR}=0{,}0104<0{,}10$, sehingga matriks konsisten pada data ilustratif. Tiga bobot teratas adalah riwayat kerawanan C1 (23,95\%), defisiensi penerangan C3 (14,29\%), dan mobilitas malam C2 (14,29\%). Perankingan TOPSIS menghasilkan urutan urgensi A3 (Persimpangan Hegarmanah, $\mathit{CC}=0{,}6445$) $>$ A1 (Gang Kos Sayang, $0{,}5774$) $>$ A4 (Gang Cipacing, $0{,}4995$) $>$ A2 (Ruas Jalan Cikeruh, $0{,}4638$) $>$ A5 (Ruas Jalan Cileles, $0{,}1820$). Dengan simulasi plafon anggaran Rp15.000.000 per tahun dan estimasi biaya pemasangan Rp5--8 juta per titik, A3 dan A1 didanai penuh pada Fase 1 (segera) dengan total belanja Rp14,0 juta, A4 dan A2 dialokasikan pada Fase 2, dan A5 pada Fase 3. Pada uji sensitivitas $\pm 20\%$, peringkat teratas A3 dan A1 stabil pada seluruh 16 skenario, sedangkan pembalikan peringkat hanya terjadi antara A4 dan A2 pada 2 dari 16 skenario (C1 $-20\%$ dan C2 $+20\%$). Hasil ini menunjukkan bahwa alur model dapat dijalankan secara numerik.
 
 \subsection{Arsitektur Konseptual dan Justifikasi Adopsi}
-
-Arsitektur empat lapisan pada Gambar~\ref{fig:arsitektur} mengadopsi
-pola GIS-MCDM dari \cite{feizizadeh2025} dan \cite{kabashkin2025},
-logika optimasi \textit{coverage} dari \cite{wang2025} dan
-\cite{yuhang2025}, serta skema \textit{expert-driven} dari
-\cite{ahmed2022} dan \cite{baddour2026}.
-
-\begin{figure*}[!htbp]
-\centering
-\includegraphics[width=0.92\textwidth]{gambar-3-arsitektur.png}
-\caption{Arsitektur konseptual empat lapisan DSS prioritas CCTV
-Jatinangor: lapisan input (data diskrit lokal C1--C9), lapisan
-\textit{preprocessing} (pembersihan, kodifikasi, normalisasi),
-lapisan \textit{decision engine} (AHP untuk bobot, TOPSIS untuk
-perankingan, GIS untuk gap coverage), dan lapisan output (peringkat
-A1--A5, peta prioritas, rencana pemasangan bertahap).}
-\label{fig:arsitektur}
-\end{figure*}
-
-Gambar~\ref{fig:arsitektur} menunjukkan alur keputusan dari data
-mentah hingga rekomendasi alokasi. Setiap lapisan memiliki masukan
-dan keluaran yang jelas: lapisan input mengumpulkan sembilan kriteria,
-lapisan \textit{preprocessing} membentuk matriks keputusan, lapisan
-\textit{engine} menghitung bobot dan peringkat, dan lapisan output
-menerjemahkan skor menjadi urutan pemasangan bertahap. Justifikasi
-adopsi dan penolakan elemen literatur dicatat eksplisit:
-
+Arsitektur empat lapisan pada Gambar~\ref{fig:arch} mengadopsi pola GIS-MCDM dari \cite{feiz,kab}, logika optimasi \textit{coverage} dari \cite{wang,yuhang}, dan skema \textit{expert-driven} dari \cite{ahmed,baddour}. Setiap lapisan memiliki masukan dan keluaran yang jelas: lapisan input mengumpulkan data sembilan kriteria, lapisan \textit{preprocessing} membentuk matriks keputusan, lapisan \textit{engine} menghitung bobot dan peringkat, dan lapisan output menerjemahkan skor menjadi urutan pemasangan bertahap. Justifikasi adopsi dan penolakan elemen literatur dicatat secara eksplisit:
 \begin{itemize}
-\item \textbf{Ditolak: simulasi-DSS operasional ala \cite{gonzalez2024}}
-karena membutuhkan data kalibrasi berbiaya tinggi dan infrastruktur
-yang tidak tersedia di Jatinangor.
-\item \textbf{Ditolak: kombinasi BWM-CoCoSo ala \cite{baddour2026}}
-karena selisih kinerja terhadap AHP-TOPSIS kecil, sedangkan pakar
-tersedia untuk AHP dan prosesnya lebih mudah diaudit.
-\item \textbf{Ditunda: metrik \textit{response time} dan \textit{egress}
-ala \cite{gonzalez2024}} karena datanya tidak tersedia; dicatat sebagai
-keterbatasan dan arah riset lanjutan.
-\item \textbf{Dicatat sebagai catatan disiplin protokol:} template
-terkait AHP-GIS-Fuzzy-TOPSIS yang relevan namun terbit 2020 gugur pada
-aturan tahun 2021--2026.
+\item \textbf{Ditolak:} simulasi-DSS operasional ala \cite{gonz}, karena membutuhkan data kalibrasi berbiaya tinggi dan infrastruktur yang tidak tersedia di Jatinangor.
+\item \textbf{Ditolak:} kombinasi BWM-CoCoSo ala \cite{baddour}, karena selisih kinerjanya terhadap AHP-TOPSIS kecil, sedangkan pakar tersedia untuk AHP dan prosesnya lebih mudah diaudit.
+\item \textbf{Ditunda:} metrik \textit{response time} dan \textit{egress} ala \cite{gonz}, karena datanya tidak tersedia; hal ini dicatat sebagai keterbatasan dan arah riset lanjutan.
+\item \textbf{Catatan disiplin protokol:} templat terkait AHP-GIS-Fuzzy-TOPSIS yang relevan tetapi terbit 2020 gugur oleh aturan tahun 2021--2026.
 \end{itemize}
 
+\begin{figure*}[!t]
+\centering
+\input{../assets/diagram/arsitektur-4-lapis-kanonik.tex}
+\caption{Arsitektur konseptual empat lapisan DSS prioritisasi CCTV Jatinangor: lapisan input (data diskrit lokal C1--C9), lapisan \textit{preprocessing} (pembersihan, kodifikasi, normalisasi), lapisan \textit{decision engine} (AHP untuk bobot, TOPSIS untuk perankingan, GIS untuk \textit{gap coverage}), dan lapisan output (peringkat A1--A5, peta prioritas, rencana pemasangan bertahap).}
+\label{fig:arch}
+\end{figure*}
+
 \subsection{Kelayakan Adopsi Model}
+Kelayakan model ditinjau pada tiga dimensi. Pertama, kebutuhan data: seluruh input berupa data diskrit nonstreaming (rekap insiden, \textit{counting} manual, survei, OSM, RAB), sehingga tidak bergantung pada jaringan sensor kontinu maupun langganan citra berbiaya. Kedua, kompleksitas metode: AHP dan TOPSIS transparan, dapat dihitung manual maupun dengan lembar kerja, dan tidak menuntut infrastruktur komputasi berat; CR dan analisis sensitivitas menyediakan uji kualitas yang jelas. Ketiga, keluaran: model menghasilkan peringkat, peta prioritas, dan urutan pemasangan yang dapat dipakai sebagai dasar pengalokasian anggaran bertahap. Berdasarkan tiga dimensi tersebut, model diperkirakan dapat dijalankan oleh pemangku kepentingan lokal dengan data yang tersedia, dengan catatan bahwa hal ini belum diuji pada data lapangan.
 
-Kelayakan model diuji pada tiga dimensi. \textbf{Pertama, kebutuhan
-data:} seluruh input berupa data diskrit non-\textit{streaming} (rekap
-insiden, \textit{counting} manual, survei, OSM, RAB) sehingga tidak
-bergantung pada jaringan sensor kontinu maupun langganan citra
-berbiaya. \textbf{Kedua, kompleksitas metode:} AHP dan TOPSIS
-transparan, dapat dihitung manual maupun lembar kerja, dan tidak
-menuntut infrastruktur komputasi berat; CR dan analisis sensitivitas
-menyediakan uji kualitas yang jelas. \textbf{Ketiga, keluaran:} model
-menghasilkan peringkat, peta prioritas, dan urutan pemasangan yang
-langsung dapat dipakai sebagai dasar pengalokasian anggaran bertahap.
-Dengan tiga dimensi tersebut, model dapat dijalankan oleh pemangku
-kepentingan lokal dengan data yang tersedia.
+% ================= V. KESIMPULAN =================
+\section{Kesimpulan dan Roadmap Implementasi}
+Kajian ini memetakan 12 studi primer melalui protokol PRISMA-ScR dan mengidentifikasi lima pola arsitektur DSS keselamatan perkotaan, sebaran peran metode MCDM dengan pasangan AHP untuk pembobotan dan TOPSIS untuk perankingan sebagai kombinasi yang paling langsung diadopsi, serta taksonomi kriteria \textit{benefit}, \textit{cost}, dan \textit{context-dependent}. Dari sintesis tersebut dirancang model konseptual DSS prioritisasi CCTV untuk Jatinangor yang mencakup lima alternatif segmen (A1--A5), sembilan kriteria dengan pemisahan urgensi (C1--C8) dari kelayakan teknis dan biaya (C9 dan anggaran), pembobotan AHP 8$\times$8 lintas tiga kelompok pemangku kepentingan, serta perankingan TOPSIS dengan alokasi anggaran bertahap. Uji numerik dengan data ilustratif menunjukkan bahwa alur model dapat dijalankan dan peringkat teratas bertahan pada uji sensitivitas $\pm 20\%$. Model ini masih berstatus konseptual: penerapannya memerlukan data lapangan dan bobot empiris dari pemangku kepentingan.
 
-% =====================================================================
-\FloatBarrier
-\section{KESIMPULAN DAN ROADMAP IMPLEMENTASI}
-% =====================================================================
-
-Kajian ini memetakan 12 studi literatur melalui protokol PRISMA-ScR dan
-mengidentifikasi lima pola arsitektur DSS keselamatan perkotaan, sebaran
-metode MCDM dengan kombinasi rujukan AHP untuk pembobotan dan TOPSIS
-untuk perankingan, serta taksonomi kriteria \textit{benefit},
-\textit{cost}, dan \textit{context-dependent}. Dari sintesis tersebut
-dirancang model konseptual DSS prioritisasi CCTV untuk Jatinangor yang
-mencakup: (1) lima alternatif segmen representatif A1--A5 berbasis
-tipologi spasial lapangan, (2) matriks kriteria C1--C9 yang secara tegas
-memisahkan kriteria urgensi risiko (C1--C8) dari kriteria kelayakan
-teknis dan biaya (C9 dan anggaran), (3) pembobotan AHP tiga kelompok
-pemangku kepentingan dengan struktur hierarki untuk menjaga konsistensi
-($CR < 0{,}10$), (4) perankingan TOPSIS yang diintegrasikan dengan modul
-alokasi anggaran bertahap (Fase 1, 2, dan 3), serta (5) validasi numerik
-pilot dummy yang membuktikan ketahanan peringkat terhadap analisis
-sensitivitas $\pm 20\%$.
-
-\textit{Roadmap} pengembangan menuju implementasi sistem perangkat
-lunak meliputi empat langkah:
-\begin{enumerate}
-\item \textbf{Pengumpulan Data Empiris Lapangan:} Melakukan survei
-geometri gang A1--A5, penghitungan (\textit{counting}) mobilitas pejalan
-dan pengendara malam hari, survei defisiensi PJU malam, pemetaan GPS
-kamera aktif, dan penyusunan RAB tiang/jaringan.
-\item \textbf{Penyusunan Prototipe Dasbor DSS:} Mengimplementasikan
-algoritma AHP-TOPSIS ke dalam antarmuka dasbor spasial ringan berbasis
-web GIS untuk memvisualisasikan zonasi prioritas dan rute pengawasan.
-\item \textbf{Kalibrasi Bobot Pemangku Kepentingan:} Mengedarkan instrumen
-kuesioner perbandingan berpasangan kepada perwakilan Pemda Sumedang,
-pengelola keamanan kampus, dan paguyuban RT/indekos untuk memperoleh
-vektor bobot empiris konsensus.
-\item \textbf{Pengembangan Lanjutan:} Integrasi kanal pelaporan insiden
-warga berbasis mobile, pembaruan data secara berkala, dan evaluasi
-dampak penurunan angka kriminalitas pasca-instalasi.
+\textit{Roadmap} menuju implementasi perangkat lunak meliputi empat langkah.
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Pengumpulan data empiris lapangan:} survei geometri gang A1--A5, penghitungan (\textit{counting}) mobilitas pejalan dan pengendara malam hari, survei defisiensi PJU malam, pemetaan GPS kamera aktif, dan penyusunan RAB tiang/jaringan.
+\item \textbf{Penyusunan prototipe dasbor DSS:} implementasi algoritma AHP-TOPSIS pada dasbor spasial ringan berbasis web GIS untuk memvisualisasikan zonasi prioritas dan rute pengawasan.
+\item \textbf{Kalibrasi bobot pemangku kepentingan:} kuesioner perbandingan berpasangan kepada perwakilan Pemda Sumedang, pengelola keamanan kampus, dan paguyuban RT/indekos untuk memperoleh vektor bobot empiris konsensus.
+\item \textbf{Pengembangan lanjutan:} integrasi kanal pelaporan insiden warga berbasis mobile, pembaruan data berkala, dan evaluasi dampak penurunan angka kriminalitas pasca-instalasi.
 \end{enumerate}
 
-Keterbatasan kajian ini mencakup: (1) pencarian literatur dibatasi pada
-satu basis data utama (Scopus) untuk artikel berbahasa Inggris, di mana
-terdapat 60 laporan yang tidak dapat diakses teks lengkapnya karena
-batasan langganan institusi; (2) penurunan beberapa kriteria keselamatan
-dan arsitektur penempatan sensor dilakukan melalui abstraksi analogi
-struktural dari domain terkait (seperti rute transportasi bahan
-berbahaya \cite{kanj2024}, risiko banjir \cite{zheng2025}, dan sensor
-jaringan listrik \cite{yuhang2025}); (3) kriteria C6 (derajat simpul
-jalan) bersumber tunggal dari model \textit{vertex cover} \cite{wang2025};
-serta (4) nilai numerik matriks keputusan dan bobot AHP pada naskah ini
-merupakan simulasi pilot dummy terverifikasi yang dirancang sebagai
-cetak biru sebelum pengisian data survei lapangan secara komprehensif.
+Keterbatasan kajian ini mencakup: (1) pencarian literatur dibatasi pada satu basis data (Scopus) untuk artikel berbahasa Inggris, dan 60 laporan tidak dapat diakses teks lengkapnya karena batasan langganan institusi; (2) penurunan beberapa kriteria keselamatan dan arsitektur penempatan sensor dilakukan melalui abstraksi analogi struktural dari domain terkait (rute transportasi bahan berbahaya \cite{kanj}, risiko banjir \cite{zheng}, dan sensor jaringan listrik \cite{yuhang}); (3) kriteria C6 (derajat simpul jalan) bersumber tunggal dari model \textit{vertex cover} \cite{wang}; serta (4) nilai numerik matriks keputusan dan bobot AHP dalam naskah ini berasal dari simulasi \textit{pilot dummy} yang dirancang sebagai cetak biru sebelum pengisian data survei lapangan secara komprehensif.
 
-% =====================================================================
-\section*{Deklarasi Penggunaan Generative AI}
-% =====================================================================
-
-Sesuai dengan panduan etika publikasi IEEE mengenai pemanfaatan
-kecerdasan buatan, tim penulis menyatakan bahwa perangkat Generative AI
-(Google Gemini dan OpenCode) digunakan secara terarah sebagai alat bantu
-penelitian dalam: (1) pengelompokan kata kunci awal pada tahap penyaringan
-abstrak, (2) penataan sintaks tabel dan kode format LaTeX IEEEtran, serta
-(3) pemeriksaan tata bahasa dan konsistensi silang antar-tabel. Seluruh
-tahapan verifikasi kriteria inklusi--eksklusi, pembacaan teks lengkap,
-ekstraksi data literatur, perumusan model matematis AHP-TOPSIS, simulasi
-numerik, dan penyusunan naskah dilakukan serta dipertanggungjawabkan
-sepenuhnya oleh seluruh anggota tim penulis.
-
-% =====================================================================
-\FloatBarrier
 \balance
-\begin{thebibliography}{18}
 
-\bibitem{bps_jatinangor}
-Badan Pusat Statistik Kabupaten Sumedang, \emph{Kecamatan Jatinangor
-Dalam Angka 2024}. Sumedang, Indonesia: BPS Kabupaten Sumedang, 2024.
-
-\bibitem{saaty1980}
-T.~L. Saaty, \emph{The Analytic Hierarchy Process: Planning, Priority
-Setting, Resource Allocation}. New York, NY, USA: McGraw-Hill, 1980.
-
-\bibitem{hwang1981}
-C.-L. Hwang and K. Yoon, \emph{Multiple Attribute Decision Making:
-Methods and Applications}. Berlin, Germany: Springer-Verlag, 1981.
-
-\bibitem{tricco2018}
-A.~C. Tricco \emph{et al.}, ``PRISMA extension for scoping reviews
-(PRISMA-ScR): Checklist and explanation,'' \emph{Ann. Intern. Med.},
-vol. 169, no. 7, pp. 467--473, Oct. 2018, doi: 10.7326/M18-0850.
-
-\bibitem{cohen1979}
-L.~E. Cohen and M. Felson, ``Social change and crime rate trends: A
-routine activity approach,'' \emph{Am. Sociol. Rev.}, vol. 44, no. 4,
-pp. 588--608, 1979.
-
-\bibitem{crowe2000}
-T.~D. Crowe, \emph{Crime Prevention Through Environmental Design:
-Applications of Architectural Design and Space Management Concepts},
-2nd ed. Boston, MA, USA: Butterworth-Heinemann, 2000.
-
-\bibitem{wang2025}
-L. Wang, Y. Zhang, T. Feng, and X. Qi, ``Monitoring layout and
-optimisation method based on minimum weighted vertices of roads,''
-\emph{Appl. Sci.}, vol. 15, no. 21, Art. no. 11622, 2025, doi:
-10.3390/app152111622.
-
-\bibitem{gonzalez2024}
-J. Gonz\'{a}lez-Villa \emph{et al.}, ``Decision-support system for
-safety and security assessment and management in smart cities,''
-\emph{Multimedia Tools Appl.}, vol. 83, no. 22, pp. 61971--61994, 2024,
-doi: 10.1007/s11042-023-16020-6.
-
-\bibitem{feizizadeh2025}
-B. Feizizadeh and D. Omarzadeh, ``A GIS based spatiotemporal modelling
-approach for cycling risk mapping using crowd-sourced sensor data,''
-\emph{Ann. GIS}, vol. 31, no. 2, pp. 333--351, 2025, doi:
-10.1080/19475683.2025.2453550.
-
-\bibitem{ahmed2022}
-V. Ahmed, S. Saboor, N. Ahmad, and M. Ghaly, ``A multi-attribute
-utility decision support tool for a smart campus---UAE as a case
-study,'' \emph{Front. Built Environ.}, vol. 8, Art. no. 1044646, 2022,
-doi: 10.3389/fbuil.2022.1044646.
-
-\bibitem{choi2025}
-J. Choi, J. Ok, and I. Yu, ``Smart city technologies for apartment
-complexes in South Korea: Expert prioritization and expected utility
-evaluation,'' \emph{J. Asian Archit. Build. Eng.}, early access,
-Dec. 2025, doi: 10.1080/13467581.2025.2605740.
-
-\bibitem{kanj2024}
-H. Kanj, Y. Kotb, M. Alakkoumi, and S. Kanj, ``Dynamic decision making
-process for dangerous good transportation using a combination of
-TOPSIS and AHP methods with fuzzy sets,'' \emph{IEEE Access}, vol. 12,
-pp. 40450--40479, 2024, doi: 10.1109/ACCESS.2024.3372852.
-
-\bibitem{kabashkin2025}
-I. Kabashkin, A. Kulmurzina, B. Nadimov, G. Tlepiyeva,
-Z. Sansyzbayeva, and T. Sultanov, ``Synchronized multi-point UAV-based
-traffic monitoring for urban infrastructure decision support,''
-\emph{Drones}, vol. 9, no. 5, Art. no. 370, 2025, doi:
-10.3390/drones9050370.
-
-\bibitem{baddour2026}
-O. Baddour, A. Bhogayata, and T. Vora, ``Intelligent decision support
-for diplomatic quarter planning through multi-criteria analysis and
-urban intelligence,'' \emph{J. Intell. Decis. Mak. Inf. Sci.}, vol. 3,
-no. 3S, pp. 1612--1629, 2026, doi: 10.59543/jidmis.v3.958.
-
-\bibitem{almassawa2024}
-S.~F. Almassawa, E. Rustiadi, A. Fauzi, and R. Sutriadi, ``Policy on
-the implementation of smart mobility in South Tangerang City,
-Indonesia based on public transportation using the PROMETHEE method,''
-\emph{Plann. Malaysia}, vol. 22, no. 5, pp. 293--306, 2024, doi:
-10.21837/pm.v22i34.1590.
-
-\bibitem{shiddiqy2025}
-M.~A.~A. Shiddiqy, R. Novarizal, M.~S.~N.~B. Abu Hassan,
-D. Kurniawansyah, and Alficandra, ``An integrated smart defense
-architecture for the Nusantara capital city of Indonesia,''
-\emph{Int. J. Saf. Secur. Eng.}, vol. 15, no. 12, pp. 2561--2572,
-2025, doi: 10.18280/ijsse.151213.
-
-\bibitem{zheng2025}
-X. Zheng, K. Wang, and M. Liu, ``A Bayesian Network and DEMATEL-ISM
-approach for smart community flood risk assessment: A case study of
-Tangxia, China,'' \emph{J. Cases Inf. Technol.}, vol. 27, no. 1, pp.
-1--22, 2025, doi: 10.4018/JCIT.386165.
-
-\bibitem{yuhang2025}
-E. Yuhang \emph{et al.}, ``Sensor placement optimization for power grid
-condition monitoring based on a backup coverage model: A case study of
-Guangzhou,'' \emph{Appl. Sci.}, vol. 15, no. 23, Art. no. 12570, 2025,
-doi: 10.3390/app152312570.
-
+\begin{thebibliography}{99}
+\footnotesize
+\setlength{\itemsep}{0pt}
+\bibitem{bps} Badan Pusat Statistik Kabupaten Sumedang, \textit{Kecamatan Jatinangor Dalam Angka 2024}. Sumedang, Indonesia: BPS Kabupaten Sumedang, 2024.
+\bibitem{crowe} T. D. Crowe, \textit{Crime Prevention Through Environmental Design: Applications of Architectural Design and Space Management Concepts}, 2nd ed. Boston, MA, USA: Butterworth-Heinemann, 2000.
+\bibitem{cohen} L. E. Cohen and M. Felson, ``Social change and crime rate trends: A routine activity approach,'' \textit{Am. Sociol. Rev.}, vol. 44, no. 4, pp. 588--608, 1979.
+\bibitem{saaty} T. L. Saaty, \textit{The Analytic Hierarchy Process: Planning, Priority Setting, Resource Allocation}. New York, NY, USA: McGraw-Hill, 1980.
+\bibitem{hwang} C.-L. Hwang and K. Yoon, \textit{Multiple Attribute Decision Making: Methods and Applications}. Berlin, Germany: Springer-Verlag, 1981.
+\bibitem{tricco} A. C. Tricco \textit{et al.}, ``PRISMA extension for scoping reviews (PRISMA-ScR): Checklist and explanation,'' \textit{Ann. Intern. Med.}, vol. 169, no. 7, pp. 467--473, Oct. 2018, doi: 10.7326/M18-0850.
+\bibitem{wang} L. Wang, Y. Zhang, T. Feng, and X. Qi, ``Monitoring layout and optimisation method based on minimum weighted vertices of roads,'' \textit{Appl. Sci.}, vol. 15, no. 21, Art. no. 11622, 2025, doi: 10.3390/app152111622.
+\bibitem{gonz} J. Gonz\'alez-Villa \textit{et al.}, ``Decision-support system for safety and security assessment and management in smart cities,'' \textit{Multimedia Tools Appl.}, vol. 83, no. 22, pp. 61971--61994, 2024, doi: 10.1007/s11042-023-16020-6.
+\bibitem{feiz} B. Feizizadeh and D. Omarzadeh, ``A GIS based spatiotemporal modelling approach for cycling risk mapping using crowd-sourced sensor data,'' \textit{Ann. GIS}, vol. 31, no. 2, pp. 333--351, 2025, doi: 10.1080/19475683.2025.2453550.
+\bibitem{ahmed} V. Ahmed, S. Saboor, N. Ahmad, and M. Ghaly, ``A multi-attribute utility decision support tool for a smart campus: UAE as a case study,'' \textit{Front. Built Environ.}, vol. 8, Art. no. 1044646, 2022, doi: 10.3389/fbuil.2022.1044646.
+\bibitem{choi} J. Choi, J. Ok, and I. Yu, ``Smart city technologies for apartment complexes in South Korea: Expert prioritization and expected utility evaluation,'' \textit{J. Asian Archit. Build. Eng.}, early access, Dec. 2025, doi: 10.1080/13467581.2025.2605740.
+\bibitem{kanj} H. Kanj, Y. Kotb, M. Alakkoumi, and S. Kanj, ``Dynamic decision making process for dangerous good transportation using a combination of TOPSIS and AHP methods with fuzzy sets,'' \textit{IEEE Access}, vol. 12, pp. 40450--40479, 2024, doi: 10.1109/ACCESS.2024.3372852.
+\bibitem{kab} I. Kabashkin, A. Kulmurzina, B. Nadimov, G. Tlepiyeva, Z. Sansyzbayeva, and T. Sultanov, ``Synchronized multi-point UAV-based traffic monitoring for urban infrastructure decision support,'' \textit{Drones}, vol. 9, no. 5, Art. no. 370, 2025, doi: 10.3390/drones9050370.
+\bibitem{baddour} O. Baddour, A. Bhogayata, and T. Vora, ``Intelligent decision support for diplomatic quarter planning through multi-criteria analysis and urban intelligence,'' \textit{J. Intell. Decis. Mak. Inf. Sci.}, vol. 3, no. 3S, pp. 1612--1629, 2026, doi: 10.59543/jidmis.v3.958.
+\bibitem{alma} S. F. Almassawa, E. Rustiadi, A. Fauzi, and R. Sutriadi, ``Policy on the implementation of smart mobility in South Tangerang City, Indonesia based on public transportation using the PROMETHEE method,'' \textit{Plann. Malaysia}, vol. 22, no. 5, pp. 293--306, 2024, doi: 10.21837/pm.v22i34.1590.
+\bibitem{shid} M. A. A. Shiddiqy, R. Novarizal, M. S. N. B. Abu Hassan, D. Kurniawansyah, and Alficandra, ``An integrated smart defense architecture for the Nusantara capital city of Indonesia,'' \textit{Int. J. Saf. Secur. Eng.}, vol. 15, no. 12, pp. 2561--2572, 2025, doi: 10.18280/ijsse.151213.
+\bibitem{zheng} X. Zheng, K. Wang, and M. Liu, ``A Bayesian Network and DEMATEL-ISM approach for smart community flood risk assessment: A case study of Tangxia, China,'' \textit{J. Cases Inf. Technol.}, vol. 27, no. 1, pp. 1--22, 2025, doi: 10.4018/JCIT.386165.
+\bibitem{yuhang} E. Yuhang \textit{et al.}, ``Sensor placement optimization for power grid condition monitoring based on a backup coverage model: A case study of Guangzhou,'' \textit{Appl. Sci.}, vol. 15, no. 23, Art. no. 12570, 2025, doi: 10.3390/app152312570.
 \end{thebibliography}
 
 \end{document}
