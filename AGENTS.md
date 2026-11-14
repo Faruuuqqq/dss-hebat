@@ -55,8 +55,8 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 | Paper fase proposal (`04-paper/`) | SELESAI — diselaraskan ke AHP 8×8/PRISMA 416, **tercompile 8 halaman**; diagram arsitektur kini TikZ kanonik |
 | Data & sumber (`08-docs/data-dan-sumber.md`) | SELESAI — BPS + E-Office dicatat, data riil + dummy CCTV + sumber |
 | Dokumentasi SE (`08-docs/`) | SELESAI — SRS (FR/NFR/acceptance), traceability, UML Mermaid, mockup desktop/mobile aktual |
-| Migrasi Next.js (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4, paritas angka kanonik & uji interaksi peramban LULUS |
-| Git | ter-commit (9 commit sesi 10–11); branch `main`; belum di-push |
+| Migrasi Next.js (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; bug input angka, format, dan `lint` diperbaiki; 3 suite uji LULUS |
+| Git | ter-commit (12 commit s.d. sesi 12); branch `main`; belum di-push |
 
 ## 5. Invarian (JANGAN dilanggar tanpa alasan kuat)
 
@@ -91,9 +91,11 @@ assets/diagram/
   build-arsitektur-png.sh          # regenerasi PNG 400 dpi dari sumber TikZ
 07-webapp/                   # Next.js 16 + TS + Tailwind 4 (migrasi aplikasi)
   app/page.tsx               # dashboard interaktif (client component)
+  components/NumberCell.tsx  # sel angka aman (draft string, koma, jepit saat blur)
   lib/engine.ts              # mesin AHP-TOPSIS TS (mandiri, data-driven)
   scripts/parity.mts         # paritas angka kanonik (node, tanpa build)
   scripts/ui-check.mjs       # uji interaksi Chromium (playwright-core)
+  scripts/ui-bugs.mjs        # uji regresi perilaku input angka
 05-aplikasi/
   index.html                 # aplikasi (1 file, offline) — DATASETS resmi & perluasan
   test-algoritma.mjs         # verifikasi: ekstrak script index.html + cek paritas CSV
@@ -129,10 +131,10 @@ TECTONIC=/path/ke/tectonic bash build-papers.sh
 bash assets/diagram/build-arsitektur-png.sh
 
 # webapp Next.js
-cd 07-webapp && npm run parity        # paritas angka kanonik (harus PASS)
-cd 07-webapp && npm run build         # build produksi (harus sukses)
-# uji interaksi: jalankan `npm start` lalu
-#   BASE_URL=http://127.0.0.1:3000 node scripts/ui-check.mjs
+cd 07-webapp && npm run verify        # lint + parity + build (harus lulus)
+# uji peramban: jalankan `npm start` lalu
+#   npm run test:bugs                 # perilaku input angka (16 cek)
+#   npm run test:ui                   # interaksi dashboard (18 cek)
 ```
 Aplikasi: buka `05-aplikasi/index.html` di browser (tanpa server). Screenshot headless opsional via Chromium/Playwright.
 

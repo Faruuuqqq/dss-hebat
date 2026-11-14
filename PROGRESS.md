@@ -25,6 +25,34 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-14 · Sesi 12 — Perbaikan bug webapp Next.js
+
+**Konteks:** fokus dipertajam ke `07-webapp/` saja, dengan prioritas memperbaiki bug pada website.
+
+**Bug yang ditemukan dan diperbaiki (dibuktikan RED sebelum GREEN):**
+1. **Input angka merusak pengetikan.** Sel dikendalikan langsung oleh state numerik, sehingga `Number("")` menjadi `0` saat sel dikosongkan; React mengisi ulang `"0"` dan karakter berikutnya menempel. Hasil: `"7.5"` → `"75"`, `"1250"` → `"01250"`, AHP `"2.5"` → `"0.0525"`. Diperbaiki lewat `components/NumberCell.tsx` (draft string selama fokus, commit numerik live, jepit dan format saat blur).
+2. **Nilai di luar rentang diterima apa adanya.** C9 bisa bernilai 9 padahal skala 1–5, biaya bisa negatif, AHP tanpa batas atas. Sekarang dijepit: C9 1..5, biaya ≥ 0, AHP 1/9..9 (skala Saaty).
+3. **Format angka tidak deterministik.** `toLocaleString("id-ID")` bergantung data ICU runtime; server dan klien bisa berbeda dan memicu hydration mismatch. Diganti formatter manual (titik ribuan, koma desimal).
+4. **Script `lint` rusak.** `next lint` sudah dihapus di Next 16 sehingga gagal dengan "Invalid project directory". Diganti `eslint .` + `eslint.config.mjs` (flat config `eslint-config-next`).
+5. **Kunci dataset tanpa guard.** Nilai `<select>` bertipe string bebas; kunci tak dikenal membuat `DATASETS[k]` undefined dan aplikasi melempar error. Ditambahkan `getDataset()`.
+6. Import mati (`allocPhases`, `feasibleFlags`, `topsis`) dibuang; `type: module` menghilangkan peringatan `MODULE_TYPELESS_PACKAGE_JSON`.
+
+**Perubahan:**
+- `07-webapp/components/NumberCell.tsx` (baru), `eslint.config.mjs` (baru), `scripts/ui-bugs.mjs` (baru).
+- `app/page.tsx`, `lib/engine.ts`, `lib/format.ts`, `scripts/parity.mts`, `package.json`, `README.md`.
+- Skrip baru: `test:bugs`, `test:ui`, `verify` (lint + parity + build).
+
+**Verifikasi:**
+- `scripts/ui-bugs.mjs` → **16/16 LULUS**. Dijalankan lebih dulu pada implementasi lama dan **9 pemeriksaan GAGAL** dengan pola `"07.5"`, `"01250"`, `"0.0525"` — bukti akar masalahnya benar.
+- `scripts/parity.mts` → **50+ pemeriksaan LULUS**: angka kanonik, 11 pemeriksaan format deterministik, 12 pemeriksaan parser (`7.5`, `6,5`, `7.`, `1e5` ditolak, dll.).
+- `scripts/ui-check.mjs` → **18/18 LULUS** tanpa error konsol.
+- `npm run verify` (lint + parity + build) → LULUS; `/` dan `/icon.svg` tetap statis (prerender).
+- Tanpa overflow horizontal pada 390/768/1440 px; screenshot 1440 px diperiksa: kolom C9 terisi (4,5,4,3,4), AHP 8×8 konsisten, angka kanonik utuh.
+
+**Open items:**
+- [ ] (Opsional) Deploy Vercel + Supabase.
+- [ ] (Opsional) Muat data dari basis data, bukan statis di `lib/engine.ts`.
+
 ### 2026-11-14 · Sesi 11 — Migrasi Next.js: paritas angka dan uji interaksi
 
 **Konteks:** fase 6 rencana (migrasi `07-webapp/` ke Next.js + TypeScript + Tailwind) dieksekusi dan diverifikasi, bukan hanya dievaluasi.
