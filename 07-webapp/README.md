@@ -30,6 +30,7 @@ npm run parity       # 50+ pemeriksaan: angka kanonik, format, parser input
 npm start &
 npm run test:bugs    # 16 pemeriksaan perilaku input angka
 npm run test:ui      # 18 pemeriksaan interaksi dashboard
+npm run test:export  # 22 pemeriksaan ekspor CSV (isi berkas, kedua dataset)
 ```
 
 Skrip peramban memakai `playwright-core` dengan Chromium yang sudah ada di mesin
@@ -56,6 +57,7 @@ scripts/
   parity.mts        # paritas angka kanonik + format + parser
   ui-check.mjs      # uji interaksi peramban
   ui-bugs.mjs       # uji regresi perilaku input angka
+  ui-export.mjs     # uji ekspor CSV (unduhan nyata + isi berkas)
 ```
 
 `lib/engine.ts` sengaja dibuat **mandiri tanpa impor internal** supaya dapat dijalankan

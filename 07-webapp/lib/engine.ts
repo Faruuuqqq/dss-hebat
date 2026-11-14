@@ -175,8 +175,6 @@ export const deepCopy = <T,>(a: T[][]): T[][] => a.map((r) => r.slice());
 /** Kunci dataset yang sah. */
 export type DatasetKey = keyof typeof DATASETS;
 
-export const DATASET_KEYS = Object.keys(DATASETS) as DatasetKey[];
-
 /**
  * Ambil dataset berdasarkan kunci.
  *

@@ -107,6 +107,8 @@ export default function Page() {
 
   const top = dataset.alts[ev.order[0]];
   const flips = ev.sensitivity.rows.filter((r) => r.reversals > 0);
+  /** Jumlah fase yang benar-benar terisi; 0 berarti tidak ada yang dialokasikan. */
+  const allocatedPhaseCount = Object.keys(ev.allocation.subtotals).length;
 
   function loadDataset(key: DatasetKey) {
     const init = initialState(String(key));
@@ -474,21 +476,27 @@ export default function Page() {
           title={`Alokasi Anggaran Bertahap (plafon Rp ${fmt(BUDGET, 1)} Jt/tahun)`}
           note={`Hanya alternatif dengan C9 ≥ ${C9_MIN} dan biaya satu titik tidak melebihi plafon yang dialokasikan.`}
         >
-          <table className="w-full min-w-[560px] border-collapse">
-            <thead>
-              <tr>
-                <Th align="right">Fase</Th>
-                <Th>Alternatif</Th>
-                <Th align="right">CC</Th>
-                <Th align="right">Biaya (Jt Rp)</Th>
-                <Th align="right">Subtotal fase</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.keys(ev.allocation.subtotals)
-                .map(Number)
-                .sort((a, b) => a - b)
-                .map((p) => {
+          {allocatedPhaseCount === 0 ? (
+            <p className="rounded border border-line bg-sunken px-3 py-2.5 text-[13px] text-ink-soft">
+              Tidak ada alternatif yang dialokasikan. Semua alternatif gagal memenuhi kendala kelayakan
+              (C9 ≥ {C9_MIN}) atau biaya satu titiknya melebihi plafon Rp {fmt(BUDGET, 1)} Jt.
+            </p>
+          ) : (
+            <table className="w-full min-w-[560px] border-collapse">
+              <thead>
+                <tr>
+                  <Th align="right">Fase</Th>
+                  <Th>Alternatif</Th>
+                  <Th align="right">CC</Th>
+                  <Th align="right">Biaya (Jt Rp)</Th>
+                  <Th align="right">Subtotal fase</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(ev.allocation.subtotals)
+                  .map(Number)
+                  .sort((a, b) => a - b)
+                  .map((p) => {
                   const members = ev.order.filter((i) => ev.allocation.phases[i] === p);
                   const subtotal = ev.allocation.subtotals[p];
                   return members.map((i, k) => (
@@ -517,9 +525,10 @@ export default function Page() {
                       ) : null}
                     </tr>
                   ));
-                })}
-            </tbody>
-          </table>
+                  })}
+              </tbody>
+            </table>
+          )}
 
           {ev.allocation.excludedC9.length > 0 || ev.allocation.excludedBudget.length > 0 ? (
             <div className="mt-3 space-y-1 text-[12.5px] text-ink-soft">
@@ -716,6 +725,11 @@ function PriorityMap({
             : overBudget
               ? "Biaya > plafon"
               : `Fase ${phases[i]}`;
+          // Kode 3 karakter (mis. D10) lebih lebar daripada kode 2 karakter,
+          // sehingga ukuran font harus dibatasi agar tidak meluap keluar titik.
+          // Lebar glif tebal kira-kira 0,62 x ukuran font.
+          const maxFontForCircle = (2 * rr * 0.8) / (0.62 * a.code.length);
+          const labelFont = Math.max(7.5, Math.min(13 + 3 * k, maxFontForCircle));
 
           return (
             <g key={a.code}>
@@ -728,7 +742,14 @@ function PriorityMap({
                 strokeWidth={layak && !overBudget ? 3 : 2}
                 strokeDasharray={layak && !overBudget ? undefined : "4 3"}
               />
-              <text x={x} y={y + 5} textAnchor="middle" fontSize={13 + 3 * k} fontWeight="700" fill="#fff">
+              <text
+                x={x}
+                y={y + labelFont * 0.35}
+                textAnchor="middle"
+                fontSize={labelFont}
+                fontWeight="700"
+                fill="#fff"
+              >
                 {a.code}
               </text>
               <text x={x} y={y + rr + 15} textAnchor="middle" fontSize={small ? 10 : 12} fontWeight="600" fill="var(--ink)">

@@ -12,7 +12,8 @@
     "parity": "node scripts/parity.mts",
     "test:bugs": "node scripts/ui-bugs.mjs",
     "test:ui": "node scripts/ui-check.mjs",
-    "verify": "npm run lint && npm run parity && npm run build"
+    "verify": "npm run lint && npm run parity && npm run build",
+    "test:export": "node scripts/ui-export.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

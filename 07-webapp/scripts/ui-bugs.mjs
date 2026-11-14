@@ -120,6 +120,32 @@ await page.waitForTimeout(300);
 chk("B10 reset: C1 A1 kembali 4.2", await page.locator(sel("C1 A1")).inputValue(), "4.2");
 chk("B10 reset: C9 A1 kembali 4", await page.locator(sel("C9 A1")).inputValue(), "4");
 
+// B11 — bila semua alternatif tidak layak, tabel fase harus menjelaskan,
+// bukan menampilkan header kosong tanpa isi.
+{
+  for (const code of ["A1", "A2", "A3", "A4", "A5"]) {
+    const el = page.locator(sel(`C9 ${code}`));
+    await el.click();
+    await el.press("Control+a");
+    await el.press("Delete");
+    await el.pressSequentially("1", { delay: 20 });
+    await el.blur();
+  }
+  await page.waitForTimeout(300);
+  const fase = await page
+    .locator('section:has(h2:text-is("Alokasi Anggaran Bertahap (plafon Rp 15,0 Jt/tahun)"))')
+    .innerText();
+  chk("B11 ada pesan saat tidak ada yang dialokasikan", /tidak ada alternatif yang dialokasikan/i.test(fase), true);
+  chk("B11 KPI layak menjadi 0/5", await (async () => {
+    const el = page.locator('div:has(> div:text-is("Layak (C9 ≥ 3)")) > div').nth(1);
+    return (await el.textContent())?.trim();
+  })(), "0/5");
+}
+
+// B12 — pulihkan keadaan agar reset tetap terbukti
+await page.getByRole("button", { name: "Reset ke data awal" }).click();
+await page.waitForTimeout(250);
+
 await browser.close();
 
 if (fail > 0) {
