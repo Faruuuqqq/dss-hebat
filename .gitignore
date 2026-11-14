@@ -1,13 +1,18 @@
-# lokal saja, tidak di-push
+# ---------------------------------------------------------------------------
+# Lokal saja, tidak di-push
+# ---------------------------------------------------------------------------
 .playwright-mcp/
 99-arsip/
 __pycache__/
 *.pyc
+*.pyo
 
-# file pribadi, bukan artefak proyek
+# File pribadi, bukan artefak proyek
 My FromFile Playlist Missing.csv
 
-# artefak build LaTeX (jika compile lokal)
+# ---------------------------------------------------------------------------
+# Artefak build LaTeX
+# ---------------------------------------------------------------------------
 *.aux
 *.log
 *.out
@@ -16,3 +21,38 @@ My FromFile Playlist Missing.csv
 *.fls
 *.fdb_latexmk
 *.xdv
+*.bcf
+*.run.xml
+*.bbl
+*.blg
+
+# ---------------------------------------------------------------------------
+# Artefak build Node / Next.js (07-webapp juga punya .gitignore sendiri)
+# ---------------------------------------------------------------------------
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Screenshot uji lokal
+.shots/
+07-webapp/.shots/
+
+# ---------------------------------------------------------------------------
+# Sistem operasi & editor
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/
+
+# ---------------------------------------------------------------------------
+# Lingkungan & rahasia (jangan pernah di-commit)
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example

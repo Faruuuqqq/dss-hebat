@@ -1,0 +1,27 @@
+# Normalisasi akhir baris agar diff konsisten lintas sistem operasi.
+* text=auto eol=lf
+
+# Berkas yang memang memakai CRLF (data ekspor Windows).
+*.csv text eol=crlf
+*.txt text eol=crlf
+
+# Binari: jangan di-diff sebagai teks.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.pdf  binary
+*.drawio binary
+*.docx binary
+*.pptx binary
+*.xlsx binary
+*.zip  binary
+
+# Linguist: penanda bahasa agar statistik repo di GitHub tidak menyesatkan
+# (PDF/drawio bukan kode; naskah markdown dan LaTeX adalah isi utama).
+*.drawio linguist-documentation
+*.md     linguist-documentation
+*.tex    linguist-documentation
+dss_revisi_markdown/** linguist-documentation
+08-docs/**             linguist-documentation
+assets/diagram/*.tex   linguist-documentation

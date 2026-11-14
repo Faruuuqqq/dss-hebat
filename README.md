@@ -1,54 +1,112 @@
-# DSS Jatinangor — CCTV Prioritization (Smart Living & Safety)
+# DSS Jatinangor — Prioritisasi Penempatan CCTV
 
-> **Sumber kebenaran tunggal:** `dss_revisi_markdown/dss_revisi.md` (model AHP datar 8×8, PRISMA 582→416→121→12).
-> Semua luaran hidup (`05-aplikasi/`, `06-paper-hasil/`, `08-docs/`) wajib konsisten dengan naskah itu.
-> Status terkini: `AGENTS.md` + `PROGRESS.md`. `CONTEXT.md` bersifat historis (s.d. 5 Okt 2026).
+Sistem pendukung keputusan (DSS) untuk memprioritaskan penempatan CCTV di permukiman mahasiswa
+**Jatinangor**, Kabupaten Sumedang. Model memakai **AHP** untuk pembobotan kriteria dan **TOPSIS**
+untuk perankingan alternatif, dilengkapi alokasi anggaran bertahap serta analisis sensitivitas.
 
-Scoping review PRISMA-ScR + model konseptual AHP-TOPSIS. **Mulai dari `AGENTS.md`** (panduan agen + status) dan `PROGRESS.md` (log terbaru). Alur baca: brief → protokol → data → sintesis → paper → aplikasi.
+Proyek ini adalah tugas akademik mata kuliah *Decision Support System* (kelompok 5, Universitas
+Padjadjaran) yang mencakup tiga hal: *scoping review* PRISMA-ScR, model konseptual, dan implementasi
+perangkat lunak beserta pengujian numeriknya.
+
+## Sumber kebenaran tunggal
+
+[`dss_revisi_markdown/dss_revisi.md`](dss_revisi_markdown/dss_revisi.md) adalah **satu-satunya
+sumber kebenaran** untuk model, angka, dan alur PRISMA. Seluruh luaran lain wajib konsisten
+dengannya. Angka terkunci:
+
+| Besaran | Nilai |
+|---|---|
+| Konsistensi AHP | λmax = 8,1031 · CI = 0,0147 · **CR = 0,0104** (< 0,10) |
+| Bobot kriteria | C1 23,95% · C2 = C3 14,29% · C5 = C8 12,45% · C7 9,74% · C4 7,70% · C6 5,15% |
+| Peringkat TOPSIS | A3 0,6445 > A1 0,5774 > A4 0,4995 > A2 0,4638 > A5 0,1820 |
+| Fase anggaran (plafon Rp 15 Jt) | Fase 1 {A3, A1} = 14,0 · Fase 2 {A4, A2} = 13,0 · Fase 3 {A5} |
+| Sensitivitas ±20% | 16 skenario, 2 pembalikan peringkat (C1 −20%, C2 +20%) |
+| PRISMA-ScR | 582 → 416 → 121 → 12 |
+
+Catatan model: **C1–C8** adalah kriteria urgensi yang diproses TOPSIS, sedangkan **C9 dan RAB**
+adalah kendala alokasi. Ambang `C9 ≥ 3` merupakan kebijakan implementasi terdokumentasi, bukan
+angka yang dinyatakan eksplisit dalam naskah kanonik.
+
+## Struktur repositori
 
 ```
-00-brief\tugas.txt                  # brief UTS (sumber requirements)
-01-protokol\kerangka-paper-ieee.md    # kerangka paper per seksi
-01-protokol\panduan-baca-anggota.md   # prompt Gemini + pembagian 12 paper
-02-data\scopus-export-140.csv         # export kerja subset 140 (BUKAN alur resmi)
-02-data\screening-log-140.csv         # log screening subset kerja (BUKAN alur resmi)
-02-data\eligibility-12.csv            # lembar kerja full-text (Keputusan sudah diisi 12/12 Disertakan)
-02-data\tabel-paper-final.csv        # metadata 12 paper inti
-02-data\data-charting-12.csv          # charting ringkas 12 paper
-03-sintesis\tahap-2-charting-sintesis.md  # charting detail + sintesis RQ1/RQ2
-03-sintesis\tahap-2-charting-sintesis.tex # versi LaTeX (sama isi)
-03-sintesis\tahap-3-model.md             # model konsep awal (n=9, 3 segmen; historis)
-03-sintesis\tahap-3-model.tex            # versi LaTeX (historis)
-04-paper\draft-paper.md               # paper fase proposal (diselaraskan ke AHP 8×8, PRISMA 416)
-04-paper\draft-paper.tex              # naskah LaTeX IEEEtran conference (diselaraskan AHP 8×8)
-04-paper\prisma-diagram.svg           # diagram PRISMA versi historis (401/181); jangan dipakai
-04-paper\prisma-diagram.png           # render historis; gambar kanonik ada di dss_revisi_markdown/assets
-04-paper\diagram\taksonomi-5-pola.mmd  # sumber Mermaid Gambar 2 (historis)
-04-paper\diagram\arsitektur-4-lapis.mmd # sumber Mermaid Gambar 3 (historis)
-05-aplikasi\index.html                # aplikasi DSS 1 file, offline (AHP-TOPSIS + C9 + sensitivitas)
-05-aplikasi\test-algoritma.mjs        # uji engine aktual + paritas CSV
-06-paper-hasil\draft-paper-hasil.md/.tex # paper hasil implementasi (IEEE)
-08-docs\data-dan-sumber.md            # data riil + dummy CCTV + sumber
-AGENTS.md  PROGRESS.md                # panduan agen + log progres
-99-arsip\                             # JANGAN dikutip di paper
+00-brief/            brief tugas
+01-protokol/         protokol scoping review + kerangka paper
+02-data/             data screening, eligibility, dan charting 12 studi
+03-sintesis/         sintesis RQ1/RQ2 + pilot numerik AHP-TOPSIS (sebagian historis)
+04-paper/            paper fase proposal (md + tex + gambar, tercompile 8 halaman)
+05-aplikasi/         aplikasi DSS satu berkas, offline (index.html) + uji
+06-paper-hasil/      paper hasil implementasi (md + tex + pdf, tercompile 5 halaman)
+07-webapp/           aplikasi Next.js 16 + TypeScript + Tailwind 4
+08-docs/             dokumentasi rekayasa perangkat lunak (SRS, traceability, UML, mockup)
+assets/diagram/      sumber TikZ kanonik gambar arsitektur + pembangun PNG
+dss_revisi_markdown/ naskah final — SUMBER KEBENARAN TUNGGAL
+99-arsip/            arsip; tidak di-commit, jangan dikutip di paper
+AGENTS.md            panduan agen/mesin + status terkini
+PROGRESS.md          log progres kronologis
+CONTEXT.md           konteks fase proposal (historis, s.d. 5 Okt 2026)
+build-papers.sh      compile kedua paper secara deterministik
 ```
 
-## Progres & luaran terbaru (lihat `PROGRESS.md`)
-- `PROGRESS.md` — **log progres kronologis; selalu diperbarui tiap sesi kerja**.
-- `dss_revisi_markdown\dss_revisi.md` — **SUMBER KEBENARAN TUNGGAL**; naskah final yang sudah dikumpulkan ke dosen (AHP datar 8×8, PRISMA 582→416→121→12).
-- `05-aplikasi\` — aplikasi web DSS (1 file, offline): AHP-TOPSIS + filter C9 + alokasi anggaran + sensitivitas. Buka `index.html`. Uji: `node 05-aplikasi/test-algoritma.mjs`.
-- `06-paper-hasil\` — paper hasil implementasi (format IEEE): `.md` + `.tex` (belum dicompile) + gambar.
-- `08-docs\` — data & sumber (BPS + E-Office), mockup/SE menyusul.
+## Menjalankan aplikasi
 
-## 99-arsip — jangan dipakai di paper
-- `JANGAN-DIPAKAI-promptclaude-smart-environment-lama.txt` — domain salah (Smart Environment), kita Smart Living & Safety.
-- `JANGAN-DIPAKAI-prisma-salah-1719-deep-learning.png` — angka/query salah (1719, deep learning/sampah), yang benar `dss_revisi_markdown\assets\gambar_1_prisma.png`.
-- `ref-tim-lain-paper.pdf` + `ref-tim-lain-extract.txt` — paper tim lain, hanya bahan belajar struktur. Jangan tiru kalimat (risiko tabrakan).
+**Aplikasi satu berkas** (tanpa server, tanpa instalasi):
 
-## Status / blokir
-1. [SELESAI] Angka PRISMA diseragamkan ke alur resmi: 582 screened → 166 (lebih tua dari 2021) → 416 sought → 2 non-Inggris + 233 non-Artikel + 60 tak terakses → 121 assessed → 109 dieksklusi tema → 12 included. Berlaku untuk `draft-paper.md`/`.tex`, `dss_revisi.md`, dan `06-paper-hasil`. `prisma-diagram.svg`/`.png` di `04-paper` masih render historis (401/181); gambar kanonik ada di `dss_revisi_markdown/assets/gambar_1_prisma.png`. `screening-log-140.csv` dan `scopus-export-140.csv` = catatan kerja subset, jangan dikutip sebagai alur.
-2. `04-paper\draft-paper.md` + `.tex`: sudah diselaraskan ke model kanonik (AHP 8×8, PRISMA 416, CC A3 0,6445, sensitivitas 2/16).
-3. [SELESAI] `prisma-diagram.svg` + `.png` di `04-paper`: dipertahankan sebagai artefak historis (401/181); jangan dipakai untuk luaran final.
-4. [SELESAI] `eligibility-12.csv`: `Keputusan_Fulltext` terisi 12/12 "Disertakan"; kolom `Fokus_Verifikasi_Fulltext` menunggu PDF.
-5. PDF 12 paper inti belum ada (usulkan taruh di `02-data\pdf\`) → verifikasi Fokus tertunda.
-6. `draft-paper.tex` belum dicompile (mesin ini tanpa pdflatex) → unggah ke Overleaf, compile 2×, cek 6–8 halaman + hapus komentar merah template.
+```bash
+open 05-aplikasi/index.html      # atau klik dua kali di berkas manager
+```
+
+**Aplikasi Next.js** (butuh Node 20+):
+
+```bash
+cd 07-webapp
+npm install
+npm run dev                      # http://localhost:3000
+```
+
+## Verifikasi
+
+```bash
+# model & aplikasi satu berkas
+node 05-aplikasi/test-algoritma.mjs     # paritas angka kanonik dari index.html
+bash 05-aplikasi/test-ui.sh             # smoke test UI (butuh Chromium)
+
+# paper (butuh Tectonic: https://tectonic-typesetting.github.io)
+TECTONIC=/path/ke/tectonic bash build-papers.sh
+
+# gambar arsitektur (butuh Tectonic + Python/pymupdf)
+bash assets/diagram/build-arsitektur-png.sh
+
+# webapp
+cd 07-webapp
+npm run verify              # lint + parity + build
+npm start &                 # lalu, di terminal lain:
+npm run test:ui             # 22 cek interaksi
+npm run test:bugs           # 18 cek perilaku input angka
+npm run test:export         # 22 cek ekspor CSV
+npm run test:a11y           # audit axe-core (WCAG 2.1 A/AA)
+```
+
+## Status
+
+| Area | Status |
+|---|---|
+| Naskah proposal (SCR) | selesai, sudah dinilai |
+| Paper fase proposal (`04-paper/`) | tercompile 8 halaman |
+| Paper hasil (`06-paper-hasil/`) | tercompile 5 halaman |
+| Aplikasi satu berkas (`05-aplikasi/`) | selesai, 1 berkas offline |
+| Aplikasi Next.js (`07-webapp/`) | selesai; uji paritas, interaksi, ekspor, a11y lulus |
+| Dokumentasi SE (`08-docs/`) | selesai (SRS, traceability, UML, mockup) |
+| Data lapangan | riil tingkat desa; per-segmen masih *hybrid*/estimasi |
+
+## Catatan data
+
+Dataset `resmi` (5 segmen) adalah keluaran utama. Data per segmen bersifat **hybrid**: kalibrasi
+dari sumber sekunder level desa/kecamatan, sedangkan sel per-segmen merupakan estimasi
+terdokumentasi — belum merupakan validasi lapangan. Dataset `perluasan` (12 desa) adalah
+**simulasi** untuk demonstrasi skalabilitas dan tidak boleh dijadikan hasil utama.
+
+## Lisensi & atribusi
+
+Proyek akademik; data sekunder bersumber dari BPS Kabupaten Sumedang, publikasi kecamatan, dan
+sumber publik lain yang dicatat pada [`08-docs/data-dan-sumber.md`](08-docs/data-dan-sumber.md).
