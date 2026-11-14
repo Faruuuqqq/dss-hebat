@@ -169,10 +169,13 @@ chk("tanpa error konsol/halaman", errors.length === 0 ? "bersih" : errors.join("
   chk("region bergulir dapat menerima fokus", ok, true);
 }
 
-// 10) Screenshot untuk bukti
+// 10) Screenshot untuk bukti. Folder dibuat lebih dulu supaya skrip tetap
+// berjalan pada clone baru, tempat .shots/ belum ada (dan memang di-gitignore).
 await page.selectOption("select", "resmi");
 await page.waitForTimeout(400);
+fs.mkdirSync(".shots", { recursive: true });
 await page.screenshot({ path: ".shots/ui-check.png", fullPage: false });
+console.log("PASS  screenshot bukti ditulis ke .shots/ui-check.png");
 
 await browser.close();
 
