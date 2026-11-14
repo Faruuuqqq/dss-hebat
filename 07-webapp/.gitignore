@@ -1,0 +1,14 @@
+# dependensi
+node_modules/
+
+# keluaran build Next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# screenshot uji lokal
+.shots/
+
+# log
+*.log

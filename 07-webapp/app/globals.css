@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/*
+  Token warna dan tipografi.
+  Palet: satu latar terang, satu tinta, satu aksen (biru), plus dua warna status
+  (layak / tidak layak). Tidak ada gradien, tidak ada glow, tidak ada bayangan
+  pada elemen diam: pemisah permukaan memakai langkah tone.
+*/
+:root {
+  --ground: #f6f7f9;
+  --surface: #ffffff;
+  --surface-sunken: #eceef2;
+  --ink: #101828;
+  --ink-soft: #475467;
+  --ink-faint: #667085;
+  --border: #dfe3e9;
+  --accent: #1d4ed8;
+  --accent-soft: #eef2ff;
+  --ok: #067647;
+  --ok-soft: #ecfdf3;
+  --bad: #b42318;
+  --bad-soft: #fef3f2;
+  --warn: #b54708;
+  --warn-soft: #fffaeb;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-sunken: var(--surface-sunken);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+}
+
+html,
+body {
+  background: var(--ground);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Angka tabel rata supaya kolom numerik mudah dibandingkan. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Input sel matriks: tenang, tanpa bayangan, fokus jelas. */
+.cell {
+  width: 100%;
+  min-width: 58px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 4px 6px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink);
+}
+.cell:hover {
+  border-color: #c3c9d4;
+}
+.cell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+/* Fokus konsisten untuk seluruh kontrol. */
+:where(a, button, select, input):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
