@@ -1,6 +1,12 @@
 # FULL CONTEXT — Semua Pekerjaan Proyek UTS DSS Jatinangor
 
+> **⚠️ DOKUMEN HISTORIS (status s.d. 5 Okt 2026, fase proposal SCR).**
+> **Sumber kebenaran tunggal saat ini = `dss_revisi_markdown/dss_revisi.md`.**
+> Status terkini & open items = `AGENTS.md` + `PROGRESS.md`. Jangan memakai angka hierarki/PRISMA 401/181 dari dokumen lama.
+
 Satu file ini berisi seluruh konteks proyek: keputusan, angka, hasil kerja, dan sisa pekerjaan. Baca file ini dulu sebelum melanjutkan kerja (untuk manusia baru maupun agent baru). File terakhir diperbarui: 5 Okt 2026.
+
+> **⚠️ Dokumen ini mencerminkan status s.d. 5 Okt 2026 (fase proposal SCR).** Untuk pekerjaan terbaru (tugas aplikasi DSS + paper hasil), baca **`PROGRESS.md`** di root — itu log progres yang selalu diperbarui.
 
 ---
 
