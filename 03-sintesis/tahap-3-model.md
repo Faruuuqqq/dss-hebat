@@ -1,4 +1,9 @@
 # Tahap 3: Conceptual Modeling — Rumusan Model Konseptual DSS CCTV Jatinangor
+
+> **STATUS HISTORIS (14 Nov 2026).** Draf konseptual awal ini memakai n=9 kriteria (C1–C9) dan 3 segmen (S1–S3).
+> Model final = `dss_revisi_markdown/dss_revisi.md` (n=8 kriteria urgensi + C9 kelayakan; 5 segmen A1–A5; AHP datar 8×8).
+> Jangan memakai angka contoh di dokumen ini untuk luaran final.
+
 ## Status: DRAF perumusan (diisi nilai lapangan oleh tim; merujuk sintesis Tahap 2 v2, protokol 2021-2026)
 
 ---
