@@ -1,11 +1,14 @@
 /**
  * Uji EKSPOR CSV pada webapp Next.js.
+ * Uji EKSPOR CSV pada webapp Next.js SiPrioCCTV.
  *
  * Fitur ekspor sebelumnya tidak pernah diverifikasi otomatis. Skrip ini menekan
  * tombol "Ekspor CSV" di peramban sungguhan, menangkap berkas unduhan, lalu
  * memeriksa isinya terhadap angka kanonik.
+ * Menguji tombol "Unduh hasil (CSV)" pada halaman /hasil.
  *
  * Jalankan (server harus berjalan lebih dulu):
+ * Jalankan:
  *   BASE_URL=http://127.0.0.1:3111 node scripts/ui-export.mjs
  */
 import { chromium } from "playwright-core";
@@ -47,6 +50,7 @@ const page = await browser.newPage({
 });
 
 await page.goto(BASE, { waitUntil: "networkidle" });
+await page.goto(`${BASE}/hasil`, { waitUntil: "networkidle" });
 
 async function unduh(selectorDataset) {
   if (selectorDataset) {
@@ -61,6 +65,10 @@ async function unduh(selectorDataset) {
   await download.saveAs(file);
   return { file, name: download.suggestedFilename(), text: fs.readFileSync(file, "utf8") };
 }
+const [download] = await Promise.all([
+  page.waitForEvent("download", { timeout: 10000 }),
+  page.getByRole("button", { name: "Unduh hasil (CSV)" }).click(),
+]);
 
 /** Parse CSV sederhana dengan dukungan tanda kutip. */
 function parseCsv(text) {
@@ -94,10 +102,15 @@ function parseCsv(text) {
   }
   return rows;
 }
+const file = path.join(tmp, download.suggestedFilename());
+await download.saveAs(file);
+const csvText = fs.readFileSync(file, "utf8");
 
 // --- dataset resmi ---
 const resmi = await unduh(null);
 chk("nama berkas resmi", resmi.name, "dss-cctv-resmi.csv");
+chk("unduhan berhasil", fs.existsSync(file), true);
+chk("nama file CSV", download.suggestedFilename().includes("Hasil_DSS_CCTV"), true);
 
 const rows = parseCsv(resmi.text);
 const head = rows[0];
@@ -106,6 +119,8 @@ chk("header kolom pertama", head[0], "dataset");
 chk("header memuat CC", head.includes("CC"), true);
 chk("header memuat 8 bobot", head.filter((h) => h.startsWith("w_")).length, 8);
 chk("jumlah baris data", rows.length - 1, 5);
+const lines = csvText.trim().split("\n");
+chk("jumlah baris CSV (1 header + 5 alts)", lines.length, 6);
 
 const a3 = rows.find((r) => r[1] === "A3");
 chk("A3 ada di CSV", Boolean(a3), true);
@@ -115,10 +130,19 @@ chk("A3 biaya", a3[5], "7.50");
 chk("A3 C9", a3[6], "4");
 chk("A3 layak", a3[7], "ya");
 chk("A3 fase 1", a3[8], "1");
+const header = lines[0];
+chk("header memuat Peringkat, ID, Closeness_CC, Fase",
+  header.includes("Peringkat") && header.includes("Closeness_CC") && header.includes("Fase"),
+  true
+);
 
 const a5 = rows.find((r) => r[1] === "A5");
 chk("A5 CC kanonik", a5[4], "0.182026");
 chk("A5 fase 3", a5[8], "3");
+// Peringkat 1 harus A3 dengan CC 0.7674
+const row1 = lines[1];
+chk("baris 1 adalah A3", row1.includes("A3"), true);
+chk("baris 1 CC A3 ~0.7674", row1.includes("0.7674"), true);
 
 // setiap baris punya jumlah kolom sama dengan header
 chk("semua baris 17 kolom", rows.slice(1).every((r) => r.length === head.length), true);
@@ -153,6 +177,8 @@ fs.rmSync(tmp, { recursive: true, force: true });
 
 if (fail > 0) {
   console.log(`\n${fail} CHECK GAGAL`);
+  console.log(`\n${fail} UJI EKSPOR CSV GAGAL`);
   process.exit(1);
 }
 console.log("\nSEMUA CHECK EKSPOR CSV LULUS.");
+console.log("\nSEMUA UJI EKSPOR CSV LULUS ✅");

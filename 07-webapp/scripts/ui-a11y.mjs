@@ -1,14 +1,10 @@
 /**
- * Audit aksesibilitas otomatis dengan axe-core.
+ * Audit aksesibilitas otomatis dengan axe-core pada 5 layar SiPrioCCTV.
  *
- * Menjalankan aturan WCAG 2.1 A/AA pada halaman di dua lebar (desktop & ponsel)
- * dan pada dua keadaan (data resmi & kondisi tidak ada alternatif layak).
+ * Menjalankan aturan WCAG 2.1 A/AA pada halaman di desktop dan ponsel.
  *
  * Jalankan (server harus berjalan lebih dulu):
  *   BASE_URL=http://127.0.0.1:3111 node scripts/ui-a11y.mjs
- *
- * Kode keluar 1 bila ada pelanggaran tingkat `serious` atau `critical`,
- * sehingga bisa dipakai sebagai gerbang regresi.
  */
 import { chromium } from "playwright-core";
 import fs from "node:fs";
@@ -36,22 +32,19 @@ if (!exe) {
 
 const AXE = path.join(process.cwd(), "node_modules", "axe-core", "axe.min.js");
 if (!fs.existsSync(AXE)) {
-  console.error("SKIP: axe-core tidak terpasang (npm i -D axe-core).");
+  console.error("SKIP: axe-core tidak terpasang.");
   process.exit(0);
 }
 
-/** Pelanggaran yang dianggap memblokir. */
 const BLOCKING = new Set(["serious", "critical"]);
-
 const browser = await chromium.launch({ executablePath: exe, args: ["--no-sandbox", "--disable-gpu"] });
 
 let blocking = 0;
 let advisory = 0;
 
-async function audit(label, width, prepare) {
+async function audit(label, route, width) {
   const page = await browser.newPage({ viewport: { width, height: 1000 } });
-  await page.goto(BASE, { waitUntil: "networkidle" });
-  if (prepare) await prepare(page);
+  await page.goto(`${BASE}${route}`, { waitUntil: "networkidle" });
   await page.addScriptTag({ path: AXE });
 
   const result = await page.evaluate(async () => {
@@ -69,12 +62,6 @@ async function audit(label, width, prepare) {
     if (isBlocking) blocking++;
     else advisory++;
     console.log(`  [${v.impact}] ${v.id}: ${v.help} (${v.nodes.length} elemen)`);
-    for (const node of v.nodes.slice(0, 3)) {
-      console.log(`      target: ${node.target.join(" ")}`);
-      const msg = (node.failureSummary ?? "").split("\n").filter(Boolean)[0];
-      if (msg) console.log(`      sebab : ${msg.trim()}`);
-    }
-    if (v.nodes.length > 3) console.log(`      ... dan ${v.nodes.length - 3} elemen lain`);
   }
   if (violations.length === 0) console.log("  tidak ada pelanggaran");
 
@@ -82,30 +69,21 @@ async function audit(label, width, prepare) {
   return violations;
 }
 
-// 1) Tampilan normal, desktop
-await audit("Data resmi", 1440);
+// 1) Dashboard Desktop & Mobile
+await audit("Dashboard Desktop", "/", 1440);
+await audit("Dashboard Mobile", "/", 390);
 
-// 2) Tampilan normal, ponsel
-await audit("Data resmi", 390);
+// 2) Data Kriteria
+await audit("Data Kriteria", "/kriteria", 1440);
 
-// 3) Kondisi batas: tidak ada alternatif layak (empty state)
-await audit("Tanpa alternatif layak", 1440, async (page) => {
-  for (const code of ["A1", "A2", "A3", "A4", "A5"]) {
-    const el = page.locator(`input[aria-label="C9 ${code}"]`);
-    await el.click();
-    await el.press("Control+a");
-    await el.press("Delete");
-    await el.pressSequentially("1", { delay: 15 });
-    await el.blur();
-  }
-  await page.waitForTimeout(400);
-});
+// 3) Pembobotan AHP
+await audit("Pembobotan AHP", "/ahp", 1440);
 
-// 4) Dataset simulasi (12 alternatif)
-await audit("Dataset simulasi", 1440, async (page) => {
-  await page.selectOption("select", "perluasan");
-  await page.waitForTimeout(400);
-});
+// 4) Hasil & Anggaran
+await audit("Hasil TOPSIS & Anggaran", "/hasil", 1440);
+
+// 5) Uji Sensitivitas
+await audit("Uji Sensitivitas", "/sensitivitas", 1440);
 
 await browser.close();
 

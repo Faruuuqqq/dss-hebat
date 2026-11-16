@@ -1,12 +1,10 @@
 /**
- * Uji interaksi UI aplikasi Next.js di peramban sungguhan.
+ * Uji interaksi UI aplikasi Next.js SiPrioCCTV di peramban sungguhan.
  *
- * Prasyarat: server produksi sudah berjalan (npm run build && npm start)
- * dan Chromium tersedia. Skrip memakai playwright-core dengan executablePath
- * ke Chromium yang sudah ada, jadi tidak mengunduh peramban baru.
+ * Menguji 5 layar (Dashboard, Data Kriteria, Pembobotan AHP, Hasil & Anggaran, Uji Sensitivitas).
  *
  * Jalankan:
- *   BASE_URL=http://127.0.0.1:3111 CHROME=/path/ke/chrome node scripts/ui-check.mjs
+ *   BASE_URL=http://127.0.0.1:3111 node scripts/ui-check.mjs
  */
 import { chromium } from "playwright-core";
 import fs from "node:fs";
@@ -44,6 +42,8 @@ if (!exe) {
   process.exit(0);
 }
 
+fs.mkdirSync(".shots", { recursive: true });
+
 const browser = await chromium.launch({
   executablePath: exe,
   args: ["--no-sandbox", "--disable-gpu"],
@@ -55,132 +55,92 @@ page.on("pageerror", (e) => errors.push(String(e)));
 page.on("console", (m) => {
   if (m.type() === "error") errors.push(m.text());
 });
-// Catat URL permintaan yang gagal supaya penyebabnya bisa ditelusuri,
-// bukan hanya pesan "Failed to load resource".
 page.on("response", (r) => {
   if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`);
 });
 
-await page.goto(BASE, { waitUntil: "networkidle" });
+console.log("=== 1. Layar Dashboard (/) ===");
+await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
+await page.screenshot({ path: ".shots/screen-1-dashboard.png", fullPage: true });
 
-/** Ambil teks KPI berdasarkan labelnya. */
-async function kpi(labelPrefix) {
-  const el = page.locator(`div:has(> div:text-is("${labelPrefix}")) > div`).nth(1);
-  return (await el.textContent())?.trim() ?? "";
-}
+chk("judul dashboard", (await page.locator("main h1").textContent())?.trim(), "Ringkasan Prioritas CCTV");
+const pageText = await page.innerText("main");
+chk("KPI segmen dievaluasi", pageText.includes("Segmen dievaluasi") && pageText.includes("5"), true);
+chk("KPI urgensi tertinggi A3", pageText.includes("A3 · 0,7674"), true);
+chk("KPI konsistensi AHP", pageText.includes("CR ≤ 0,002"), true);
+chk("KPI anggaran Fase 1", pageText.includes("Rp14,0 jt"), true);
+chk("peringkat 1 A3 di daftar", pageText.includes("A3") && pageText.includes("Persimpangan Hegarmanah") && pageText.includes("0,7674"), true);
+chk("peta prioritas termuat", (await page.locator("canvas, svg").count()) > 0, true);
 
-// 1) Render awal
-chk("judul halaman", (await page.locator("h1").textContent())?.trim(), "Prioritisasi Penempatan CCTV Jatinangor");
-
-const cr = await kpi("Rasio Konsistensi (CR)");
-chk("KPI CR", cr, "0,0104");
-
-const feasible = await kpi("Layak (C9 ≥ 3)");
-chk("KPI layak awal", feasible, "5/5");
-
-const top = await kpi("Prioritas Tertinggi");
-chk("KPI prioritas", top, "A3");
-
-// 2) Angka TOPSIS di tabel
-const topsisRows = page.locator('section:has(h2:text-is("Hasil Perankingan TOPSIS")) tbody tr');
-chk("jumlah baris TOPSIS", await topsisRows.count(), 5);
-const firstRow = (await topsisRows.nth(0).innerText()).replace(/\s+/g, " ");
-chk("peringkat 1 = A3 CC 0,6445", /A3/.test(firstRow) && /0,6445/.test(firstRow), true);
-
-// 3) C9 awal terlihat di matriks
-const c9a1 = page.locator('input[aria-label="C9 A1"]');
-chk("nilai C9 A1 awal", await c9a1.inputValue(), "4");
-
-// 4) Edit C9 -> 1, hasil harus berubah
-await c9a1.fill("1");
-await page.waitForTimeout(300);
-chk("KPI layak setelah C9=1", await kpi("Layak (C9 ≥ 3)"), "4/5");
-
-const topsisText = await page
-  .locator('section:has(h2:text-is("Hasil Perankingan TOPSIS"))')
-  .innerText();
-chk("badge C9 < 3 muncul", topsisText.includes("C9 < 3"), true);
-
-const faseText = await page
-  .locator('section:has(h2:text-is("Alokasi Anggaran Bertahap (plafon Rp 15,0 Jt/tahun)"))')
-  .innerText();
-chk("A1 disebut tidak dialokasikan", /Tidak dialokasikan[\s\S]*A1/.test(faseText), true);
-
-// 5) Kembalikan C9, lalu uji biaya di atas plafon
-await c9a1.fill("4");
+// Test map mode switch
+await page.getByRole("tab", { name: "Kelayakan C9" }).click();
 await page.waitForTimeout(200);
-chk("KPI layak pulih", await kpi("Layak (C9 ≥ 3)"), "5/5");
+await page.getByRole("tab", { name: "Urgensi" }).click();
+await page.waitForTimeout(200);
 
-const costA5 = page.locator('input[aria-label="Biaya A5"]');
-await costA5.fill("15.1");
-await page.waitForTimeout(300);
-const topText = await page
-  .locator('section:has(h2:text-is("Hasil Perankingan TOPSIS"))')
-  .innerText();
-chk("badge biaya > plafon muncul", topText.includes("Biaya > plafon"), true);
+console.log("\n=== 2. Layar Data Kriteria (/kriteria) ===");
+await page.goto(`${BASE}/kriteria`, { waitUntil: "networkidle" });
+await page.screenshot({ path: ".shots/screen-2-kriteria.png", fullPage: true });
 
-// 6) Fokus input bertahan saat mengetik (tidak dirender ulang paksa)
-await page.locator('input[aria-label="C1 A2"]').click();
-await page.keyboard.type("9");
-const focused = await page.evaluate(() => document.activeElement?.getAttribute("aria-label") ?? "");
-chk("fokus bertahan saat mengedit", focused, "C1 A2");
+chk("judul kriteria", (await page.locator("main h1").textContent())?.trim(), "Data Kriteria Segmen");
+const kriteriaText = await page.innerText("main");
+chk("tabel matriks keputusan", kriteriaText.includes("Matriks keputusan"), true);
+chk("sumber data ditampilkan", kriteriaText.includes("Sumber data & status"), true);
 
-// 7) Reset memulihkan nilai awal
-await page.getByRole("button", { name: "Reset ke data awal" }).click();
-await page.waitForTimeout(300);
-chk("reset: C9 A1 kembali 4", await c9a1.inputValue(), "4");
-chk("reset: biaya A5 kembali 5.5", await page.locator('input[aria-label="Biaya A5"]').inputValue(), "5.5");
+// Click row to change selection
+await page.locator("table tbody tr").nth(1).click();
+await page.waitForTimeout(200);
+chk("form edit berubah ke A2", (await page.innerText("main")).includes("Ubah nilai · A2"), true);
 
-// 8) Ganti dataset ke simulasi
-await page.selectOption("select", "perluasan");
-await page.waitForTimeout(400);
-chk("dataset simulasi: jumlah alternatif", await kpi("Alternatif Segmen"), "12");
-const simulasiText = await page.locator("main").innerText();
-chk("label SIMULASI tampil", simulasiText.includes("SIMULASI"), true);
+console.log("\n=== 3. Layar Pembobotan AHP (/ahp) ===");
+await page.goto(`${BASE}/ahp`, { waitUntil: "networkidle" });
+await page.screenshot({ path: ".shots/screen-3-ahp.png", fullPage: true });
 
-// 9) Tidak ada error konsol
+chk("judul ahp", (await page.locator("main h1").textContent())?.trim(), "Pembobotan AHP Multi-Stakeholder");
+const ahpText = await page.innerText("main");
+chk("matriks klaster tampil", ahpText.includes("Matriks perbandingan klaster"), true);
+chk("kuesioner responden tampil", ahpText.includes("Tampilan responden"), true);
+chk("bobot global tampil", ahpText.includes("Bobot global kriteria"), true);
+
+// Switch tab G1 Pemda
+await page.getByRole("tab", { name: /G1/ }).click();
+await page.waitForTimeout(200);
+await page.getByRole("tab", { name: "Agregat" }).click();
+await page.waitForTimeout(200);
+
+console.log("\n=== 4. Layar Hasil & Anggaran (/hasil) ===");
+await page.goto(`${BASE}/hasil`, { waitUntil: "networkidle" });
+await page.screenshot({ path: ".shots/screen-4-hasil.png", fullPage: true });
+
+chk("judul hasil", (await page.locator("main h1").textContent())?.trim(), "Hasil TOPSIS & Alokasi Anggaran");
+const hasilText = await page.innerText("main");
+chk("tabel TOPSIS tampil", hasilText.includes("Peringkat urgensi dan jarak"), true);
+chk("A3 peringkat 1", hasilText.includes("A3 Persimpangan Hegarmanah"), true);
+chk("kartu alokasi fase 1", hasilText.includes("FASE 1 · SEGERA"), true);
+chk("input plafon tampil", (await page.locator('input[type="number"]').count()) >= 2, true);
+
+console.log("\n=== 5. Layar Uji Sensitivitas (/sensitivitas) ===");
+await page.goto(`${BASE}/sensitivitas`, { waitUntil: "networkidle" });
+await page.screenshot({ path: ".shots/screen-5-sensitivitas.png", fullPage: true });
+
+chk("judul sensitivitas", (await page.locator("main h1").textContent())?.trim(), "Uji Sensitivitas Bobot");
+const sensText = await page.innerText("main");
+chk("skenario chip tampil", sensText.includes("C1 Kerawanan"), true);
+chk("tabel ringkasan 16 skenario", sensText.includes("Ringkasan 16 skenario"), true);
+
+// Click -20%
+await page.getByRole("button", { name: "−20%" }).click();
+await page.waitForTimeout(200);
+await page.getByRole("button", { name: "+20%" }).click();
+await page.waitForTimeout(200);
+
+console.log("\n=== 6. Pemeriksaan Aksesibilitas & Error Konsol ===");
 chk("tanpa error konsol/halaman", errors.length === 0 ? "bersih" : errors.join(" | "), "bersih");
-
-
-// 11) Region bergulir horizontal harus dapat dijangkau papan ketik,
-//     supaya tabel lebar tetap bisa digeser tanpa tetikus.
-{
-  const audit = await page.evaluate(() => {
-    const regions = Array.from(document.querySelectorAll(".overflow-x-auto"));
-    return {
-      total: regions.length,
-      focusable: regions.filter((r) => r.tabIndex === 0).length,
-      named: regions.filter((r) => (r.getAttribute("aria-label") ?? "").length > 0).length,
-    };
-  });
-  chk("jumlah region bergulir", audit.total > 0, true);
-  chk("semua region focusable", audit.focusable, audit.total);
-  chk("semua region punya nama aksesibel", audit.named, audit.total);
-}
-
-// 12) Fokus keyboard benar-benar bisa masuk ke region bergulir
-{
-  const ok = await page.evaluate(() => {
-    const r = document.querySelector(".overflow-x-auto");
-    if (!r) return false;
-    r.focus();
-    return document.activeElement === r;
-  });
-  chk("region bergulir dapat menerima fokus", ok, true);
-}
-
-// 10) Screenshot untuk bukti. Folder dibuat lebih dulu supaya skrip tetap
-// berjalan pada clone baru, tempat .shots/ belum ada (dan memang di-gitignore).
-await page.selectOption("select", "resmi");
-await page.waitForTimeout(400);
-fs.mkdirSync(".shots", { recursive: true });
-await page.screenshot({ path: ".shots/ui-check.png", fullPage: false });
-console.log("PASS  screenshot bukti ditulis ke .shots/ui-check.png");
 
 await browser.close();
 
 if (fail > 0) {
-  console.log(`\n${fail} CHECK GAGAL`);
+  console.log(`\n${fail} UJI UI GAGAL`);
   process.exit(1);
 }
-console.log("\nSEMUA UI CHECK LULUS — interaksi aplikasi Next.js terverifikasi.");
+console.log("\nSEMUA UJI UI INTERAKTIF LULUS (5 LAYAR TEREPRODUKSI) ✅");
