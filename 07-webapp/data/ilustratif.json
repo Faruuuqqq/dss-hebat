@@ -1,0 +1,828 @@
+{
+  "id": "ilustratif",
+  "nama": "Dataset Ilustratif (5 Segmen)",
+  "deskripsi": "Data ilustratif hierarki 3 klaster x 3 kelompok responden sesuai xlsx",
+  "status": "SIMULASI",
+  "ahp_mode": "hierarki",
+  "plafon_per_fase_rp": 15000000,
+  "c9_min_fase1": 3,
+  "alternatives": [
+    {
+      "id": "A1",
+      "nama_segmen": "Gang Kos Sayang",
+      "tipe_segmen": "Gang residensial",
+      "desa": "Sayang",
+      "lat": -6.9272,
+      "lng": 107.7731,
+      "karakteristik": "Gang sempit 1,5–2,5 m, padat indekos, buntu"
+    },
+    {
+      "id": "A2",
+      "nama_segmen": "Ruas Jalan Cikeruh",
+      "tipe_segmen": "Ruas jalan",
+      "desa": "Cikeruh",
+      "lat": -6.9265,
+      "lng": 107.7712,
+      "karakteristik": "Koridor 3–4 m dekat kampus, jalur mahasiswa malam"
+    },
+    {
+      "id": "A3",
+      "nama_segmen": "Persimpangan Hegarmanah",
+      "tipe_segmen": "Persimpangan",
+      "desa": "Hegarmanah",
+      "lat": -6.9298,
+      "lng": 107.7698,
+      "karakteristik": "Simpul 5 cabang; ATM, minimarket, halte"
+    },
+    {
+      "id": "A4",
+      "nama_segmen": "Gang Cipacing",
+      "tipe_segmen": "Gang residensial",
+      "desa": "Cipacing",
+      "lat": -6.9327,
+      "lng": 107.7745,
+      "karakteristik": "Gang panjang berliku, gelap, jauh dari CCTV aktif"
+    },
+    {
+      "id": "A5",
+      "nama_segmen": "Ruas Jalan Cileles",
+      "tipe_segmen": "Ruas jalan",
+      "desa": "Cileles",
+      "lat": -6.9241,
+      "lng": 107.779,
+      "karakteristik": "Ruas sekunder lingkar timur kampus"
+    }
+  ],
+  "criteria": [
+    {
+      "kode": "C1",
+      "nama": "Riwayat kerawanan",
+      "klaster": "Risiko",
+      "satuan": "kejadian/km/th",
+      "skala": "rasio",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Rekap Polsek/desa; wawancara RT"
+    },
+    {
+      "kode": "C2",
+      "nama": "Volume mobilitas malam",
+      "klaster": "Paparan Aktivitas",
+      "satuan": "orang/jam",
+      "skala": "rasio",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Counting manual 18.00–24.00"
+    },
+    {
+      "kode": "C3",
+      "nama": "Defisiensi penerangan",
+      "klaster": "Risiko",
+      "satuan": "skor 1–5",
+      "skala": "ordinal",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Survei observasi malam; data Dishub"
+    },
+    {
+      "kode": "C4",
+      "nama": "Efisiensi coverage",
+      "klaster": "Karakteristik Spasial",
+      "satuan": "m²/titik",
+      "skala": "rasio",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Geometri OSM; uji pandang"
+    },
+    {
+      "kode": "C5",
+      "nama": "Kepadatan penghuni",
+      "klaster": "Paparan Aktivitas",
+      "satuan": "kamar/km",
+      "skala": "rasio",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Pendataan indekos; profil desa"
+    },
+    {
+      "kode": "C6",
+      "nama": "Derajat simpul jalan",
+      "klaster": "Karakteristik Spasial",
+      "satuan": "cabang",
+      "skala": "rasio",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Ekstraksi OSM; observasi"
+    },
+    {
+      "kode": "C7",
+      "nama": "Coverage gap CCTV",
+      "klaster": "Karakteristik Spasial",
+      "satuan": "meter",
+      "skala": "rasio",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Koordinat GPS kamera eksisting"
+    },
+    {
+      "kode": "C8",
+      "nama": "Kedekatan fasilitas rentan",
+      "klaster": "Paparan Aktivitas",
+      "satuan": "unit POI/150 m",
+      "skala": "rasio",
+      "peran": "benefit (urgensi)",
+      "sumber_data": "Observasi; POI OSM"
+    },
+    {
+      "kode": "C9",
+      "nama": "Kelayakan implementasi",
+      "klaster": "Kendala kelayakan",
+      "satuan": "skor 1–5",
+      "skala": "ordinal",
+      "peran": "constraint (di luar TOPSIS)",
+      "sumber_data": "Survei teknis; estimasi RAB"
+    }
+  ],
+  "values": {
+    "A1": {
+      "kriteria": {
+        "C1": 12.0,
+        "C2": 120.0,
+        "C3": 4.0,
+        "C4": 180.0,
+        "C5": 410.0,
+        "C6": 2.0,
+        "C7": 260.0,
+        "C8": 9.0
+      },
+      "c9": 4.0,
+      "biaya_rp": 7000000.0
+    },
+    "A2": {
+      "kriteria": {
+        "C1": 8.0,
+        "C2": 310.0,
+        "C3": 2.0,
+        "C4": 520.0,
+        "C5": 150.0,
+        "C6": 3.0,
+        "C7": 180.0,
+        "C8": 5.0
+      },
+      "c9": 5.0,
+      "biaya_rp": 6500000.0
+    },
+    "A3": {
+      "kriteria": {
+        "C1": 15.0,
+        "C2": 460.0,
+        "C3": 4.0,
+        "C4": 780.0,
+        "C5": 150.0,
+        "C6": 5.0,
+        "C7": 110.0,
+        "C8": 14.0
+      },
+      "c9": 4.0,
+      "biaya_rp": 7000000.0
+    },
+    "A4": {
+      "kriteria": {
+        "C1": 9.0,
+        "C2": 60.0,
+        "C3": 5.0,
+        "C4": 210.0,
+        "C5": 220.0,
+        "C6": 2.0,
+        "C7": 520.0,
+        "C8": 3.0
+      },
+      "c9": 2.0,
+      "biaya_rp": 6000000.0
+    },
+    "A5": {
+      "kriteria": {
+        "C1": 3.0,
+        "C2": 90.0,
+        "C3": 3.0,
+        "C4": 460.0,
+        "C5": 90.0,
+        "C6": 3.0,
+        "C7": 340.0,
+        "C8": 2.0
+      },
+      "c9": 3.0,
+      "biaya_rp": 5500000.0
+    }
+  },
+  "stakeholders": [
+    {
+      "responden_id": "R01",
+      "kelompok": "G1 Pemda",
+      "instansi": "Kecamatan Jatinangor",
+      "peran": "Perwakilan kecamatan"
+    },
+    {
+      "responden_id": "R02",
+      "kelompok": "G1 Pemda",
+      "instansi": "Satpol PP",
+      "peran": "Perwakilan"
+    },
+    {
+      "responden_id": "R03",
+      "kelompok": "G1 Pemda",
+      "instansi": "Dishub Sumedang",
+      "peran": "Perwakilan"
+    },
+    {
+      "responden_id": "R04",
+      "kelompok": "G2 Kampus",
+      "instansi": "Dit. Keamanan PTN",
+      "peran": "Perwakilan"
+    },
+    {
+      "responden_id": "R05",
+      "kelompok": "G2 Kampus",
+      "instansi": "Sarana Prasarana PTN",
+      "peran": "Perwakilan"
+    },
+    {
+      "responden_id": "R06",
+      "kelompok": "G3 Warga",
+      "instansi": "RT/RW setempat",
+      "peran": "Ketua RT"
+    },
+    {
+      "responden_id": "R07",
+      "kelompok": "G3 Warga",
+      "instansi": "Paguyuban indekos",
+      "peran": "Pengelola"
+    }
+  ],
+  "pairwise": [
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Klaster",
+      "kriteria_a": "Risiko",
+      "kriteria_b": "Paparan",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Klaster",
+      "kriteria_a": "Risiko",
+      "kriteria_b": "Spasial",
+      "nilai_saaty_a_vs_b": 3.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Klaster",
+      "kriteria_a": "Paparan",
+      "kriteria_b": "Spasial",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Risiko",
+      "kriteria_a": "C1",
+      "kriteria_b": "C3",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Paparan",
+      "kriteria_a": "C2",
+      "kriteria_b": "C5",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Paparan",
+      "kriteria_a": "C2",
+      "kriteria_b": "C8",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Paparan",
+      "kriteria_a": "C5",
+      "kriteria_b": "C8",
+      "nilai_saaty_a_vs_b": 1.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Spasial",
+      "kriteria_a": "C4",
+      "kriteria_b": "C6",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Spasial",
+      "kriteria_a": "C4",
+      "kriteria_b": "C7",
+      "nilai_saaty_a_vs_b": 1.0
+    },
+    {
+      "kelompok": "G1 Pemda",
+      "level": "Spasial",
+      "kriteria_a": "C6",
+      "kriteria_b": "C7",
+      "nilai_saaty_a_vs_b": 0.5
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Klaster",
+      "kriteria_a": "Risiko",
+      "kriteria_b": "Paparan",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Klaster",
+      "kriteria_a": "Risiko",
+      "kriteria_b": "Spasial",
+      "nilai_saaty_a_vs_b": 4.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Klaster",
+      "kriteria_a": "Paparan",
+      "kriteria_b": "Spasial",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Risiko",
+      "kriteria_a": "C1",
+      "kriteria_b": "C3",
+      "nilai_saaty_a_vs_b": 1.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Paparan",
+      "kriteria_a": "C2",
+      "kriteria_b": "C5",
+      "nilai_saaty_a_vs_b": 1.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Paparan",
+      "kriteria_a": "C2",
+      "kriteria_b": "C8",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Paparan",
+      "kriteria_a": "C5",
+      "kriteria_b": "C8",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Spasial",
+      "kriteria_a": "C4",
+      "kriteria_b": "C6",
+      "nilai_saaty_a_vs_b": 3.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Spasial",
+      "kriteria_a": "C4",
+      "kriteria_b": "C7",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G2 Kampus",
+      "level": "Spasial",
+      "kriteria_a": "C6",
+      "kriteria_b": "C7",
+      "nilai_saaty_a_vs_b": 1.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Klaster",
+      "kriteria_a": "Risiko",
+      "kriteria_b": "Paparan",
+      "nilai_saaty_a_vs_b": 1.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Klaster",
+      "kriteria_a": "Risiko",
+      "kriteria_b": "Spasial",
+      "nilai_saaty_a_vs_b": 3.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Klaster",
+      "kriteria_a": "Paparan",
+      "kriteria_b": "Spasial",
+      "nilai_saaty_a_vs_b": 3.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Risiko",
+      "kriteria_a": "C1",
+      "kriteria_b": "C3",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Paparan",
+      "kriteria_a": "C2",
+      "kriteria_b": "C5",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Paparan",
+      "kriteria_a": "C2",
+      "kriteria_b": "C8",
+      "nilai_saaty_a_vs_b": 3.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Paparan",
+      "kriteria_a": "C5",
+      "kriteria_b": "C8",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Spasial",
+      "kriteria_a": "C4",
+      "kriteria_b": "C6",
+      "nilai_saaty_a_vs_b": 2.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Spasial",
+      "kriteria_a": "C4",
+      "kriteria_b": "C7",
+      "nilai_saaty_a_vs_b": 1.0
+    },
+    {
+      "kelompok": "G3 Warga",
+      "level": "Spasial",
+      "kriteria_a": "C6",
+      "kriteria_b": "C7",
+      "nilai_saaty_a_vs_b": 0.5
+    }
+  ],
+  "benchmarks": {
+    "ahp": {
+      "cr_table": [
+        {
+          "kelompok": "G1 Pemda",
+          "level": "Klaster",
+          "cr": 0.0079,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G2 Kampus",
+          "level": "Klaster",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G3 Warga",
+          "level": "Klaster",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "Agregat",
+          "level": "Klaster",
+          "cr": 0.0009,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G1 Pemda",
+          "level": "Risiko",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G2 Kampus",
+          "level": "Risiko",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G3 Warga",
+          "level": "Risiko",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "Agregat",
+          "level": "Risiko",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G1 Pemda",
+          "level": "Paparan",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G2 Kampus",
+          "level": "Paparan",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G3 Warga",
+          "level": "Paparan",
+          "cr": 0.0079,
+          "status": "OK"
+        },
+        {
+          "kelompok": "Agregat",
+          "level": "Paparan",
+          "cr": 0.0009,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G1 Pemda",
+          "level": "Spasial",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G2 Kampus",
+          "level": "Spasial",
+          "cr": 0.0158,
+          "status": "OK"
+        },
+        {
+          "kelompok": "G3 Warga",
+          "level": "Spasial",
+          "cr": 0.0,
+          "status": "OK"
+        },
+        {
+          "kelompok": "Agregat",
+          "level": "Spasial",
+          "cr": 0.0017,
+          "status": "OK"
+        }
+      ],
+      "weights": {
+        "C1": {
+          "klaster": "Risiko",
+          "bobot_global": 0.3156,
+          "persen": 0.3156333682478519
+        },
+        "C2": {
+          "klaster": "Paparan",
+          "bobot_global": 0.1614,
+          "persen": 0.1613828401478052
+        },
+        "C3": {
+          "klaster": "Risiko",
+          "bobot_global": 0.1988,
+          "persen": 0.1988365623523443
+        },
+        "C4": {
+          "klaster": "Spasial",
+          "bobot_global": 0.0681,
+          "persen": 0.06810959614691023
+        },
+        "C5": {
+          "klaster": "Paparan",
+          "bobot_global": 0.105,
+          "persen": 0.104966996923964
+        },
+        "C6": {
+          "klaster": "Spasial",
+          "bobot_global": 0.0311,
+          "persen": 0.0311205252659617
+        },
+        "C7": {
+          "klaster": "Spasial",
+          "bobot_global": 0.0517,
+          "persen": 0.05167723609684619
+        },
+        "C8": {
+          "klaster": "Paparan",
+          "bobot_global": 0.0683,
+          "persen": 0.06827287481831637
+        }
+      }
+    },
+    "topsis": [
+      {
+        "alternatif_id": "A1",
+        "nama_segmen": "Gang Kos Sayang",
+        "d_plus": 0.1168,
+        "d_minus": 0.1517,
+        "closeness_cc": 0.565,
+        "ranking": 2
+      },
+      {
+        "alternatif_id": "A2",
+        "nama_segmen": "Ruas Jalan Cikeruh",
+        "d_plus": 0.1453,
+        "d_minus": 0.1021,
+        "closeness_cc": 0.4128,
+        "ranking": 4
+      },
+      {
+        "alternatif_id": "A3",
+        "nama_segmen": "Persimpangan Hegarmanah",
+        "d_plus": 0.065,
+        "d_minus": 0.2146,
+        "closeness_cc": 0.7674,
+        "ranking": 1
+      },
+      {
+        "alternatif_id": "A4",
+        "nama_segmen": "Gang Cipacing",
+        "d_plus": 0.1551,
+        "d_minus": 0.1164,
+        "closeness_cc": 0.4287,
+        "ranking": 3
+      },
+      {
+        "alternatif_id": "A5",
+        "nama_segmen": "Ruas Jalan Cileles",
+        "d_plus": 0.2176,
+        "d_minus": 0.0353,
+        "closeness_cc": 0.1397,
+        "ranking": 5
+      }
+    ],
+    "allocation": {
+      "items": [
+        {
+          "alternatif_id": "A3",
+          "nama_segmen": "Persimpangan Hegarmanah",
+          "ranking": 1,
+          "cc": 0.7674,
+          "skor_c9": 4.0,
+          "biaya_rp": 7000000.0,
+          "fase": 1,
+          "keterangan": "Segera",
+          "cc_per_juta_rp": 0.1096
+        },
+        {
+          "alternatif_id": "A1",
+          "nama_segmen": "Gang Kos Sayang",
+          "ranking": 2,
+          "cc": 0.565,
+          "skor_c9": 4.0,
+          "biaya_rp": 7000000.0,
+          "fase": 1,
+          "keterangan": "Segera",
+          "cc_per_juta_rp": 0.0807
+        },
+        {
+          "alternatif_id": "A4",
+          "nama_segmen": "Gang Cipacing",
+          "ranking": 3,
+          "cc": 0.4287,
+          "skor_c9": 2.0,
+          "biaya_rp": 6000000.0,
+          "fase": 2,
+          "keterangan": "Fase 2",
+          "cc_per_juta_rp": 0.0714
+        },
+        {
+          "alternatif_id": "A2",
+          "nama_segmen": "Ruas Jalan Cikeruh",
+          "ranking": 4,
+          "cc": 0.4128,
+          "skor_c9": 5.0,
+          "biaya_rp": 6500000.0,
+          "fase": 2,
+          "keterangan": "Fase 2",
+          "cc_per_juta_rp": 0.0635
+        },
+        {
+          "alternatif_id": "A5",
+          "nama_segmen": "Ruas Jalan Cileles",
+          "ranking": 5,
+          "cc": 0.1397,
+          "skor_c9": 3.0,
+          "biaya_rp": 5500000.0,
+          "fase": 3,
+          "keterangan": "Fase 3",
+          "cc_per_juta_rp": 0.0254
+        }
+      ],
+      "plafon_per_fase": 15000000.0,
+      "c9_min_fase1": 3
+    },
+    "sensitivity": [
+      {
+        "kriteria": "C1",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C1",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C2",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C2",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A2 > A4 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": false
+      },
+      {
+        "kriteria": "C3",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A2 > A4 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": false
+      },
+      {
+        "kriteria": "C3",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C4",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C4",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C5",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C5",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C6",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C6",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C7",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C7",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C8",
+        "perubahan_bobot": "-20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      },
+      {
+        "kriteria": "C8",
+        "perubahan_bobot": "+20%",
+        "urutan_hasil": "A3 > A1 > A4 > A2 > A5",
+        "peringkat_1_tetap": true,
+        "urutan_penuh_tetap": true
+      }
+    ]
+  }
+}

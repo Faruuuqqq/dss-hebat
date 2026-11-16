@@ -1,0 +1,349 @@
+{
+  "id": "naskah_uts",
+  "nama": "Dataset Naskah UTS (AHP 8x8)",
+  "deskripsi": "Model numerik kanonik proposal UTS: AHP datar 8x8, lambda_max 8.1031, CR 0.0104",
+  "status": "SIMULASI",
+  "ahp_mode": "datar",
+  "plafon_per_fase_rp": 15000000,
+  "c9_min_fase1": 3,
+  "alternatives": [
+    {
+      "id": "A1",
+      "nama_segmen": "Gang Kos Sayang",
+      "tipe_segmen": "Gang residensial",
+      "desa": "Sayang",
+      "lat": -6.9272,
+      "lng": 107.7731,
+      "karakteristik": "Gang sempit, padat indekos"
+    },
+    {
+      "id": "A2",
+      "nama_segmen": "Ruas Jalan Cikeruh",
+      "tipe_segmen": "Ruas jalan",
+      "desa": "Cikeruh",
+      "lat": -6.9265,
+      "lng": 107.7712,
+      "karakteristik": "Koridor dekat kampus, jalur malam"
+    },
+    {
+      "id": "A3",
+      "nama_segmen": "Persimpangan Hegarmanah",
+      "tipe_segmen": "Persimpangan",
+      "desa": "Hegarmanah",
+      "lat": -6.9298,
+      "lng": 107.7698,
+      "karakteristik": "Simpul utama 5 cabang"
+    },
+    {
+      "id": "A4",
+      "nama_segmen": "Gang Cipacing",
+      "tipe_segmen": "Gang residensial",
+      "desa": "Cipacing",
+      "lat": -6.9327,
+      "lng": 107.7745,
+      "karakteristik": "Gang panjang, jauh dari CCTV"
+    },
+    {
+      "id": "A5",
+      "nama_segmen": "Ruas Jalan Cileles",
+      "tipe_segmen": "Ruas jalan",
+      "desa": "Cileles",
+      "lat": -6.9241,
+      "lng": 107.779,
+      "karakteristik": "Ruas sekunder lingkar timur"
+    }
+  ],
+  "criteria": [
+    {
+      "kode": "C1",
+      "nama": "Riwayat Kerawanan",
+      "satuan": "insiden/km/th",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C2",
+      "nama": "Mobilitas Malam",
+      "satuan": "orang/jam",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C3",
+      "nama": "Defisiensi PJU",
+      "satuan": "skor 1-5",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C4",
+      "nama": "Efisiensi Coverage",
+      "satuan": "m2/titik",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C5",
+      "nama": "Kepadatan Kos",
+      "satuan": "kamar/km",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C6",
+      "nama": "Derajat Simpul",
+      "satuan": "cabang",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C7",
+      "nama": "Gap CCTV Eksisting",
+      "satuan": "meter",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C8",
+      "nama": "POI Rentan",
+      "satuan": "unit",
+      "peran": "benefit"
+    },
+    {
+      "kode": "C9",
+      "nama": "Kelayakan Teknis",
+      "satuan": "skor 1-5",
+      "peran": "kendala"
+    }
+  ],
+  "values": {
+    "A1": {
+      "kriteria": {
+        "C1": 4.2,
+        "C2": 120,
+        "C3": 4,
+        "C4": 380,
+        "C5": 85,
+        "C6": 2,
+        "C7": 450,
+        "C8": 8
+      },
+      "c9": 4,
+      "biaya_rp": 6500000
+    },
+    "A2": {
+      "kriteria": {
+        "C1": 2.1,
+        "C2": 350,
+        "C3": 2,
+        "C4": 650,
+        "C5": 40,
+        "C6": 3,
+        "C7": 180,
+        "C8": 12
+      },
+      "c9": 5,
+      "biaya_rp": 5000000
+    },
+    "A3": {
+      "kriteria": {
+        "C1": 3.5,
+        "C2": 280,
+        "C3": 3,
+        "C4": 520,
+        "C5": 55,
+        "C6": 5,
+        "C7": 320,
+        "C8": 15
+      },
+      "c9": 4,
+      "biaya_rp": 7500000
+    },
+    "A4": {
+      "kriteria": {
+        "C1": 3.8,
+        "C2": 80,
+        "C3": 5,
+        "C4": 290,
+        "C5": 60,
+        "C6": 2,
+        "C7": 600,
+        "C8": 4
+      },
+      "c9": 3,
+      "biaya_rp": 8000000
+    },
+    "A5": {
+      "kriteria": {
+        "C1": 1.5,
+        "C2": 160,
+        "C3": 3,
+        "C4": 420,
+        "C5": 30,
+        "C6": 2,
+        "C7": 250,
+        "C8": 5
+      },
+      "c9": 4,
+      "biaya_rp": 5500000
+    }
+  },
+  "ahp_matrix_8x8": [
+    [
+      1.0,
+      2.0,
+      2.0,
+      3.0,
+      2.0,
+      4.0,
+      2.0,
+      2.0
+    ],
+    [
+      0.5,
+      1.0,
+      1.0,
+      2.0,
+      1.0,
+      3.0,
+      2.0,
+      1.0
+    ],
+    [
+      0.5,
+      1.0,
+      1.0,
+      2.0,
+      1.0,
+      3.0,
+      2.0,
+      1.0
+    ],
+    [
+      0.33,
+      0.5,
+      0.5,
+      1.0,
+      0.5,
+      2.0,
+      1.0,
+      0.5
+    ],
+    [
+      0.5,
+      1.0,
+      1.0,
+      2.0,
+      1.0,
+      2.0,
+      1.0,
+      1.0
+    ],
+    [
+      0.25,
+      0.33,
+      0.33,
+      0.5,
+      0.5,
+      1.0,
+      0.5,
+      0.5
+    ],
+    [
+      0.5,
+      0.5,
+      0.5,
+      1.0,
+      1.0,
+      2.0,
+      1.0,
+      1.0
+    ],
+    [
+      0.5,
+      1.0,
+      1.0,
+      2.0,
+      1.0,
+      2.0,
+      1.0,
+      1.0
+    ]
+  ],
+  "benchmarks": {
+    "ahp": {
+      "lam": 8.10306181034438,
+      "CI": 0.014723115763482906,
+      "CR": 0.010441926073392132,
+      "w": [
+        0.2394767594828246,
+        0.14285859398318712,
+        0.14285859398318712,
+        0.07697142675072806,
+        0.12448790705295738,
+        0.05150015848118846,
+        0.09735865321296974,
+        0.12448790705295738
+      ]
+    },
+    "topsis": [
+      {
+        "alternatif_id": "A1",
+        "closeness_cc": 0.5773850343521282,
+        "ranking": 2
+      },
+      {
+        "alternatif_id": "A2",
+        "closeness_cc": 0.46377056695863755,
+        "ranking": 4
+      },
+      {
+        "alternatif_id": "A3",
+        "closeness_cc": 0.6445304002038504,
+        "ranking": 1
+      },
+      {
+        "alternatif_id": "A4",
+        "closeness_cc": 0.4995401849422471,
+        "ranking": 3
+      },
+      {
+        "alternatif_id": "A5",
+        "closeness_cc": 0.18202618998946082,
+        "ranking": 5
+      }
+    ],
+    "allocation": {
+      "items": [
+        {
+          "alternatif_id": "A3",
+          "ranking": 1,
+          "cc": 0.6445,
+          "fase": 1,
+          "biaya_rp": 7500000
+        },
+        {
+          "alternatif_id": "A1",
+          "ranking": 2,
+          "cc": 0.5774,
+          "fase": 1,
+          "biaya_rp": 6500000
+        },
+        {
+          "alternatif_id": "A4",
+          "ranking": 3,
+          "cc": 0.4995,
+          "fase": 2,
+          "biaya_rp": 8000000
+        },
+        {
+          "alternatif_id": "A2",
+          "ranking": 4,
+          "cc": 0.4638,
+          "fase": 2,
+          "biaya_rp": 5000000
+        },
+        {
+          "alternatif_id": "A5",
+          "ranking": 5,
+          "cc": 0.182,
+          "fase": 3,
+          "biaya_rp": 5500000
+        }
+      ]
+    }
+  }
+}

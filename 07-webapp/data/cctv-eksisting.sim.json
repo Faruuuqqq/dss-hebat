@@ -1,0 +1,20 @@
+[
+  {
+    "id": "CCTV-EX-01",
+    "nama": "ETLE Koridor Unpad / Hegarmanah",
+    "lat": -6.9292,
+    "lng": 107.7715,
+    "jenis": "ETLE / PTZ",
+    "status": "Aktif",
+    "catatan": "Kamera lalu lintas koridor utama"
+  },
+  {
+    "id": "CCTV-EX-02",
+    "nama": "CCTV Koridor Sayang Timur",
+    "lat": -6.9315,
+    "lng": 107.772,
+    "jenis": "Bullet",
+    "status": "Aktif",
+    "catatan": "Kamera komersial / pertigaan jalan"
+  }
+]
