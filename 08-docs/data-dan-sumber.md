@@ -150,11 +150,35 @@ referensi keberadaan CCTV di koridor utama.
 
 **Realisasi:** 1 kriteria penuh riil (C1), 2 riil sebagian (C3, C5), 1 riil+simulasi (C7), sisanya estimasi.
 
-**Catatan implementasi C9:** `dss_revisi.md` menetapkan C9 dan RAB sebagai kendala kelayakan serta anggaran, dengan C9 berskala 1–5. Aplikasi memakai C9 ≥ 3 sebagai ambang kelayakan **operasional** pada tahap alokasi, bukan sebagai aturan numerik yang dikutip verbatim dari naskah kanonik. Nilai C9 per segmen tetap berstatus estimasi sampai survei kesiapan tiang, listrik, dan jaringan dilakukan.
+**Catatan implementasi C9:** `dss_revisi.md` menetapkan C9 dan RAB sebagai kendala kelayakan serta anggaran, dengan C9 berskala 1–5. Aplikasi memakai C9 ≥ 3 sebagai ambang kelayakan **operasional** pada tahap alokasi, bukan sebagai aturan numerik yang dikutip verbatim dari naskah kanonik. Nilai C9 per segmen tetap berstatus estimasi sampai survei kesiapan tiang, listrik, dan jaringan dilakukan. Pada aplikasi modern `07-webapp/`, alternatif dengan C9 < 3 tidak gugur permanen, melainkan ditunda ke Fase 2+ dengan catatan peringatan kesiapan tiang/listrik.
 
 ---
 
-## 9. Gap & rencana validasi lapangan
+## 9. Struktur Berkas Data Digital dalam Aplikasi
+
+Sistem mengorganisasikan dataset digital ke dalam dua preset dan berkas spasial pendukung:
+
+1. **`Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx` (Berkas Induk Excel):**
+   - Berisi 10 sheets: `kriteria`, `alternatif`, `nilai_kriteria`, `ahp_pairwise` (Pemerintah, Kampus, Warga), `ahp_agregat`, `hasil_ahp`, `topsis_normalisasi`, `topsis_terbobot`, `hasil_topsis`, `alokasi_anggaran`, dan `sensitivitas`.
+   - Menggunakan model AHP hierarki 3 klaster (Risiko, Paparan, Spasial) dengan agregasi rata-rata geometrik 3 kelompok pemangku kepentingan.
+
+2. **`07-webapp/data/ilustratif.json` (Preset Default Aplikasi Modern):**
+   - Hasil ekstraksi otomatis dari Excel via `07-webapp/scripts/import-xlsx.py`.
+   - Menghasilkan bobot global C1 31,56%, C3 19,88%, C2 16,14%, C5 10,50%, C8 6,83%, C4 6,81%, C7 5,17%, C6 3,11%.
+   - Menghasilkan nilai TOPSIS $CC$: $A_3$ ($0{,}7674$) > $A_1$ ($0{,}5650$) > $A_4$ ($0{,}4287$) > $A_2$ ($0{,}4128$) > $A_5$ ($0{,}1397$).
+   - Alokasi anggaran: Fase 1 $\{A_3, A_1\}$ Rp14,0 Jt, Fase 2 $\{A_4, A_2\}$ Rp12,5 Jt, Fase 3 $\{A_5\}$ Rp5,5 Jt.
+
+3. **`07-webapp/data/naskah-uts.json` (Preset Kanonik Naskah UTS & Paper Hasil):**
+   - Merefleksikan model numerik kanonik AHP datar $8 \times 8$ dari `dss_revisi_markdown/dss_revisi.md`.
+   - Menghasilkan bobot global C1 23,95%, C2=C3 14,29%, C5=C8 12,45%, C7 9,74%, C4 7,70%, C6 5,15%.
+   - Menghasilkan nilai TOPSIS $CC$: $A_3$ ($0{,}6445$) > $A_1$ ($0{,}5774$) > $A_4$ ($0{,}4995$) > $A_2$ ($0{,}4638$) > $A_5$ ($0{,}1820$).
+
+4. **`07-webapp/data/cctv-eksisting.sim.json` & `jalan.sim.json` `[SIMULASI]`:**
+   - Memuat koordinat skematik titik CCTV eksisting dan segmen jaringan jalan yang digunakan oleh komponen visualisasi Peta 3D Three.js (`PriorityMap3D.tsx`) dan Peta 2D SVG (`PriorityMap2D.tsx`). Seluruh koordinat berstatus simulasi visual, bukan koordinat survei GPS lapangan.
+
+---
+
+## 10. Gap & rencana validasi lapangan
 
 - **CCTV permukiman per-gang** → belum ada; perlu survei GPS titik kamera eksisting.
 - **C2 mobilitas malam** → perlu counting pejalan/kendaraan malam.
@@ -166,7 +190,7 @@ referensi keberadaan CCTV di koridor utama.
 
 ---
 
-## 10. Daftar sumber (URL)
+## 11. Daftar sumber (URL)
 
 1. E-Office Desa Sumedang (demografi): https://e-officedesa.sumedangkab.go.id/dashboard_simpatik/kecamatan/37
 2. Profil Desa Hegarmanah: http://hegarmanah-jatinangor.blogspot.com/p/profil-desa.html

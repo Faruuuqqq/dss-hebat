@@ -1,148 +1,218 @@
-# Diagram UML — Aplikasi DSS Prioritisasi CCTV Jatinangor
+# Diagram UML — Sistem Pendukung Keputusan SiPrioCCTV Jatinangor
 
-## Tujuan dan batasan
+Dokumen ini memodelkan arsitektur, use case, alur aktivitas, dan interaksi komponen pada aplikasi **SiPrioCCTV Jatinangor** (berbasis **Next.js 16 + Three.js + Supabase** pada `07-webapp/` serta prototipe mandiri pada `05-aplikasi/`).
 
-Dokumen ini mendeskripsikan perilaku aplikasi web offline pada `05-aplikasi/index.html` untuk prioritisasi penempatan CCTV di permukiman mahasiswa Jatinangor. Diagram memodelkan **alur aplikasi dan keputusan**, bukan klaim bahwa nilai setiap segmen telah berasal dari survei lapangan.
+---
 
-- **C1–C8** adalah kriteria urgensi berorientasi *benefit* dan menjadi masukan pembobotan AHP serta perankingan TOPSIS.
-- **C9** adalah kelayakan teknis, sedangkan **RAB/biaya per titik** adalah kendala anggaran. Keduanya tidak masuk perhitungan urgensi TOPSIS.
-- Aplikasi menerapkan **C9 ≥ 3** sebagai ambang kelayakan **operasional** pada tahap alokasi fase. Ambang tersebut adalah kebijakan implementasi terdokumentasi, **bukan** aturan numerik yang dinyatakan eksplisit dalam naskah kanonik.
-- Dataset resmi lima segmen memakai mode *hybrid*: sebagian data dikalibrasi dari sumber sekunder, sementara nilai per-gang yang belum tersedia tetap merupakan estimasi terdokumentasi. Dataset 12 desa adalah `[SIMULASI]` untuk demonstrasi skalabilitas.
+## 1. Aktor dan Use Case Diagram
 
-## Aktor dan use case
-
-Aktor utama adalah pengguna/pengambil keputusan yang membuka aplikasi lokal di browser. Pengguna dapat memilih dataset, mengubah nilai matriks, memeriksa hasil keputusan, lalu mengekspor hasil. Mesin DSS menjalankan AHP, TOPSIS, filter kelayakan, alokasi anggaran, serta sensitivitas secara otomatis.
-
-> Mermaid belum menyediakan notasi *use case diagram* UML native. Diagram berikut memakai `flowchart` sebagai representasi use case yang setara dan dapat dirender Mermaid.
+Aplikasi memfasilitasi dua peran utama:
+1. **Operator DSS / Administrator:** Mengelola matriks kriteria segmen, mengatur plafon anggaran dan ambang $C_9$, mengganti preset dataset, menganalisis sensitivitas bobot, dan mengekspor hasil ke CSV.
+2. **Pakar / Responden:** Mengisi kuesioner perbandingan berpasangan Saaty (1–9) terpandu untuk menilai kepentingan relatif antar-kriteria atau antar-klaster urgensi.
 
 ```mermaid
 flowchart LR
-    user["Pengguna atau pengambil keputusan"]
+    admin["Operator DSS / Admin"]
+    expert["Pakar / Responden"]
 
-    subgraph app["Aplikasi DSS CCTV"]
-        uc1(["Memilih dataset"])
-        uc2(["Mengubah C1 sampai C8"])
-        uc3(["Mengubah C9 dan RAB per titik"])
-        uc4(["Mengubah matriks AHP 8 x 8"])
-        uc5(["Melihat bobot AHP dan konsistensi"])
-        uc6(["Melihat peringkat TOPSIS dan peta skematik"])
-        uc7(["Melihat kelayakan dan alokasi fase"])
-        uc8(["Melihat analisis sensitivitas"])
-        uc9(["Ekspor hasil CSV"])
-        engine(["Hitung ulang engine DSS"])
+    subgraph app["SiPrioCCTV Jatinangor (Next.js 16)"]
+        direction TB
+        uc_switch["Memilih Preset Dataset (Ilustratif / Naskah UTS)"]
+        uc_kriteria["Melihat & Mengubah Matriks Kriteria (C1-C8, C9, Biaya)"]
+        uc_ahp_view["Melihat Matriks AHP, CR, dan Bobot Global"]
+        uc_ahp_quiz["Mengisi Kuesioner Slider Perbandingan Saaty"]
+        uc_map_3d["Eksplorasi Peta 3D (Three.js) & Layer Spasial"]
+        uc_topsis["Melihat Peringkat TOPSIS & Jarak Ideal"]
+        uc_alloc["Mengatur Plafon Anggaran & Alokasi Bertahap"]
+        uc_sens["Menjalankan Uji Sensitivitas OAT +-20%"]
+        uc_export["Mengekspor Laporan Hasil ke CSV"]
+        uc_db["Sinkronisasi Data ke Supabase Cloud"]
     end
 
-    user --> uc1
-    user --> uc2
-    user --> uc3
-    user --> uc4
-    user --> uc5
-    user --> uc6
-    user --> uc7
-    user --> uc8
-    user --> uc9
+    admin --> uc_switch
+    admin --> uc_kriteria
+    admin --> uc_ahp_view
+    admin --> uc_map_3d
+    admin --> uc_topsis
+    admin --> uc_alloc
+    admin --> uc_sens
+    admin --> uc_export
+    admin --> uc_db
 
-    uc1 --> engine
-    uc2 --> engine
-    uc3 --> engine
-    uc4 --> engine
-    engine --> uc5
-    engine --> uc6
-    engine --> uc7
-    engine --> uc8
-    uc9 --> engine
+    expert --> uc_ahp_quiz
+    expert --> uc_ahp_view
+    expert --> uc_map_3d
 ```
 
-**Penjelasan singkat:** perubahan input tidak merender ulang tabel input, tetapi memicu pembaruan hasil agar fokus saat mengetik tetap terjaga. Ekspor CSV memakai hasil perhitungan terbaru, termasuk status kelayakan C9 dan fase jika alternatif memenuhi ambang operasional.
+---
 
-## Activity diagram perhitungan dan alokasi
+## 2. Diagram Arsitektur & Komponen (4 Lapis)
 
-Diagram berikut membedakan dua jalur keputusan. Jalur pertama menghasilkan urutan urgensi dari C1–C8 melalui AHP dan TOPSIS. Jalur kedua memakai C9 dan RAB setelah peringkat terbentuk untuk menentukan kelayakan teknis dan fase anggaran.
+Sistem dirancang dengan pemisahan tanggung jawab yang jelas (*Separation of Concerns*):
 
 ```mermaid
 flowchart TD
-    start(["Mulai"])
-    load["Muat dataset aktif dan matriks AHP"]
-    input["Terima perubahan input pengguna bila ada"]
-    ahp["Hitung AHP: bobot, lambda maksimum, CI, dan CR"]
-    cr{"CR kurang dari 0,10?"}
-    notice["Tandai matriks perlu ditinjau ulang"]
-    topsis["Hitung TOPSIS dari C1 sampai C8"]
-    rank["Urutkan alternatif berdasarkan CC"]
-    feasible{"C9 memenuhi ambang operasional 3?"}
-    exclude["Tandai tidak layak dan tidak alokasikan"]
-    affordable{"Biaya satu titik tidak melebihi plafon?"}
-    excludeBudget["Tandai biaya di atas plafon dan tidak alokasikan"]
-    budget{"Biaya masih muat dalam plafon fase?"}
-    assign["Masukkan alternatif ke fase aktif"]
-    nextphase["Buat fase berikutnya"]
-    more{"Masih ada alternatif layak?"}
-    sens["Jalankan sensitivitas bobot plus atau minus 20 persen"]
-    render["Tampilkan KPI, bobot, peringkat, peta, fase, dan sensitivitas"]
-    export{"Pengguna meminta ekspor?"}
-    csv["Buat dan unduh CSV hasil"]
-    finish(["Selesai"])
+    subgraph L1["1. Lapis Presentasi (UI Shell & Pages)"]
+        PageDash["app/page.tsx (Dashboard & KPI)"]
+        PageKrit["app/kriteria/page.tsx (Data Kriteria)"]
+        PageAHP["app/ahp/page.tsx (Pembobotan AHP)"]
+        PageHasil["app/hasil/page.tsx (Hasil TOPSIS & Anggaran)"]
+        PageSens["app/sensitivitas/page.tsx (Uji Sensitivitas)"]
+        Sidebar["components/Sidebar.tsx (Navigasi & Role)"]
+        NumberCell["components/NumberCell.tsx (Safe Number Input)"]
+    end
 
-    start --> load --> input --> ahp --> cr
-    cr -- "Tidak" --> notice --> topsis
-    cr -- "Ya" --> topsis
-    topsis --> rank --> feasible
-    feasible -- "Tidak" --> exclude --> more
-    feasible -- "Ya" --> affordable
-    affordable -- "Tidak" --> excludeBudget --> more
-    affordable -- "Ya" --> budget
-    budget -- "Ya" --> assign --> more
-    budget -- "Tidak" --> nextphase --> assign
-    more -- "Ya" --> feasible
-    more -- "Tidak" --> sens --> render --> export
-    export -- "Ya" --> csv --> finish
-    export -- "Tidak" --> finish
+    subgraph L2["2. Lapis Visualisasi Spasial"]
+        Map3D["components/map/PriorityMap3D.tsx (Three.js WebGL)"]
+        Map2D["components/map/PriorityMap2D.tsx (SVG 2D Fallback)"]
+        MapMode["components/map/MapModeToggle.tsx (Layer Toggle)"]
+    end
+
+    subgraph L3["3. Lapis Logika Keputusan (Domain Engine)"]
+        Store["lib/store.tsx (React Context Global State)"]
+        Engine["lib/engine/index.ts (Evaluator Orchestrator)"]
+        AHP["lib/engine/ahp.ts (AHP Eigenvalue & CR Solver)"]
+        TOPSIS["lib/engine/topsis.ts (Euclidean & CC Solver)"]
+        Alloc["lib/engine/allocation.ts (Phased Budget & C9 Filter)"]
+        Sens["lib/engine/sensitivity.ts (OAT +-20% Simulator)"]
+        Fmt["lib/format.ts (Deterministic Formatter & CSV)"]
+    end
+
+    subgraph L4["4. Lapis Penyimpanan & Repositori"]
+        Repo["lib/supabase-repository.ts (Repository Pattern)"]
+        SupaClient["lib/supabase.ts (Supabase JS Client)"]
+        CloudDB[("Supabase Cloud (PostgreSQL + RLS + Audit Log)")]
+        LocalJSON[("Local Static JSON Fixtures (Graceful Fallback)")]
+    end
+
+    L1 --> Store
+    L1 --> L2
+    Store --> Engine
+    Engine --> AHP
+    Engine --> TOPSIS
+    Engine --> Alloc
+    Engine --> Sens
+    L1 --> Fmt
+    Store --> Repo
+    Repo --> SupaClient
+    SupaClient -.-> CloudDB
+    Repo -.-> LocalJSON
 ```
 
-**Penjelasan singkat:** status CR tidak menghentikan aplikasi, tetapi memberi penanda bahwa penilaian AHP perlu ditinjau. TOPSIS tetap hanya memproses C1–C8. C9 dan biaya baru dipakai sesudahnya, sehingga alternatif yang sangat urgen tetap dapat terlihat pada peringkat namun tidak dimasukkan ke fase bila C9 berada di bawah ambang operasional atau biaya satu titik melebihi plafon.
+---
 
-## Sequence diagram pembaruan hasil
+## 3. Activity Diagram — Alur Keputusan Lengkap
 
-Sequence berikut menjelaskan pembaruan otomatis saat pengguna mengedit sel matriks atau memilih dataset. Perhitungan mengalir dari browser ke state data, engine AHP dan TOPSIS, kemudian ke filter kelayakan/alokasi dan komponen hasil.
+Diagram berikut memodelkan seluruh siklus pemrosesan keputusan dari inisialisasi dataset hingga rekomendasi alokasi anggaran dan pengujian sensitivitas:
+
+```mermaid
+flowchart TD
+    Start(["Mulai"])
+    SelectDS["Pilih Preset Dataset (Ilustratif / Naskah UTS)"]
+    LoadData["Muat Alternatif, Matriks Keputusan X, dan Matriks AHP"]
+    CheckAHPMode{"Mode AHP?"}
+    
+    SolveHierarki["Hitung AHP Hierarki 3 Klaster x 3 Stakeholder (Rata-rata Geometrik)"]
+    SolveFlat["Hitung AHP Datar 8 x 8 (Matriks Kanonik)"]
+    
+    CheckCR{"CR < 0,10?"}
+    CRWarning["Tandai Peringatan Matriks Inkonsisten"]
+    WeightReady["Vektor Bobot Global Kriteria (w1 .. w8) Siap"]
+    
+    NormTOPSIS["Normalisasi Matriks X dengan Vektor Euclidean"]
+    WeightTOPSIS["Hitung Matriks Terbobot V = w * R"]
+    IdealSolutions["Tentukan Solusi Ideal Positif A+ dan Negatif A-"]
+    CalcDistance["Hitung Jarak Euclidean D+ dan D-"]
+    CalcCC["Hitung Koefisien Kedekatan Relatif CC = D- / (D+ + D-)"]
+    SortAlts["Urutkan Alternatif Berdasarkan Nilai CC Menurun"]
+    
+    LoopAlt{"Periksa Alternatif Tiap Urutan CC"}
+    CheckC9{"C9 >= Ambang Operasional (3)?"}
+    DeferPhase["Tunda ke Fase 2+ dengan Peringatan Kesiapan Tiang/Listrik"]
+    CheckBudget{"Biaya Muat dalam Plafon Fase Aktif?"}
+    AssignPhase["Alokasikan ke Fase Aktif"]
+    NextPhase["Buat Fase Anggaran Berikutnya dan Alokasikan"]
+    
+    RunSens["Jalankan Simulasi Sensitivitas OAT +-20% (16 Skenario)"]
+    RenderUI["Render 5 Layar, Peta 3D Three.js, dan Tabel Hasil"]
+    ExportCheck{"Pengguna Meminta Ekspor?"}
+    GenerateCSV["Generate & Unduh Berkas CSV"]
+    End(["Selesai"])
+
+    Start --> SelectDS --> LoadData --> CheckAHPMode
+    CheckAHPMode -- "Hierarki (Ilustratif)" --> SolveHierarki --> CheckCR
+    CheckAHPMode -- "Datar (Naskah UTS)" --> SolveFlat --> CheckCR
+    CheckCR -- "Tidak" --> CRWarning --> WeightReady
+    CheckCR -- "Ya" --> WeightReady
+    WeightReady --> NormTOPSIS --> WeightTOPSIS --> IdealSolutions --> CalcDistance --> CalcCC --> SortAlts --> LoopAlt
+    
+    LoopAlt --> CheckC9
+    CheckC9 -- "Tidak" --> DeferPhase --> CheckBudget
+    CheckC9 -- "Ya" --> CheckBudget
+    CheckBudget -- "Ya" --> AssignPhase
+    CheckBudget -- "Tidak" --> NextPhase
+    
+    AssignPhase --> LoopAlt
+    NextPhase --> LoopAlt
+    LoopAlt -- "Semua Alternatif Teralokasi" --> RunSens --> RenderUI --> ExportCheck
+    
+    ExportCheck -- "Ya" --> GenerateCSV --> End
+    ExportCheck -- "Tidak" --> End
+```
+
+---
+
+## 4. Sequence Diagram — Interaksi Pengguna & Evaluasi Real-Time
+
+Diagram sekuens ini menggambarkan interaksi dinamis ketika operator mengubah nilai kriteria alternatif atau preferensi AHP:
 
 ```mermaid
 sequenceDiagram
-    actor User as Pengguna
-    participant UI as Browser dan antarmuka
-    participant State as State dataset dan input
-    participant AHP as Engine AHP
-    participant TOPSIS as Engine TOPSIS
-    participant Alloc as Filter C9 dan alokasi RAB
-    participant View as Tabel hasil, peta, dan sensitivitas
+    autonumber
+    actor User as Operator / Responden
+    participant UI as Antarmuka (Page / Form / NumberCell)
+    participant Store as State Store (lib/store.tsx)
+    participant Engine as Engine Evaluator (lib/engine)
+    participant Map3D as Canvas 3D (PriorityMap3D)
+    participant Repo as Supabase Repository
+    participant Storage as Supabase Cloud / Local JSON
 
-    User->>UI: Pilih dataset atau ubah nilai input
-    UI->>State: Perbarui C1 sampai C8, C9, RAB, atau matriks AHP
-    State->>AHP: Hitung bobot, lambda maksimum, CI, CR
-    AHP-->>UI: Bobot dan status konsistensi
-    State->>TOPSIS: Kirim C1 sampai C8 dan bobot AHP
-    TOPSIS-->>UI: D plus, D minus, CC, dan peringkat
-    State->>Alloc: Kirim CC, C9, RAB, dan plafon fase
-    Note over Alloc: C9 minimal 3 adalah ambang operasional
-    Alloc-->>UI: Status layak dan fase alokasi
-    UI->>View: Render KPI, bobot, peringkat, peta, fase, sensitivitas
-    View-->>User: Hasil keputusan yang diperbarui
+    User->>UI: Ubah Nilai Kriteria Alternatif atau Geser Slider Saaty
+    UI->>Store: Kirim Payload Perubahan (updateAlternativeValues / updateAhpCell)
+    Store->>Engine: Evaluasi Ulang (evaluate) dengan Preset Aktif
+    Engine->>Engine: 1. Hitung Nilai Eigen AHP & Konsistensi CR
+    Engine->>Engine: 2. Normalisasi Euclidean & Jarak TOPSIS
+    Engine->>Engine: 3. Urutkan CC & Filter Kelayakan C9
+    Engine->>Engine: 4. Alokasi Greedy Fase Anggaran
+    Engine->>Engine: 5. Simulasi 16 Skenario Sensitivitas OAT
+    Engine-->>Store: Kembalikan EvaluationResult Lengkap
+    Store-->>UI: Perbarui State Global (KPI, Tabel TOPSIS, Alokasi Fase)
+    Store->>Map3D: Perbarui Tinggi Pilar Spasial (propto CC) & Warna Status
+    Map3D-->>User: Tampilan 3D Diperbarui secara Halus (60 FPS)
 
-    opt Pengguna memilih ekspor
-        User->>UI: Klik ekspor CSV
-        UI->>AHP: Hitung bobot terbaru
-        UI->>TOPSIS: Hitung peringkat terbaru
-        UI->>Alloc: Tentukan kelayakan dan fase terbaru
-        UI-->>User: Unduh CSV
+    opt Simpan Perubahan ke Database
+        User->>UI: Klik "Simpan Perubahan"
+        UI->>Store: Trigger Sinkronisasi
+        Store->>Repo: saveAlternativeValues(datasetId, altId, values)
+        Repo->>Storage: Upsert ke PostgreSQL (atau Local Fallback)
+        Storage-->>Repo: Konfirmasi Berhasil & Log Audit Dicatat
+        Repo-->>UI: Tampilkan Notifikasi Sukses
     end
 ```
 
-## Trace sumber dan konsistensi
+---
 
-| Elemen diagram | Dasar penelusuran |
-|---|---|
-| Alternatif segmen, pemisahan C1–C8 dari C9 dan biaya, AHP lalu TOPSIS, serta alokasi bertahap | `dss_revisi_markdown/dss_revisi.md`, Seksi IV-B sampai IV-D. |
-| Implementasi AHP datar 8×8, TOPSIS C1–C8, filter C9, plafon fase, sensitivitas, ekspor CSV, dan pembaruan hasil saat input berubah | `05-aplikasi/index.html`. |
-| Penjelasan penggunaan aplikasi, dataset resmi dan simulasi, serta definisi ambang C9 sebagai kebijakan operasional | `05-aplikasi/README.md` dan `PROGRESS.md`, Sesi 8 (14 November 2026). |
-| Status data riil, estimasi, dan simulasi per segmen | `08-docs/data-dan-sumber.md`, khususnya pemetaan status C1–C9 dan catatan C9. |
+## 5. Ringkasan Keterlacakan Komponen UML ke Kode
 
-Dokumen ini tidak menetapkan nilai observasi baru. Validasi empiris tetap memerlukan survei per segmen untuk kesiapan tiang, listrik, jaringan, RAB, dan indikator urgensi yang saat ini masih berstatus estimasi atau simulasi.
+| Komponen / Artefak UML | Berkas Sumber Implementasi | Skrip Pengujian Terkait |
+|---|---|---|
+| AHP Hierarki & Flat Engine | `07-webapp/lib/engine/ahp.ts` | `07-webapp/scripts/parity.mts` |
+| TOPSIS Vector Normalization | `07-webapp/lib/engine/topsis.ts` | `07-webapp/scripts/parity.mts` |
+| Alokasi Fase & Filter $C_9$ | `07-webapp/lib/engine/allocation.ts` | `07-webapp/scripts/parity.mts` |
+| Uji Sensitivitas OAT $\pm 20\%$ | `07-webapp/lib/engine/sensitivity.ts` | `07-webapp/scripts/parity.mts` |
+| Peta Spasial 3D WebGL | `07-webapp/components/map/PriorityMap3D.tsx` | `07-webapp/scripts/ui-check.mjs` |
+| Fallback Peta 2D SVG | `07-webapp/components/map/PriorityMap2D.tsx` | `07-webapp/scripts/ui-check.mjs` |
+| Proteksi Input Angka | `07-webapp/components/NumberCell.tsx` | `07-webapp/scripts/ui-bugs.mjs` |
+| Ekspor CSV Deterministiik | `07-webapp/lib/format.ts` | `07-webapp/scripts/ui-export.mjs` |
+| Skema Database & RLS | `07-webapp/supabase/migrations/20261116000000_init.sql` | `07-webapp/lib/supabase-repository.ts` |
+| Audit Aksesibilitas WCAG AA | Seluruh halaman `07-webapp/app/` | `07-webapp/scripts/ui-a11y.mjs` |

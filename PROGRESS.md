@@ -27,6 +27,32 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-16 · Sesi 23 — Penyelarasan Menyeluruh Dokumentasi Rekayasa Perangkat Lunak (08-docs/)
+
+**Konteks:** Menyelaraskan seluruh dokumen Rekayasa Perangkat Lunak pada `08-docs/` dan membuat dokumen ringkasan teknis proyek `PROJECT_OVERVIEW.md` agar mencerminkan kondisi terkini aplikasi modern `07-webapp/` (Next.js 16 + Three.js + Supabase).
+
+**Keputusan:**
+1. **Pembuatan `PROJECT_OVERVIEW.md`:** Menyusun dokumen komprehensif latar belakang masalah permukiman mahasiswa Jatinangor, perumusan matematis lengkap (AHP hierarki vs datar, 8 kriteria benefit TOPSIS, C9 operasional, alokasi bertahap, dan uji sensitivitas OAT +-20%), arsitektur 4 lapis, serta panduan deployment ke Vercel.
+2. **Pembaruan Diagram UML (`08-docs/uml.md`):** Mengganti diagram lama dengan pemodelan Mermaid modern: Use Case multi-peran (Admin vs Pakar), Arsitektur 4 Lapis, Activity alur keputusan bertahap, dan Sequence evaluasi real-time saat state berubah.
+3. **Penyelarasan Indeks & Mockup (`08-docs/README.md` & `mockup/README.md`):** Memutakhirkan indeks artefak dokumentasi SE, prinsip model keputusan, tata letak 5 layar aplikasi, serta perintah reproduksi screenshot headless Chromium.
+4. **Inventarisasi Data Digital (`08-docs/data-dan-sumber.md`):** Mendokumentasikan keterkaitan berkas `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx`, `ilustratif.json`, `naskah-uts.json`, dan simulasi spasial terhadap preset aplikasi.
+
+**File:**
+- `PROJECT_OVERVIEW.md`
+- `08-docs/uml.md`
+- `08-docs/README.md`
+- `08-docs/data-dan-sumber.md`
+- `08-docs/mockup/README.md`
+- `PROGRESS.md`
+
+**Verifikasi:**
+- Seluruh diagram Mermaid di `08-docs/uml.md` valid secara sintaksis dan sesuai standar penamaan.
+- `npm --prefix 07-webapp run verify` dan `node 05-aplikasi/test-algoritma.mjs` tetap 100% PASS.
+- Push commit ke `origin/main` berhasil.
+
+**Open items:**
+- Uji coba live deployment di Vercel oleh pengguna.
+
 ### 2026-11-16 · Sesi 22 — Implementasi penuh SiPrioCCTV (Next.js 16 + Three.js + Supabase)
 
 **Konteks:** Menuntaskan implementasi seluruh rencana `implementation_plan.md` yang telah disetujui pengguna untuk membangun aplikasi modern SiPrioCCTV Jatinangor dengan Next.js 16, Three.js, dan Supabase.
