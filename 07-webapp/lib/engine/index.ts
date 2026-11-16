@@ -3,11 +3,12 @@ import type {
   Criterion,
   FullDSSResult,
   PairwiseItem,
+  AhpMatrixResult,
+  HierarchicalAhpResult,
 } from "./types.ts";
 import {
   solveAhpMatrix,
   solveHierarchicalAhp,
-  RI,
 } from "./ahp.ts";
 import { solveTopsis } from "./topsis.ts";
 import { solveAllocation } from "./allocation.ts";
@@ -60,8 +61,8 @@ export function solveDataset(input: SolveDatasetInput): FullDSSResult {
 
   // 1. Solve AHP
   let ahpWeights: Record<string, number> = {};
-  let flatResult: any = undefined;
-  let hierarchicalResult: any = undefined;
+  let flatResult: AhpMatrixResult | undefined = undefined;
+  let hierarchicalResult: HierarchicalAhpResult | undefined = undefined;
 
   if (overrides.customWeights) {
     ahpWeights = { ...overrides.customWeights };
@@ -75,9 +76,10 @@ export function solveDataset(input: SolveDatasetInput): FullDSSResult {
     hierarchicalResult = solveHierarchicalAhp(clusters, clusterCriteriaMap, pairwise);
     ahpWeights = hierarchicalResult.globalWeights;
   } else if (ahp_matrix_8x8) {
-    flatResult = solveAhpMatrix(ahp_matrix_8x8);
+    const solved = solveAhpMatrix(ahp_matrix_8x8);
+    flatResult = solved;
     critCodes.forEach((code, idx) => {
-      ahpWeights[code] = flatResult.weights[idx] ?? 0;
+      ahpWeights[code] = solved.weights[idx] ?? 0;
     });
   }
 

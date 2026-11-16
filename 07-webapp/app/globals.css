@@ -1,84 +1,103 @@
 @import "tailwindcss";
 
-/*
-  Token warna dan tipografi.
-  Palet: satu latar terang, satu tinta, satu aksen (biru), plus dua warna status
-  (layak / tidak layak). Tidak ada gradien, tidak ada glow, tidak ada bayangan
-  pada elemen diam: pemisah permukaan memakai langkah tone.
-*/
 :root {
-  --ground: #f6f7f9;
-  --surface: #ffffff;
-  --surface-sunken: #eceef2;
-  --ink: #101828;
-  --ink-soft: #475467;
-  --ink-faint: #667085;
-  --border: #dfe3e9;
-  --accent: #1d4ed8;
-  --accent-soft: #eef2ff;
-  --ok: #067647;
-  --ok-soft: #ecfdf3;
-  --bad: #b42318;
-  --bad-soft: #fef3f2;
-  --warn: #b54708;
-  --warn-soft: #fffaeb;
+  --ground: #F3F5F4;
+  --surface: #FFFFFF;
+  --surface-sunken: #EEF2F1;
+  --sidebar: #0B3B38;
+  --sidebar-hover: #0E4B47;
+  --sidebar-active: #E3ECEF;
+  --sidebar-active-text: #0B3B38;
+  
+  --ink: #14201F;
+  --ink-soft: #3D4A47;
+  --ink-faint: #55625F;
+  --border: #DDE3E1;
+  
+  --brand-primary: #0E6B66;
+  --brand-primary-hover: #0B5652;
+  --brand-light: #E3F1EF;
+  
+  --rank-1: #A8231A;
+  --rank-2: #B45309;
+  --rank-3: #8A6A00;
+  --rank-4: #2F6F8F;
+  --rank-5: #55625F;
+  
+  --fase-1-bg: #FBE4E1;
+  --fase-1-text: #A8231A;
+  --fase-2-bg: #FFF1D6;
+  --fase-2-text: #8A6A00;
+  --fase-3-bg: #E3ECEF;
+  --fase-3-text: #2F6F8F;
+
+  --ok: #0E6B66;
+  --ok-soft: #E3F1EF;
+  --warn: #B45309;
+  --warn-soft: #FFF1D6;
+  --bad: #A8231A;
+  --bad-soft: #FBE4E1;
 }
 
 @theme inline {
   --color-ground: var(--ground);
   --color-surface: var(--surface);
   --color-sunken: var(--surface-sunken);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-hover: var(--sidebar-hover);
+  --color-sidebar-active: var(--sidebar-active);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
   --color-line: var(--border);
-  --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
-  --color-ok: var(--ok);
-  --color-ok-soft: var(--ok-soft);
-  --color-bad: var(--bad);
-  --color-bad-soft: var(--bad-soft);
-  --color-warn: var(--warn);
-  --color-warn-soft: var(--warn-soft);
+  --color-primary: var(--brand-primary);
+  --color-primary-hover: var(--brand-primary-hover);
+  --color-primary-light: var(--brand-light);
+  --color-rank-1: var(--rank-1);
+  --color-rank-2: var(--rank-2);
+  --color-rank-3: var(--rank-3);
+  --color-rank-4: var(--rank-4);
+  --color-rank-5: var(--rank-5);
 }
 
 html,
 body {
   background: var(--ground);
   color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Angka tabel rata supaya kolom numerik mudah dibandingkan. */
 .tnum {
   font-variant-numeric: tabular-nums;
 }
 
-/* Input sel matriks: tenang, tanpa bayangan, fokus jelas. */
 .cell {
   width: 100%;
   min-width: 58px;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 6px;
   background: var(--surface);
-  padding: 4px 6px;
+  padding: 6px 8px;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
   text-align: right;
   color: var(--ink);
-}
-.cell:hover {
-  border-color: #c3c9d4;
-}
-.cell:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-  border-color: var(--accent);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Fokus konsisten untuk seluruh kontrol. */
+.cell:hover {
+  border-color: #B2C0BD;
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 1px;
+  border-color: var(--brand-primary);
+}
+
 :where(a, button, select, input):focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--brand-primary);
   outline-offset: 2px;
 }
 

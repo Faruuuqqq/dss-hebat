@@ -14,7 +14,6 @@ export function solveAllocation(
   options: AllocationOptions
 ): PhaseAllocationResult {
   const { plafonPerFase, c9MinFase1 = 3, strictC9Filter = false } = options;
-  const m = alternatives.length;
 
   const candidateItems = alternatives.map((alt, idx) => {
     const cost = costs[idx];

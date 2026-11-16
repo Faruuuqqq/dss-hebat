@@ -8,9 +8,6 @@ export function solveSensitivity(
   alternativeIds: string[],
   deltas: number[] = [-0.2, 0.2]
 ): SensitivityAnalysisResult {
-  const m = alternativeIds.length;
-  const n = criteriaCodes.length;
-
   // 1. Base TOPSIS
   const baseTopsis = solveTopsis(X, baseWeights, criteriaCodes);
   const baseSortedIds = baseTopsis.sortedIndices.map((i) => alternativeIds[i]);
