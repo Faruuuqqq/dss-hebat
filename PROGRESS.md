@@ -27,6 +27,33 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-16 · Sesi 26 — Desain Mockup 5 Layar Native Figma SiPrioCCTV
+
+**Konteks:** Merespons instruksi pengguna untuk mendesain mockup lengkap 5 layar aplikasi SiPrioCCTV Jatinangor langsung di file Figma pengguna (`https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=3-3&t=nXJVs1dXcvDSw3oS-4`) via Figma MCP plugin API.
+
+**Keputusan:**
+1. **Desain Native Figma (Bukan Screenshot Flat):**
+   - Menggunakan Figma Plugin API (`use_figma`) dengan teks asli yang dapat diedit (*editable text*), frame bertata letak rapi, serta token palet warna kanonik (`#0B3B38` Dark Teal, `#0E6B66` Brand Teal, `#F4F6F5` Background, `#0F172A` Text, dan kode warna status ranking).
+2. **5 Layar Lengkap yang Dibangun (1440 × 1080 px):**
+   - **Layar 1 (Node `3:3`): 01 · Dashboard Utama** — 4 KPI metrics, visualisasi peta skematik koridor jalan Jatinangor dengan pin CCTV berkode warna, bar peringkat TOPSIS, dan 3 kartu alokasi fase anggaran.
+   - **Layar 2 (Node `8:2`): 02 · Data Kriteria** — Tabel matriks keputusan 5 segmen $\times$ 8 kriteria + C9, badge status kelayakan, formulir edit aman `NumberCell`, dan transparansi sumber data lapangan.
+   - **Layar 3 (Node `9:2`): 03 · Pembobotan AHP** — Metrik konsistensi Saaty ($\lambda_{\max} = 3.0183$, $CI = 0.0091$, $CR = 0.0158 < 0.10$ Valid), matriks perbandingan berpasangan klaster $3 \times 3$, kuesioner slider interaktif skala Saaty 1–9, kartu bobot global 8 kriteria, dan komparasi model hierarki vs 8×8 datar.
+   - **Layar 4 (Node `10:2`): 04 · Hasil TOPSIS & Anggaran** — Tabel komprehensif TOPSIS ($D^+$, $D^-$, $CC$, peringkat 1–5), rincian alokasi bertahap multi-fase plafon Rp 15 Jt, dan panel pengaturan plafon dinamis serta filter kelayakan C9.
+   - **Layar 5 (Node `11:2`): 05 · Uji Sensitivitas** — Chip pemilihan kriteria, tombol variasi bobot ($-20\%$, $0\%$, $+20\%$), visualisasi pergeseran peringkat (*rank shift indicator*) dengan peringatan pembalikan peringkat (*rank reversal* pada C1 $-20\%$), serta tabel stabilitas 16 skenario OAT (ketahanan 87.5%).
+   - **Banner Proyek (Node `11:164`):** Header ringkasan proyek di atas seluruh frame artboard.
+3. **Verifikasi Visual:** Mengambil tangkapan layar via `get_screenshot` dan menginspeksi seluruh 5 frame, memperbaiki penempatan teks rata-rata dan spasi badge.
+
+**File & URL:**
+- Figma File: `https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=0-1`
+- `08-docs/mockup/README.md`
+- `PROGRESS.md`
+
+**Verifikasi:**
+- `use_figma` eksekusi 100% sukses tanpa error plugin.
+- Seluruh 5 artboard terverifikasi visual melalui `get_screenshot` dan curl PNG.
+
+---
+
 ### 2026-11-16 · Sesi 25 — Peningkatan Responsivitas Penuh (Mobile Drawer + Layout Adaptif 5 Layar)
 
 **Konteks:** Menjawab permintaan pengguna untuk membuat antarmuka aplikasi modern SiPrioCCTV (`07-webapp/`) sepenuhnya responsif di semua ukuran layar (ponsel, tablet, dan desktop), menggantikan layout flex baris kaku sebelumnya.

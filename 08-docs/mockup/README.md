@@ -2,10 +2,11 @@
 
 Folder ini mendokumentasikan desain antarmuka, *wireframe*, dan tangkapan layar visual untuk aplikasi DSS Prioritisasi Penempatan CCTV Jatinangor.
 
-Dokumentasi visual mencakup tiga artefak penting:
-1. **Mockup Desain Referensi:** [`../../SiPrioCCTV Jatinangor.html`](../../SiPrioCCTV%20Jatinangor.html) (Mockup 5 layar interaktif yang menjadi acuan desain UI).
-2. **Implementasi Aplikasi Modern:** [`../../07-webapp/`](../../07-webapp/) (Next.js 16 + Tailwind CSS 4 + Three.js dengan 5 halaman terdedikasi).
-3. **Prototipe Mandiri (Offline):** [`../../05-aplikasi/index.html`](../../05-aplikasi/index.html) (Aplikasi satu-berkas offline).
+Dokumentasi visual mencakup empat artefak penting:
+1. **Desain Figma Native (High-Fidelity):** [Figma Design Canvas — SiPrioCCTV](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=0-1) (Mockup 5 layar lengkap yang dapat diedit langsung di Figma).
+2. **Mockup Desain Referensi:** [`../../SiPrioCCTV Jatinangor.html`](../../SiPrioCCTV%20Jatinangor.html) (Mockup 5 layar interaktif yang menjadi acuan desain UI).
+3. **Implementasi Aplikasi Modern:** [`../../07-webapp/`](../../07-webapp/) (Next.js 16 + Tailwind CSS 4 + Three.js dengan 5 halaman terdedikasi).
+4. **Prototipe Mandiri (Offline):** [`../../05-aplikasi/index.html`](../../05-aplikasi/index.html) (Aplikasi satu-berkas offline).
 
 ---
 
@@ -21,6 +22,20 @@ Seluruh tangkapan layar di bawah ini diambil langsung dari aplikasi modern Next.
 | [`mockup-ahp.png`](mockup-ahp.png) | 1440 × 1080 px | **Layar 3 — Pembobotan AHP:** Matriks perbandingan berpasangan klaster, badge konsistensi Saaty, kuesioner slider responden, dan kartu bobot global. |
 | [`mockup-hasil.png`](mockup-hasil.png) | 1440 × 1080 px | **Layar 4 — Hasil TOPSIS & Anggaran:** Tabel lengkap TOPSIS ($D^+$, $D^-$, $CC$), progress bar alokasi fase, pengaturan plafon dinamis & tombol ekspor CSV. |
 | [`mockup-sensitivitas.png`](mockup-sensitivitas.png) | 1440 × 1080 px | **Layar 5 — Uji Sensitivitas Bobot:** Chip kriteria interaktif, simulasi $\pm 20\%$, indikator pergeseran peringkat, dan tabel ringkasan 16 skenario. |
+
+---
+
+## 1.1 Tautan File Desain Figma (Live Editable Mockup)
+
+Seluruh 5 layar telah dibangun langsung ke dalam file Figma dengan hierarki komponen native, frame auto-layout, dan token warna sistem:
+
+- **Figma Design Link:** [SiPrioCCTV Figma Canvas (Page 1)](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=0-1)
+- **Node ID 3:3 (Dashboard Utama):** [Figma Node 3:3](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=3-3)
+- **Node ID 8:2 (Data Kriteria):** [Figma Node 8:2](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=8-2)
+- **Node ID 9:2 (Pembobotan AHP):** [Figma Node 9:2](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=9-2)
+- **Node ID 10:2 (Hasil TOPSIS & Anggaran):** [Figma Node 10:2](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=10-2)
+- **Node ID 11:2 (Uji Sensitivitas):** [Figma Node 11:2](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=11-2)
+- **Node ID 11:164 (Header & Project Overview):** [Figma Node 11:164](https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=11-164)
 
 ---
 
