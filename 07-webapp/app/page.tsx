@@ -52,22 +52,22 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header section */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#14201F] tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#14201F] tracking-tight">
             Ringkasan Prioritas CCTV
           </h1>
-          <p className="text-sm text-[#55625F] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#55625F] mt-0.5">
             Kecamatan Jatinangor, Kab. Sumedang · {dataset.alternatives.length} segmen kandidat · DSS Multi-stakeholder
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="bg-[#FFF1D6] text-[#8A6A00] text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#F5DEB3]">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <span className="bg-[#FFF1D6] text-[#8A6A00] text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-[#F5DEB3]">
             Data ilustratif
           </span>
           <button
             onClick={resetDataset}
-            className="bg-[#0E6B66] hover:bg-[#0B5652] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-sm transition-colors cursor-pointer"
+            className="bg-[#0E6B66] hover:bg-[#0B5652] text-white text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-xs transition-colors cursor-pointer"
           >
             Hitung ulang
           </button>
@@ -75,30 +75,30 @@ export default function DashboardPage() {
       </div>
 
       {/* 4 KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
           <p className="text-xs font-medium text-[#55625F]">Segmen dievaluasi</p>
-          <p className="text-3xl font-extrabold text-[#14201F] mt-1.5">{dataset.alternatives.length}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-[#14201F] mt-1 sm:mt-1.5">{dataset.alternatives.length}</p>
           <p className="text-xs text-[#475467] mt-1">A1–A{dataset.alternatives.length} · 8 kriteria urgensi</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
           <p className="text-xs font-medium text-[#55625F]">Urgensi tertinggi</p>
-          <p className="text-3xl font-extrabold text-[#A8231A] mt-1.5">
+          <p className="text-2xl sm:text-3xl font-extrabold text-[#A8231A] mt-1 sm:mt-1.5">
             {topAlt?.id} · {topCC.toFixed(4).replace(".", ",")}
           </p>
           <p className="text-xs text-[#475467] mt-1 truncate">{topAlt?.nama_segmen}</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
           <p className="text-xs font-medium text-[#55625F]">Konsistensi AHP</p>
-          <p className="text-3xl font-extrabold text-[#0E6B66] mt-1.5">{crText}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-[#0E6B66] mt-1 sm:mt-1.5">{crText}</p>
           <p className="text-xs text-[#475467] mt-1">Agregat 3 kelompok · batas 0,10</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
           <p className="text-xs font-medium text-[#55625F]">Anggaran Fase 1</p>
-          <p className="text-3xl font-extrabold text-[#14201F] mt-1.5">
+          <p className="text-2xl sm:text-3xl font-extrabold text-[#14201F] mt-1 sm:mt-1.5">
             Rp{fase1Spent.toFixed(1).replace(".", ",")} jt
           </p>
           <p className="text-xs text-[#475467] mt-1">dari plafon Rp{plafonJt.toFixed(1).replace(".", ",")} jt</p>
@@ -106,10 +106,10 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Grid: Map & Ranking List */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
         {/* Left Column: Map */}
-        <div className="lg:col-span-7 bg-white p-5 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="lg:col-span-7 bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h2 className="font-bold text-base text-[#14201F]">Peta prioritas segmen</h2>
             <MapModeToggle mode={activeMapMode} onChange={setActiveMapMode} />
           </div>
@@ -180,12 +180,12 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom Panel: Phased Installation Plan */}
-      <div className="bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-        <h2 className="font-bold text-base text-[#14201F]">
+      <div className="bg-white p-5 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+        <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
           Rencana pemasangan bertahap (plafon Rp{plafonJt.toFixed(1).replace(".", ",")} jt per fase)
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4">
           {/* Phase 1 Card */}
           <div className="bg-[#FBE4E1] p-4 rounded-xl border border-[#F5C2BC] space-y-2">
             <span className="text-xs font-bold text-[#A8231A] tracking-wider uppercase block">

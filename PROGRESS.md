@@ -27,6 +27,40 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-16 · Sesi 25 — Peningkatan Responsivitas Penuh (Mobile Drawer + Layout Adaptif 5 Layar)
+
+**Konteks:** Menjawab permintaan pengguna untuk membuat antarmuka aplikasi modern SiPrioCCTV (`07-webapp/`) sepenuhnya responsif di semua ukuran layar (ponsel, tablet, dan desktop), menggantikan layout flex baris kaku sebelumnya.
+
+**Keputusan:**
+1. **Navigasi Responsif & Mobile Drawer (`Sidebar.tsx` & `layout.tsx`):**
+   - Di perangkat desktop (`lg:flex`): Sidebar permanen di sebelah kiri (`w-64`).
+   - Di perangkat mobile (`< lg`): Menambahkan bilah navigasi atas (*top navigation bar*) dengan tombol hamburger (☰/✕), judul halaman aktif, serta *slide-out drawer overlay* dengan latar belakang gelap (*backdrop blur*) yang otomatis tertutup saat tautan ditekan.
+   - Mengubah layout `<main>` menjadi adaptif `p-4 sm:p-6 lg:p-8 xl:p-10` sehingga ruang layar ponsel tidak terbuang.
+2. **Responsivitas 5 Layar & Komponen:**
+   - Header halaman diubah menjadi `flex-col sm:flex-row` agar tombol aksi tidak terpotong.
+   - Seluruh tabel matriks keputusan, AHP, TOPSIS, dan sensitivitas diberi batas `min-w` dengan `overflow-x-auto` yang halus pada sentuhan (*touch scroll*).
+   - Kanvas 3D Three.js (`PriorityMap3D.tsx`) dibuat adaptif dengan ketinggian responsif (`h-[280px] sm:h-[340px] md:h-[380px]`) dan tooltip melayang yang tidak keluar dari batas viewport ponsel.
+   - Form kriteria dan alokasi anggaran beralih dari grid kaku ke `grid-cols-1 sm:grid-cols-2 md:grid-cols-3`.
+3. **Pengambilan Ulang Mockup:** Seluruh 6 tangkapan layar di `08-docs/mockup/` direkam ulang dengan tata letak responsif terbaru.
+
+**File:**
+- `07-webapp/components/Sidebar.tsx`
+- `07-webapp/app/layout.tsx`
+- `07-webapp/app/page.tsx`
+- `07-webapp/app/kriteria/page.tsx`
+- `07-webapp/app/ahp/page.tsx`
+- `07-webapp/app/hasil/page.tsx`
+- `07-webapp/app/sensitivitas/page.tsx`
+- `07-webapp/components/map/PriorityMap3D.tsx`
+- `07-webapp/components/map/MapModeToggle.tsx`
+- `08-docs/mockup/` (seluruh 6 mockup PNG)
+- `PROGRESS.md`
+
+**Verifikasi:**
+- `npm --prefix 07-webapp run verify` (ESLint + Paritas 75 check + Build Next.js): **LULUS (0 error)**.
+- `node 07-webapp/scripts/ui-a11y.mjs`: **LULUS (0 pelanggaran serius/kritis pada desktop 1440px dan mobile 390px)**.
+- `node 07-webapp/scripts/ui-check.mjs`: **LULUS (5 layar verified di Chromium)**.
+
 ### 2026-11-16 · Sesi 24 — Pembaruan Tangkapan Layar Mockup 5 Layar Aplikasi Modern (08-docs/mockup/)
 
 **Konteks:** Memperbarui seluruh tangkapan layar mockup pada `08-docs/mockup/` yang sebelumnya masih menggunakan tampilan prototipe lama `05-aplikasi/index.html` (14 Nov), agar menampilkan antarmuka visual aplikasi modern `07-webapp/` (Next.js 16 + Three.js).

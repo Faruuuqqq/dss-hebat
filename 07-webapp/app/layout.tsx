@@ -16,10 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className="min-h-screen bg-[#F3F5F4] text-[#14201F] antialiased flex flex-row">
+      <body className="min-h-screen bg-[#F3F5F4] text-[#14201F] antialiased flex flex-col lg:flex-row">
         <DSSProvider>
           <Sidebar />
-          <main className="flex-1 min-w-0 overflow-y-auto min-h-screen p-8 lg:p-10">
+          <main className="flex-1 min-w-0 w-full min-h-screen p-4 sm:p-6 lg:p-8 xl:p-10">
             {children}
           </main>
         </DSSProvider>

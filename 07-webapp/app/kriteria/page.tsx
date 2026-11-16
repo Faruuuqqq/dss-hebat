@@ -44,25 +44,25 @@ export default function KriteriaPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#14201F] tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#14201F] tracking-tight">
             Data Kriteria Segmen
           </h1>
-          <p className="text-sm text-[#55625F] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#55625F] mt-0.5">
             Nilai mentah C1–C8 menentukan urgensi. C9 dan biaya menjadi kendala kelayakan, bukan bagian TOPSIS.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <button
             onClick={() => alert("Fitur impor CSV membaca berkas matriks keputusan dan memperbarui dataset aktif.")}
-            className="px-4 py-2 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg shadow-2xs transition-colors"
+            className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg shadow-2xs transition-colors cursor-pointer"
           >
             Impor CSV
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-sm transition-colors"
+            className="px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-xs transition-colors cursor-pointer"
           >
             Simpan perubahan
           </button>
@@ -76,13 +76,13 @@ export default function KriteriaPage() {
       )}
 
       {/* Decision Matrix Table */}
-      <div className="bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-        <h2 className="font-bold text-base text-[#14201F]">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+        <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
           Matriks keputusan ({dataset.alternatives.length} alternatif × 8 kriteria + kendala)
         </h2>
 
         <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tabel Matriks Keputusan">
-          <table className="w-full text-xs text-left border-collapse">
+          <table className="w-full min-w-[680px] text-xs text-left border-collapse">
             <thead>
               {/* Category Clusters row */}
               <tr className="text-center font-bold text-[11px] uppercase tracking-wider text-white">
@@ -148,14 +148,14 @@ export default function KriteriaPage() {
       </div>
 
       {/* Bottom Grid: Form Edit & Sources */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
         {/* Form Edit */}
-        <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-          <h2 className="font-bold text-base text-[#14201F]">
+        <div className="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
             Ubah nilai · {selectedAlt.id} {selectedAlt.nama_segmen}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
             <div>
               <label htmlFor="input-c1" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C1 Riwayat kerawanan
@@ -309,13 +309,13 @@ export default function KriteriaPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <span className="text-[11px] text-[#475467]">
               Sumber dan tanggal input dicatat otomatis untuk jejak audit.
             </span>
             <button
               onClick={handleSave}
-              className="px-4 py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-sm transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-sm transition-colors cursor-pointer w-full sm:w-auto"
             >
               Simpan {selectedAlt.id}
             </button>
@@ -323,7 +323,7 @@ export default function KriteriaPage() {
         </div>
 
         {/* Sources Panel */}
-        <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+        <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
           <h2 className="font-bold text-base text-[#14201F]">Sumber data & status</h2>
 
           <div className="space-y-3">

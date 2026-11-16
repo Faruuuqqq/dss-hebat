@@ -258,21 +258,21 @@ export function PriorityMap3D() {
   return (
     <div className="relative w-full rounded-2xl bg-[#EAF0EE] border border-[#DDE3E1] overflow-hidden p-4">
       {/* 2D / 3D Switch Button */}
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-2">
         <button
           onClick={() => setView3D(false)}
-          className="px-2.5 py-1 text-xs bg-white/90 hover:bg-white text-[#0B3B38] font-medium rounded-lg border border-[#DDE3E1] shadow-xs transition-colors"
+          className="px-2.5 py-1 text-xs bg-white/90 hover:bg-white text-[#0B3B38] font-medium rounded-lg border border-[#DDE3E1] shadow-xs transition-colors cursor-pointer"
         >
           Ganti ke Peta 2D
         </button>
       </div>
 
       {/* Three.js Canvas Container */}
-      <div ref={containerRef} className="w-full h-[360px] cursor-grab active:cursor-grabbing rounded-xl overflow-hidden" />
+      <div ref={containerRef} className="w-full h-[280px] sm:h-[340px] md:h-[380px] cursor-grab active:cursor-grabbing rounded-xl overflow-hidden" />
 
       {/* Floating Hover Info Card */}
       {hoveredAltId && (
-        <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-sm p-3 rounded-xl border border-[#DDE3E1] shadow-md text-xs pointer-events-none z-10 max-w-[220px]">
+        <div className="absolute top-3 left-3 sm:top-5 sm:left-5 bg-white/95 backdrop-blur-sm p-2.5 sm:p-3 rounded-xl border border-[#DDE3E1] shadow-md text-xs pointer-events-none z-10 max-w-[190px] sm:max-w-[230px]">
           {(() => {
             const alt = dataset.alternatives.find((a) => a.id === hoveredAltId);
             const idx = dataset.alternatives.findIndex((a) => a.id === hoveredAltId);

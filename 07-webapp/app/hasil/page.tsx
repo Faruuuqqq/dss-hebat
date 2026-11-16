@@ -94,31 +94,31 @@ export default function HasilPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#14201F] tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#14201F] tracking-tight">
             Hasil TOPSIS & Alokasi Anggaran
           </h1>
-          <p className="text-sm text-[#55625F] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#55625F] mt-0.5">
             Urgensi diperingkat dulu, lalu kelayakan C9 dan plafon anggaran membagi pemasangan ke dalam fase.
           </p>
         </div>
         <button
           onClick={handleDownloadCSV}
-          className="px-4 py-2 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg shadow-2xs transition-colors cursor-pointer"
+          className="px-4 py-2 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg shadow-2xs transition-colors cursor-pointer w-full sm:w-auto"
         >
           Unduh hasil (CSV)
         </button>
       </div>
 
       {/* Main Table: TOPSIS Rankings and Distances */}
-      <div className="bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-        <h2 className="font-bold text-base text-[#14201F]">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+        <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
           Peringkat urgensi dan jarak ke solusi ideal
         </h2>
 
         <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tabel Hasil TOPSIS">
-          <table className="w-full text-xs text-left border-collapse">
+          <table className="w-full min-w-[700px] text-xs text-left border-collapse">
             <thead>
               <tr className="bg-[#EEF2F1] text-[#3D4A47] font-semibold border-b border-[#DDE3E1]">
                 <th className="p-3 w-10 text-center">#</th>
@@ -203,10 +203,10 @@ export default function HasilPage() {
       </div>
 
       {/* Bottom Grid: Phased Allocation & Budget Controls */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
         {/* Left: Phased Allocation Cards */}
-        <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-          <h2 className="font-bold text-base text-[#14201F]">
+        <div className="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
             Alokasi bertahap (plafon Rp{plafonJt.toFixed(1).replace(".", ",")} jt per fase)
           </h2>
 
@@ -280,8 +280,8 @@ export default function HasilPage() {
         </div>
 
         {/* Right: Budget Settings */}
-        <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-          <h2 className="font-bold text-base text-[#14201F]">Atur anggaran</h2>
+        <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">Atur anggaran</h2>
 
           <div className="space-y-4">
             <div>

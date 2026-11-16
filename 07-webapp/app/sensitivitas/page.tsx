@@ -78,29 +78,29 @@ export default function SensitivitasPage() {
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#14201F] tracking-tight">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#14201F] tracking-tight">
           Uji Sensitivitas Bobot
         </h1>
-        <p className="text-sm text-[#55625F] mt-0.5">
+        <p className="text-xs sm:text-sm text-[#55625F] mt-0.5">
           Ubah satu bobot kriteria sebesar ±20% (one-at-a-time), lalu lihat apakah peringkat berubah. Hitungan TOPSIS dijalankan ulang langsung.
         </p>
       </div>
 
       {/* Top Grid: Scenario Controls & Interactive Results */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
         {/* Left Column: Scenario Controls */}
-        <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-5">
-          <h2 className="font-bold text-base text-[#14201F]">Skenario</h2>
+        <div className="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4 sm:space-y-5">
+          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">Skenario</h2>
 
           {/* Criteria Chips */}
           <div className="space-y-2">
             <span className="text-xs font-semibold text-[#55625F] block">Kriteria yang diubah</span>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {criteriaList.map((c) => (
                 <button
                   key={c.code}
                   onClick={() => setActiveCrit(c.code)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     activeCrit === c.code
                       ? "bg-[#0E6B66] text-white shadow-xs"
                       : "bg-[#EEF2F1] text-[#3D4A47] hover:bg-[#DDE3E1]"
@@ -118,7 +118,7 @@ export default function SensitivitasPage() {
             <div className="grid grid-cols-3 gap-2 bg-[#EEF2F1] p-1.5 rounded-xl border border-[#DDE3E1]">
               <button
                 onClick={() => setActiveDelta(-0.2)}
-                className={`py-2 text-xs font-bold rounded-lg transition-all ${
+                className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeDelta === -0.2
                     ? "bg-[#0E6B66] text-white shadow-xs"
                     : "text-[#55625F] hover:text-[#14201F]"
@@ -128,7 +128,7 @@ export default function SensitivitasPage() {
               </button>
               <button
                 onClick={() => setActiveDelta(0)}
-                className={`py-2 text-xs font-bold rounded-lg transition-all ${
+                className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeDelta === 0
                     ? "bg-[#0E6B66] text-white shadow-xs"
                     : "text-[#55625F] hover:text-[#14201F]"
@@ -138,7 +138,7 @@ export default function SensitivitasPage() {
               </button>
               <button
                 onClick={() => setActiveDelta(0.2)}
-                className={`py-2 text-xs font-bold rounded-lg transition-all ${
+                className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeDelta === 0.2
                     ? "bg-[#0E6B66] text-white shadow-xs"
                     : "text-[#55625F] hover:text-[#14201F]"
@@ -187,7 +187,7 @@ export default function SensitivitasPage() {
         </div>
 
         {/* Right Column: Interactive Results */}
-        <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-5 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4 sm:space-y-5 flex flex-col justify-between">
           <div className="space-y-4">
             <h2 className="font-bold text-base text-[#14201F]">Peringkat pada skenario ini</h2>
 
@@ -260,9 +260,9 @@ export default function SensitivitasPage() {
       </div>
 
       {/* Bottom Panel: 16 Scenarios Summary Table */}
-      <div className="bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-bold text-base text-[#14201F]">
+          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
             Ringkasan 16 skenario (8 kriteria × ±20%)
           </h2>
           <span className="text-xs text-[#55625F]">
@@ -271,7 +271,7 @@ export default function SensitivitasPage() {
         </div>
 
         <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tabel Ringkasan 16 Skenario">
-          <table className="w-full text-xs text-left border-collapse">
+          <table className="w-full min-w-[500px] text-xs text-left border-collapse">
             <thead>
               <tr className="bg-[#EEF2F1] text-[#3D4A47] font-semibold border-b border-[#DDE3E1]">
                 <th className="p-3 w-48">Kriteria</th>

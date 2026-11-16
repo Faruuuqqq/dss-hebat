@@ -74,23 +74,23 @@ export default function AhpPage() {
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#14201F] tracking-tight">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#14201F] tracking-tight">
           Pembobotan AHP Multi-Stakeholder
         </h1>
-        <p className="text-sm text-[#55625F] mt-0.5">
+        <p className="text-xs sm:text-sm text-[#55625F] mt-0.5">
           Hierarki dua lapis (klaster, lalu kriteria). Penilaian tiga kelompok digabung dengan rata-rata geometrik.
         </p>
       </div>
 
       {/* Top Grid: Matrix & Questionnaire */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
         {/* Left Column: Cluster Pairwise Matrix */}
-        <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="font-bold text-base text-[#14201F]">Matriks perbandingan klaster</h2>
+        <div className="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4 sm:space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h2 className="font-bold text-sm sm:text-base text-[#14201F]">Matriks perbandingan klaster</h2>
 
             {/* Group Tabs */}
-            <div className="flex items-center gap-1 bg-[#EEF2F1] p-1 rounded-lg border border-[#DDE3E1]" role="tablist">
+            <div className="flex flex-wrap items-center gap-1 bg-[#EEF2F1] p-1 rounded-lg border border-[#DDE3E1]" role="tablist">
               {(["G1", "G2", "G3", "Agregat"] as const).map((tab) => (
                 <button
                   key={tab}
@@ -152,7 +152,7 @@ export default function AhpPage() {
         </div>
 
         {/* Right Column: Respondent Questionnaire (Pakar) */}
-        <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between text-xs mb-3">
               <h2 className="font-bold text-base text-[#14201F]">Tampilan responden</h2>
@@ -228,9 +228,9 @@ export default function AhpPage() {
       </div>
 
       {/* Bottom Panel: Global Weights per Cluster */}
-      <div className="bg-white p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-bold text-base text-[#14201F]">
+          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
             Bobot global kriteria (agregat 3 kelompok)
           </h2>
           <span className="text-xs text-[#55625F]">
@@ -238,7 +238,7 @@ export default function AhpPage() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Risiko Cluster */}
           <div className="p-4 rounded-xl border border-[#DDE3E1] bg-[#F8FAF9] space-y-3">
             <div className="flex items-center justify-between">
