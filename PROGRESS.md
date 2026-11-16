@@ -27,6 +27,31 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-16 · Sesi 24 — Pembaruan Tangkapan Layar Mockup 5 Layar Aplikasi Modern (08-docs/mockup/)
+
+**Konteks:** Memperbarui seluruh tangkapan layar mockup pada `08-docs/mockup/` yang sebelumnya masih menggunakan tampilan prototipe lama `05-aplikasi/index.html` (14 Nov), agar menampilkan antarmuka visual aplikasi modern `07-webapp/` (Next.js 16 + Three.js).
+
+**Keputusan:**
+1. **Otomatisasi Screenshot (`capture-mockups.mjs`):** Membangun skrip Node.js berbasis `playwright-core` untuk menangkap screenshot retina (deviceScaleFactor: 2) dari aplikasi Next.js produksi.
+2. **Pemutakhiran Aset PNG:** Memperbarui `mockup-desktop.png` (Dashboard Desktop dengan kanvas 3D Three.js) dan `mockup-mobile.png` (Dashboard Mobile responsif).
+3. **Penambahan Screenshot 4 Layar Baru:** Menangkap `mockup-kriteria.png` (Data Kriteria), `mockup-ahp.png` (Pembobotan AHP & slider kuesioner), `mockup-hasil.png` (Hasil TOPSIS & Alokasi Anggaran), dan `mockup-sensitivitas.png` (Uji Sensitivitas OAT +-20%).
+4. **Pembaruan `08-docs/mockup/README.md`:** Mendokumentasikan tabel indeks 6 screenshot resolusi tinggi dan perintah reproduksi otomatis.
+
+**File:**
+- `07-webapp/scripts/capture-mockups.mjs`
+- `08-docs/mockup/mockup-desktop.png`
+- `08-docs/mockup/mockup-mobile.png`
+- `08-docs/mockup/mockup-kriteria.png`
+- `08-docs/mockup/mockup-ahp.png`
+- `08-docs/mockup/mockup-hasil.png`
+- `08-docs/mockup/mockup-sensitivitas.png`
+- `08-docs/mockup/README.md`
+- `PROGRESS.md`
+
+**Verifikasi:**
+- Seluruh 6 berkas PNG berhasil dihasilkan dengan ukuran wajar (114 KB – 441 KB) dan kualitas visual tajam.
+- Push commit ke `origin/main` berhasil.
+
 ### 2026-11-16 · Sesi 23 — Penyelarasan Menyeluruh Dokumentasi Rekayasa Perangkat Lunak (08-docs/)
 
 **Konteks:** Menyelaraskan seluruh dokumen Rekayasa Perangkat Lunak pada `08-docs/` dan membuat dokumen ringkasan teknis proyek `PROJECT_OVERVIEW.md` agar mencerminkan kondisi terkini aplikasi modern `07-webapp/` (Next.js 16 + Three.js + Supabase).

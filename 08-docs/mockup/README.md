@@ -9,12 +9,18 @@ Dokumentasi visual mencakup tiga artefak penting:
 
 ---
 
-## 1. Artefak Tangkapan Layar Tersedia
+## 1. Artefak Tangkapan Layar Tersedia (Aplikasi Modern 07-webapp)
 
-| Berkas | Viewport | Isi yang Terlihat |
+Seluruh tangkapan layar di bawah ini diambil langsung dari aplikasi modern Next.js 16 (`07-webapp/`) dengan resolusi retina (*device scale factor 2*):
+
+| Berkas | Viewport | Layar / Fitur yang Ditampilkan |
 |---|---:|---|
-| `mockup-desktop.png` | 1440 × 2200 px | Header, KPI, matriks keputusan, bobot AHP, hasil TOPSIS, dan awal peta prioritas. |
-| `mockup-mobile.png` | 430 × 1600 px | Tampilan responsif pada perangkat mobile: kartu KPI, formulir matriks, dan AHP. |
+| [`mockup-desktop.png`](mockup-desktop.png) | 1440 × 1080 px | **Layar 1 — Dashboard Desktop:** 4 KPI, visualisasi Peta 3D Three.js dengan pilar urgensi, bar peringkat TOPSIS, dan kartu alokasi fase 1–3. |
+| [`mockup-mobile.png`](mockup-mobile.png) | 390 × 844 px | **Layar 1 — Dashboard Mobile:** Tampilan responsif pada layar smartphone (iPhone layout): header, KPI bertumpuk, dan peta adaptif. |
+| [`mockup-kriteria.png`](mockup-kriteria.png) | 1440 × 1080 px | **Layar 2 — Data Kriteria Segmen:** Matriks keputusan terkelompok 3 klaster (Risiko, Paparan, Spasial), formulir edit alternatif, dan sumber data. |
+| [`mockup-ahp.png`](mockup-ahp.png) | 1440 × 1080 px | **Layar 3 — Pembobotan AHP:** Matriks perbandingan berpasangan klaster, badge konsistensi Saaty, kuesioner slider responden, dan kartu bobot global. |
+| [`mockup-hasil.png`](mockup-hasil.png) | 1440 × 1080 px | **Layar 4 — Hasil TOPSIS & Anggaran:** Tabel lengkap TOPSIS ($D^+$, $D^-$, $CC$), progress bar alokasi fase, pengaturan plafon dinamis & tombol ekspor CSV. |
+| [`mockup-sensitivitas.png`](mockup-sensitivitas.png) | 1440 × 1080 px | **Layar 5 — Uji Sensitivitas Bobot:** Chip kriteria interaktif, simulasi $\pm 20\%$, indikator pergeseran peringkat, dan tabel ringkasan 16 skenario. |
 
 ---
 
@@ -50,24 +56,14 @@ Aplikasi modern mengorganisasikan tata letak menjadi 5 rute independen dengan na
 
 Tangkapan layar dapat diperbarui kapan saja menggunakan Chromium/Chrome secara headless:
 
-### Dari Aplikasi Modern `07-webapp/`:
+### Dari Aplikasi Modern `07-webapp/` (Otomatis Seluruh 5 Layar):
 ```bash
 # Jalankan server Next.js di latar belakang
 cd 07-webapp && npm start -p 3111 &
 sleep 2
 
-# Ambil screenshot desktop 1440px
-CHROME="$(ls -1 "$HOME"/.cache/ms-playwright/chromium-*/chrome-linux64/chrome | tail -1)"
-"$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
-  --window-size=1440,1080 \
-  --screenshot="$PWD/../08-docs/mockup/mockup-desktop.png" \
-  "http://127.0.0.1:3111/"
-
-# Ambil screenshot mobile 390px
-"$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
-  --window-size=390,844 \
-  --screenshot="$PWD/../08-docs/mockup/mockup-mobile.png" \
-  "http://127.0.0.1:3111/"
+# Jalankan skrip penangkap seluruh 6 screenshot otomatis (Playwright + Chromium):
+node scripts/capture-mockups.mjs
 ```
 
 ### Dari Prototipe Offline `05-aplikasi/`:
