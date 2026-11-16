@@ -7,23 +7,107 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ---
 
-## Status ringkas (per 14 Nov 2026)
+## Status ringkas (per 16 Nov 2026)
 
 | Area | Status |
 |---|---|
 | **Sumber kebenaran** | `dss_revisi_markdown/dss_revisi.md` (AHP datar 8×8; PRISMA 582→416→121→12) |
 | Proposal SCR (UTS) `dss_revisi.md` | SELESAI, sudah dikumpulkan ke dosen |
-| Aplikasi DSS | SELESAI (web app 1 file, offline; fokus edit diperbaiki; ambang C9 operasional; biaya > plafon tidak dialokasikan) |
-| Test aplikasi | SELESAI (mengekstrak & menjalankan engine dari `index.html`; cek CSV, C9, dan biaya > plafon) |
-| Paper hasil IEEE | DRAFT SELESAI (.md + .tex), diselaraskan ke `dss_revisi` (BPS >98.000; 24 ref), belum dicompile |
+| Aplikasi DSS Offline (`05-aplikasi/`) | SELESAI (web app 1 file, offline; fokus edit diperbaiki; ambang C9 operasional; biaya > plafon tidak dialokasikan) |
+| Aplikasi Modern (`07-webapp/`) | SELESAI — Next.js 16 + Three.js + Supabase; 5 layar terintegrasi; 2 preset dataset; 3D map + 2D fallback; 0 pelanggaran a11y |
+| Test suite | SELESAI — 75 parity check, Chromium UI check (5 layar), ekspor CSV terverifikasi, a11y WCAG 2.1 AA |
+| Paper hasil IEEE | SELESAI (.md + .tex), diselaraskan ke `dss_revisi` (BPS >98.000; 24 ref); tercompile **5 halaman** tanpa error (Tectonic) |
 | Data lapangan | RIIL level desa terkumpul; per-gang = hybrid (estimasi) |
-| Commit git | BELUM di-commit |
+| Commit git | branch `main`; siap di-commit berurutan |
 
-**Blokir aktif:** (1) `.tex` paper hasil belum dicompile (tak ada pdflatex → Overleaf); (2) data per-gang belum dari observasi lapangan; (3) repo punya perubahan putaran-2 yang belum di-commit sejak Okt.
+**Blokir aktif:** data per-gang belum dari observasi lapangan.
+**Open items (opsional):** deploy `07-webapp/` ke Vercel + Supabase bila akun/kredensial cloud disiapkan pengguna, push `main`.
 
 ---
 
 ## Log
+
+### 2026-11-16 · Sesi 22 — Implementasi penuh SiPrioCCTV (Next.js 16 + Three.js + Supabase)
+
+**Konteks:** Menuntaskan implementasi seluruh rencana `implementation_plan.md` yang telah disetujui pengguna untuk membangun aplikasi modern SiPrioCCTV Jatinangor dengan Next.js 16, Three.js, dan Supabase.
+
+**Keputusan:**
+1. **Dua Preset Dataset:** Menyediakan Preset `ilustratif` (default aplikasi dari `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx` dengan AHP hierarki 3 klaster × 3 kelompok stakeholder agregat rata-rata geometrik) dan Preset `naskah_uts` (AHP datar 8×8 kanonik untuk keselarasan dengan paper hasil).
+2. **5 Layar Terintegrasi:** Membangun Dashboard (`/`), Data Kriteria (`/kriteria`), Pembobotan AHP (`/ahp`), Hasil & Anggaran (`/hasil`), serta Uji Sensitivitas (`/sensitivitas`) sesuai tata letak mockup `SiPrioCCTV Jatinangor.html`.
+3. **Peta 3D Three.js:** Visualisasi kanvas WebGL interaktif dengan pilar ketinggian proporsional terhadap skor urgensi ($CC$), raycasting hover/klik, rotasi orbit, serta tombol fallback SVG 2D bila WebGL tidak aktif.
+4. **Repositori Supabase:** Skema migrasi SQL (`20261116000000_init.sql`), data benih (`seed.sql`), kebijakan RLS, trigger audit log, dan repository TypeScript dengan mekanisme *graceful local fallback* ke data JSON statis.
+5. **Kekebalan Input & Aksesibilitas:** Komponen sel angka aman (`NumberCell.tsx`), penyesuaian kontras rasio WCAG, serta pelabelan form (`htmlFor`, `aria-label`) menghasilkan **0 pelanggaran** pada audit otomatis `axe-core`.
+
+**File:**
+- `07-webapp/app/` (`page.tsx`, `kriteria/page.tsx`, `ahp/page.tsx`, `hasil/page.tsx`, `sensitivitas/page.tsx`, `layout.tsx`, `globals.css`)
+- `07-webapp/components/` (`Sidebar.tsx`, `NumberCell.tsx`, `map/PriorityMap3D.tsx`, `map/PriorityMap2D.tsx`, `map/MapModeToggle.tsx`)
+- `07-webapp/lib/` (`engine/`, `store.tsx`, `format.ts`, `supabase.ts`, `supabase-repository.ts`, `map-projection.ts`)
+- `07-webapp/supabase/` (`migrations/20261116000000_init.sql`, `seed.sql`)
+- `07-webapp/scripts/` (`import-xlsx.py`, `generate-data.py`, `parity.mts`, `ui-check.mjs`, `ui-bugs.mjs`, `ui-export.mjs`, `ui-a11y.mjs`)
+- `07-webapp/` (`vercel.json`, `.env.example`, `README.md`)
+- `08-docs/` (`srs.md`, `traceability.md`)
+- `AGENTS.md`
+
+**Verifikasi:**
+- `npm --prefix 07-webapp run verify` (ESLint + Paritas 75 check + Next.js build): **PASS (0 error)**.
+- `node 07-webapp/scripts/ui-check.mjs`: **PASS (5 layar verified di Chromium)**.
+- `node 07-webapp/scripts/ui-export.mjs`: **PASS (unduhan nyata CSV tervalidasi)**.
+- `node 07-webapp/scripts/ui-a11y.mjs`: **PASS (0 pelanggaran serius/kritis WCAG 2.1 AA)**.
+- `node 05-aplikasi/test-algoritma.mjs`: **PASS (paritas prototipe offline tetap terjaga 100%)**.
+
+**Open items:**
+- Deploy ke Vercel dan penyambungan database Supabase aktif (bila pengguna ingin mengaktifkan instance cloud).
+- Observasi lapangan aktual untuk kalibrasi koordinat GPS dan biaya riil per titik.
+
+### 2026-11-16 · Sesi 21 — Rencana implementasi SiPrioCCTV (Next.js + Three.js + Supabase)
+
+**Konteks:** pengguna memilih Next.js + Three.js, deploy Vercel + Supabase, UI mengikuti `SiPrioCCTV Jatinangor.html` (mockup 5 layar) dan data dari `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx`.
+
+**Keputusan:** belum ada perubahan kode; rencana detail disusun dan menunggu 5 keputusan pengguna (penanganan beda angka, aturan C9, peran Three.js, lingkup Supabase, lokasi build).
+
+**Temuan:** engine xlsx (AHP hierarki 3 klaster × 3 kelompok, rata-rata geometrik) dihitung ulang dan cocok persis (C1 31,56 %; A3 0,7674; 14/16 urutan tetap), tetapi **berbeda** dari invarian `AGENTS.md` §5 (datar 8×8; A3 0,6445). Aturan C9 di mockup (C9 < 3 hanya tidak masuk Fase 1) berbeda dari implementasi lama (dikeluarkan). `AGENTS.md` §6 masih melarang Three.js.
+
+**File:** `PROGRESS.md` (rencana ada di artefak percakapan).
+
+**Verifikasi:** hitung ulang Python dari sheet `nilai_kriteria` + `ahp_pairwise` = sheet `hasil_ahp`/`hasil_topsis`; screenshot 5 layar mockup via Chromium.
+
+**Open items:** jawaban 5 keputusan; lalu F0 (perbarui `AGENTS.md`) dan seterusnya.
+
+### 2026-11-16 · Sesi 20 — Tetapkan data dummy dan opsi visualisasi
+
+**Konteks:** pengguna memutuskan aplikasi memakai data dummy sepenuhnya karena data lapangan/kuesioner tidak tersedia, dan menanyakan kemungkinan Next.js + Three.js.
+
+**Keputusan:** roadmap menyatakan data aplikasi `[SIMULASI]`, tanpa survei atau kuesioner sebagai prasyarat; baseline ilustratif paper dipertahankan untuk paritas, bukan diklaim sebagai bukti lapangan. Three.js kompatibel dengan Next.js tetapi opsional; peta 2D tetap jalur utama tanpa kebutuhan 3D yang jelas.
+
+**File:** `tasks/plan.md`, `tasks/todo.md`, `PROGRESS.md`.
+
+**Verifikasi:** keputusan dicocokkan dengan roadmap di `dss_revisi_markdown/dss_revisi.md` dan status implementasi; belum mengubah kode aplikasi atau mengulang tes.
+
+**Open items:** selaraskan label dataset/keluaran aplikasi ke full dummy; putuskan apakah ada kebutuhan nyata untuk visual 3D.
+
+### 2026-11-16 · Sesi 19 — Dokumentasikan roadmap implementasi aplikasi
+
+**Konteks:** pengguna menjelaskan tugas lanjutan dari paper/model DSS: implementasi software dengan prioritas utama website berjalan, termasuk roadmap pembentukan aplikasi dan UI.
+
+**Keputusan:** catat roadmap dengan membedakan fase yang sudah selesai dari deployment publik, persistensi Supabase, dan validasi lapangan yang masih opsional/bergantung kebutuhan. Tegaskan website dapat berjalan lokal/build, tetapi belum dideploy publik.
+
+**File:** `tasks/plan.md`, `tasks/todo.md`, `08-docs/README.md`, `PROGRESS.md`.
+
+**Verifikasi:** roadmap naskah kanonik (data empiris, dashboard spasial, kalibrasi bobot, pengembangan lanjutan) dicocokkan dengan SRS, README webapp, traceability, dan bukti uji pada log Sesi 17. Tautan lokal dan `git diff --check` lulus; build tidak dijalankan karena sesi ini hanya menulis dokumentasi.
+
+**Open items:** deploy publik (jika diperlukan), keputusan kebutuhan Supabase, validasi data lapangan, dan kalibrasi bobot empiris.
+
+### 2026-11-16 · Sesi 18 — Sinkronkan blok "Status ringkas"
+
+**Konteks:** blok "Status ringkas" (baris 10–23) masih menyatakan paper hasil "belum dicompile" dan git "BELUM di-commit", padahal dua klaim itu sudah kedaluwarsa.
+
+**Keputusan:** samakan klaim status dengan `AGENTS.md` §4 dan bukti di repo — paper hasil tercompile 5 halaman (Tectonic); git ter-commit. Baris "Blokir aktif" dipecah: blokir nyata = data per-gang; sisanya dipindah ke open items (opsional).
+
+**File:** `PROGRESS.md` (blok status, baris 18–23).
+
+**Verifikasi:** `git rev-list --count HEAD` = 50 commit; `git status --short` bersih; tidak ada nomor baru yang ditulis yang belum diperiksa (jumlah commit sengaja tidak dicantumkan agar tidak cepat basi).
+
+**Open items:** `AGENTS.md` §4 masih menulis "16 commit s.d. sesi 15" (jumlah sebenarnya 50) — perlu ditinjau.
 
 ### 2026-11-14 · Sesi 17 — Bukti integrasi dari clone bersih
 

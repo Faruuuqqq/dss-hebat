@@ -32,20 +32,27 @@
 | FR-09 Peta skematik SVG | Keluaran konseptual berupa peta prioritas, bukan koordinat GPS final. | `renderMap`; `autoPos`; SVG dengan `aria-label`; legenda posisi relatif. | `test-ui.sh`: peta dan penanda C9 diperiksa. | Otomatis UI. |
 | FR-10 Sensitivitas ±20% OAT | Variasi +20% dan −20% tiap C1–C8 dengan renormalisasi proporsional. | `sensitivity`; `renderSens`. | `test-algoritma.mjs`: 16 run dan jumlah skenario dengan *rank reversal*; paritas tabel sensitivitas dua paper terhadap output engine. | Otomatis. |
 | FR-11 Reset | Fungsi antarmuka prototipe. | *Handler* `btn-reset`: `loadDataset(activeKey); A=deepCopy(A0); render();`. | Inspeksi manual di peramban. | Manual. |
-| FR-12 Ekspor CSV | Fungsi antarmuka prototipe untuk keluaran hasil. | *Handler* `btn-export`; `dl`; CSV berisi peringkat, CC, biaya, fase, kelayakan, C9, dan bobot. | Inspeksi manual terhadap unduhan CSV. | Manual. |
+| FR-12 Ekspor CSV | Fungsi antarmuka prototipe untuk keluaran hasil. | *Handler* `btn-export`; `dl`; CSV berisi peringkat, CC, biaya, fase, kelayakan, C9, dan bobot. | `07-webapp/scripts/ui-export.mjs` (uji unduhan nyata dan verifikasi baris/kolom) serta inspeksi manual. | Otomatis di webapp. |
+| FR-13 Dua preset dataset | Keselarasan data Excel ilustratif dan naskah kanonik UTS. | `07-webapp/data/ilustratif.json`, `07-webapp/data/naskah-uts.json`, dan switcher di `07-webapp/components/Sidebar.tsx`. | `07-webapp/scripts/parity.mts` menguji kedua preset (75 assertion). | Otomatis. |
+| FR-14 Navigasi 5 layar mockup | Memenuhi spesifikasi mockup `SiPrioCCTV Jatinangor.html`. | `app/page.tsx`, `app/kriteria/page.tsx`, `app/ahp/page.tsx`, `app/hasil/page.tsx`, `app/sensitivitas/page.tsx`. | `07-webapp/scripts/ui-check.mjs` menguji kelima route di Chromium. | Otomatis UI. |
+| FR-15 Peta 3D Three.js & Fallback | Visualisasi spasial interaktif dengan pilar proporsional CC. | `components/map/PriorityMap3D.tsx`, `components/map/PriorityMap2D.tsx`, `components/map/MapModeToggle.tsx`. | `ui-check.mjs` (verifikasi render kontainer WebGL/canvas) dan uji fallback. | Otomatis UI. |
+| FR-16 Kuesioner Saaty Pakar | Antarmuka interaktif slider perbandingan kriteria Saaty. | `app/ahp/page.tsx` (slider range, Saaty scale converter, consistency badge). | `ui-check.mjs` dan audit a11y label. | Otomatis UI. |
+| FR-17 Repositori Supabase | Integrasi PostgreSQL, RLS, audit log dengan graceful local fallback. | `supabase/migrations/20261116000000_init.sql`, `supabase/seed.sql`, `lib/supabase-repository.ts`. | Pemeriksaan skema SQL, build Next.js, dan pengujian fallback lokal. | Otomatis. |
 
 ## 3. Keterlacakan kebutuhan nonfungsional
 
 | Kebutuhan | Implementasi atau bukti | Verifikasi | Status cakupan |
 |---|---|---|---|
 | NFR-01 Offline tanpa server | Satu berkas `05-aplikasi/index.html`; tidak ada panggilan API atau dependensi eksternal pada implementasi. | Inspeksi struktur file dan pembukaan lokal di peramban. | Manual. |
-| NFR-02 Data-driven dan deterministik | `DATASETS`, `loadDataset`, fungsi murni `ahp`, `topsis`, `allocPhases`, dan `sensitivity`. | `test-algoritma.mjs` menjalankan perhitungan aktual dan memeriksa dataset 12 segmen. | Otomatis sebagian. |
-| NFR-03 Keterlacakan uji ke kode aktual | `test-algoritma.mjs` membaca `index.html`, mengharuskan tepat satu blok skrip, lalu mengekspos API internal lewat Node `vm`. | Pemeriksaan awal skrip test sendiri dan seluruh `PASS` saat dijalankan. | Otomatis. |
-| NFR-04 Bahasa Indonesia | Judul, petunjuk, tabel, legenda, dan tombol dalam `index.html`; SRS ini berbahasa Indonesia. | Inspeksi manual antarmuka. | Manual. |
-| NFR-05 Transparansi data hybrid/simulasi | Header, footer, `DATASETS.perluasan.note`, dan dokumentasi sumber data. | Inspeksi aplikasi serta `08-docs/data-dan-sumber.md`. | Manual. |
-| NFR-06 SVG ringan | `renderMap` membangun elemen SVG langsung tanpa pustaka visualisasi. | Inspeksi implementasi dan tampilan peta. | Manual. |
-| NFR-07 Pembatas numerik antarmuka | `renderX` memberi `min` C9 1 dan `max` 5, biaya `min=0`; `renderAHP` memberi `min=0.05`; *handler* AHP mempertahankan minimum 0,05. | Inspeksi elemen input dan perilaku edit. | Manual. |
-| NFR-08 Auditabilitas keluaran | `renderResults` menampilkan parameter AHP; `renderTopsis` menampilkan D⁺, D⁻, CC; `renderPhases` menampilkan biaya/subtotal; `renderSens` menampilkan hasil skenario. | `test-algoritma.mjs` memeriksa angka inti. | Otomatis sebagian, inspeksi UI. |
+| NFR-02 Data-driven dan deterministik | `DATASETS`, `loadDataset`, fungsi murni `ahp`, `topsis`, `allocPhases`, dan `sensitivity`. | `test-algoritma.mjs` dan `parity.mts` (75 check) menjalankan perhitungan aktual. | Otomatis. |
+| NFR-03 Keterlacakan uji ke kode aktual | `test-algoritma.mjs` membaca `index.html`; `parity.mts` menguji `lib/engine`. | Pemeriksaan skrip test dan seluruh `PASS` saat dijalankan. | Otomatis. |
+| NFR-04 Bahasa Indonesia | Judul, petunjuk, tabel, legenda, dan tombol dalam `index.html` dan `07-webapp`; dokumentasi berbahasa Indonesia. | Inspeksi manual antarmuka. | Manual. |
+| NFR-05 Transparansi data hybrid/simulasi | Header, footer, note, dan badge `[SIMULASI]` di peta dan kriteria. | Inspeksi aplikasi serta `08-docs/data-dan-sumber.md`. | Manual. |
+| NFR-06 Visualisasi peta | Prototipe offline menggunakan SVG ringan; aplikasi modern menggunakan Three.js WebGL dengan fallback SVG. | Inspeksi implementasi dan pengujian UI. | Otomatis UI. |
+| NFR-07 Pembatas numerik antarmuka | `components/NumberCell.tsx` melindungi input angka; batas Saaty 1/9..9; C9 skala 1–5; biaya non-negatif. | `07-webapp/scripts/ui-bugs.mjs` (16 skenario uji input). | Otomatis UI. |
+| NFR-08 Auditabilitas keluaran | Tampilan D⁺, D⁻, CC, parameter AHP, subtotal fase, tabel 16 skenario, dan tabel audit log Supabase. | `test-algoritma.mjs` dan `parity.mts` memeriksa angka inti. | Otomatis. |
+| NFR-09 Standar Aksesibilitas WCAG 2.1 AA | Kontras warna, `aria-label`, `htmlFor`, navigasi keyboard pada 5 layar. | `07-webapp/scripts/ui-a11y.mjs` (axe-core: 0 pelanggaran). | Otomatis. |
+| NFR-10 Kesiapan Deployment Cloud (Vercel) | `vercel.json`, Next.js static prerender (`next build`). | `npm run build` berhasil menghasilkan 8 halaman statis. | Otomatis. |
 
 ## 4. Keterlacakan kriteria penerimaan
 
@@ -63,6 +70,6 @@
 
 ## 5. Gap verifikasi yang tersisa
 
-1. Test algoritma sudah menguji mesin keputusan aktual, paritas CSV, filter C9, fase, dan sensitivitas, tetapi belum mengotomatisasi klik reset maupun pemeriksaan isi berkas unduhan CSV.
-2. Label visual dataset simulasi, teks Bahasa Indonesia, atribut input, dan sifat offline perlu tetap diperiksa melalui inspeksi peramban saat antarmuka berubah.
-3. Keabsahan empiris data per segmen, termasuk C9 dan RAB, tidak dapat dibuktikan oleh test perangkat lunak. Validasi tersebut membutuhkan survei lapangan sesuai roadmap naskah kanonik.
+1. Pengujian unduhan nyata CSV telah diotomatisasi secara penuh melalui skrip E2E `07-webapp/scripts/ui-export.mjs`.
+2. Validasi visual kelima layar dan pengujian aksesibilitas WCAG 2.1 AA telah diotomatisasi melalui `07-webapp/scripts/ui-check.mjs` dan `07-webapp/scripts/ui-a11y.mjs`.
+3. Keabsahan empiris data per segmen, termasuk C9 dan RAB, tidak dapat dibuktikan oleh test perangkat lunak. Validasi tersebut membutuhkan survei lapangan terkalibrasi sesuai roadmap naskah kanonik.

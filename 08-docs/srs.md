@@ -7,7 +7,9 @@
 
 **Sumber kebenaran model dan angka:** [`dss_revisi_markdown/dss_revisi.md`](../dss_revisi_markdown/dss_revisi.md)
 
-**Implementasi yang dispesifikasikan:** [`05-aplikasi/index.html`](../05-aplikasi/index.html)
+**Implementasi yang dispesifikasikan:**
+1. Prototipe offline mandiri: [`05-aplikasi/index.html`](../05-aplikasi/index.html)
+2. Aplikasi modern Next.js 16 + Three.js + Supabase: [`07-webapp/`](../07-webapp/)
 
 > Dokumen ini mendeskripsikan perilaku aplikasi yang sudah diimplementasikan. Apabila ada perbedaan penafsiran, model, angka, atau alur dengan dokumen lain, `dss_revisi_markdown/dss_revisi.md` diprioritaskan.
 
@@ -74,6 +76,11 @@ Aplikasi memakai data **hybrid**. Data sekunder riil level desa/kecamatan diguna
 | FR-10 | Sistem harus menjalankan analisis sensitivitas bobot *one-at-a-time* sebesar +20% dan −20% pada tiap C1–C8, merenormalisasi bobot lain, serta menampilkan susunan peringkat dan penanda pembalikan peringkat. |
 | FR-11 | Sistem harus menyediakan fungsi reset untuk memulihkan dataset aktif dan matriks AHP awal. |
 | FR-12 | Sistem harus mengekspor hasil peringkat, kelayakan, fase, biaya, dan CC ke berkas CSV. |
+| FR-13 | Sistem modern (`07-webapp/`) harus menyediakan dua preset dataset: preset `ilustratif` (default, AHP hierarki 3 klaster × 3 kelompok responden agregat rata-rata geometrik sesuai `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx`) dan preset `naskah_uts` (AHP datar 8×8 kanonik). |
+| FR-14 | Sistem modern (`07-webapp/`) harus mengorganisasi antarmuka dalam 5 layar terdedikasi sesuai mockup `SiPrioCCTV Jatinangor.html` (Dashboard, Data Kriteria, Pembobotan AHP, Hasil TOPSIS & Anggaran, dan Uji Sensitivitas). |
+| FR-15 | Sistem modern (`07-webapp/`) harus menyediakan visualisasi peta spasial 3D berbasis WebGL (Three.js) dengan pilar tinggi proporsional CC dan kontrol interaktif (orbit/hover/klik), serta tombol pengalih ke fallback SVG 2D. |
+| FR-16 | Sistem modern (`07-webapp/`) harus menyediakan antarmuka kuesioner slider Saaty terpandu untuk pengisian perbandingan oleh pakar/responden. |
+| FR-17 | Sistem modern (`07-webapp/`) harus mendukung integrasi repositori basis data Supabase (PostgreSQL + RLS) dengan mekanisme fallback otomatis (*graceful local fallback*) ke data statis lokal jika variabel lingkungan tidak disetel. |
 
 ## 5. Kebutuhan nonfungsional
 
@@ -84,9 +91,11 @@ Aplikasi memakai data **hybrid**. Data sekunder riil level desa/kecamatan diguna
 | NFR-03 | Implementasi harus menjaga keterlacakan hasil resmi melalui pengujian yang mengekstrak skrip aktual dari `index.html`, bukan melalui salinan algoritma. |
 | NFR-04 | Antarmuka harus menggunakan Bahasa Indonesia, kecuali istilah teknis yang lazim seperti AHP, TOPSIS, CSV, dan SVG. |
 | NFR-05 | Aplikasi harus mengomunikasikan status simulasi/hybrid dan batasannya, agar keluaran tidak disalahartikan sebagai keputusan lapangan yang tervalidasi. |
-| NFR-06 | Visualisasi peta harus ringan dan menggunakan SVG tanpa dependensi visualisasi berat. |
+| NFR-06 | Visualisasi peta harus ringan dan menggunakan SVG tanpa dependensi visualisasi berat pada prototipe offline, serta mendukung WebGL 3D dengan fallback 2D pada aplikasi modern. |
 | NFR-07 | Masukan numerik harus memiliki pembatas antarmuka minimum yang sesuai, termasuk C9 skala 1–5, biaya tidak negatif, dan elemen AHP positif. Validitas substantif masukan tetap menjadi tanggung jawab operator. |
 | NFR-08 | Aplikasi harus mendukung audit hasil melalui tampilan nilai antara TOPSIS (D⁺, D⁻, CC), parameter AHP, status kelayakan, serta subtotal fase. |
+| NFR-09 | Aplikasi modern (`07-webapp/`) harus memenuhi standar aksesibilitas web WCAG 2.1 Level AA (0 pelanggaran serius/kritis pada audit `axe-core`). |
+| NFR-10 | Aplikasi modern (`07-webapp/`) harus dapat dideploy sebagai aplikasi statis teroptimasi ke platform cloud modern (Vercel). |
 
 ## 6. Batasan dan asumsi
 

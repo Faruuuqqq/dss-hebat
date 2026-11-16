@@ -1,125 +1,144 @@
-# 07-webapp — DSS CCTV Jatinangor (Next.js)
+# 07-webapp — SiPrioCCTV Jatinangor (Next.js 16 + Three.js + Supabase)
 
-Migrasi aplikasi satu-berkas (`05-aplikasi/index.html`) ke **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4**.
+Implementasi aplikasi DSS (*Decision Support System*) prioritisasi penempatan kamera CCTV di permukiman mahasiswa Jatinangor berbasis **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + Three.js + Supabase**.
 
-Aplikasi tetap **100% sisi klien**: tidak ada backend, tidak ada basis data, tidak ada panggilan jaringan saat runtime. Halaman di-*prerender* statis.
+Aplikasi mengimplementasikan model keputusan **AHP–TOPSIS** multi-kriteria dengan alokasi anggaran bertahap dan uji sensitivitas *one-at-a-time* (OAT), mereproduksi antarmuka mockup [`SiPrioCCTV Jatinangor.html`](../SiPrioCCTV%20Jatinangor.html) dan dataset [`Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx`](../Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx).
 
-## Menjalankan
+---
+
+## Fitur Utama
+
+1. **5 Layar Terintegrasi (Desain Mockup SiPrioCCTV):**
+   - **Dashboard (`/`):** 4 KPI utama, visualisasi peta 3D prioritas, peringkat TOPSIS interaktif, dan kartu alokasi bertahap.
+   - **Data Kriteria (`/kriteria`):** Matriks keputusan terkelompok (Risiko, Paparan, Spasial, Biaya & Kelayakan), form penyesuaian nilai alternatif, dan transparansi sumber data.
+   - **Pembobotan AHP (`/ahp`):** Matriks perbandingan klaster, status konsistensi Saaty (CR, $\lambda_{\max}$, RI), kuesioner slider Saaty untuk responden pakar/stakeholder, dan kartu bobot global kriteria.
+   - **Hasil & Anggaran (`/hasil`):** Tabel komprehensif TOPSIS ($D^+$, $D^-$, $CC$), alokasi bertahap dengan progress bar, pengaturan plafon dinamis & ambang C9, serta unduhan ekspor CSV.
+   - **Uji Sensitivitas (`/sensitivitas`):** Simulasi OAT $\pm20\%$, visualisasi pergeseran peringkat, indikator pembalikan peringkat (*rank reversal*), dan tabel matriks 16 skenario.
+
+2. **Dua Preset Dataset:**
+   - **Preset `ilustratif` (Default):** Berbasis file Excel `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx` dengan AHP hierarki 3 klaster $\times$ 3 kelompok stakeholder (agregat rata-rata geometrik). Bobot global: C1 31,56%, C3 19,88%, C2 16,14%, C5 10,50%, C8 6,83%, C4 6,81%, C7 5,17%, C6 3,11%; TOPSIS A3 (0,7674) > A1 (0,5650) > A4 (0,4287) > A2 (0,4128) > A5 (0,1397).
+   - **Preset `naskah_uts`:** AHP datar $8 \times 8$ kanonik sesuai paper IEEE dan proposal UTS (C1 23,95%; TOPSIS A3 0,6445 > A1 0,5774 > A4 0,4995 > A2 0,4638 > A5 0,1820).
+
+3. **Visualisasi Peta 3D (Three.js):**
+   - Kanvas WebGL interaktif dengan jalan, bangunan kubus, titik CCTV eksisting, dan pilar prioritas dengan tinggi proporsional terhadap skor urgensi ($CC$).
+   - Raycasting untuk hover/click segmen, kontrol rotasi orbit, serta tombol beralih ke fallback SVG 2D jika WebGL dinonaktifkan.
+   - Tiga mode tampilan layer: Urgensi ($CC$), Kelayakan teknis ($C_9$), dan Coverage gap ($C_7$).
+
+4. **Integrasi Supabase & Fallback Anggun (Graceful Local Fallback):**
+   - Skema database PostgreSQL lengkap di `supabase/migrations/20261116000000_init.sql` (tabel profil, dataset, kriteria, alternatif, nilai, perbandingan AHP, dan log audit).
+   - *Row Level Security* (RLS) policies untuk pemisahan hak akses publik (baca), pakar (input AHP), dan admin (tulis matriks kriteria).
+   - Data awal otomatis dari `supabase/seed.sql`.
+   - `lib/supabase-repository.ts` mendeteksi keberadaan variabel lingkungan; jika Supabase belum terhubung, aplikasi beralih secara transparan ke data statis lokal.
+
+5. **Aksesibilitas & Kerapian UI:**
+   - Memenuhi standar WCAG 2.1 AA (0 pelanggaran pada audit otomatis `axe-core`).
+   - Kontras warna teks, label form (`htmlFor`, `aria-label`), navigasi keyboard, dan tabel responsif.
+
+---
+
+## Menjalankan Aplikasi
 
 ```bash
 cd 07-webapp
 npm install
-npm run dev          # http://localhost:3000
+npm run dev          # Buka http://localhost:3000
 ```
 
-Produksi:
+Kompilasi produksi:
 
 ```bash
 npm run build
-npm start            # default http://localhost:3000
+npm start            # Default port 3000 (atau gunakan -p 3111)
 ```
 
-## Verifikasi
+---
+
+## Verifikasi & Pengujian Otomatis
+
+Aplikasi dilengkapi suite pengujian otomatis berlapis:
 
 ```bash
-npm run verify       # lint + parity + build dalam satu perintah
-npm run lint         # ESLint 9 (flat config)
-npm run parity       # 50+ pemeriksaan: angka kanonik, format, parser input
+npm run verify       # Menjalankan: lint + parity + build produksi
 
-# uji peramban (server harus berjalan lebih dulu)
-npm start &
-npm run test:bugs    # 16 pemeriksaan perilaku input angka
-npm run test:ui      # 18 pemeriksaan interaksi dashboard
-npm run test:export  # 22 pemeriksaan ekspor CSV (isi berkas, kedua dataset)
-npm run test:a11y    # audit axe-core (WCAG 2.1 A/AA) di 2 lebar dan 4 keadaan
+npm run lint         # ESLint 9 (Next.js TypeScript config)
+npm run parity       # 75 pemeriksaan paritas numerik (AHP, TOPSIS, Alokasi, Sensitivitas)
+
+# Uji peramban (jalankan `npm start -p 3111` lebih dulu):
+npm run test:ui      # Uji interaksi di 5 layar peramban Chromium
+npm run test:bugs    # 16 pemeriksaan keandalan input angka NumberCell
+npm run test:export  # Pengujian unduhan nyata berkas CSV dan validasi isinya
+npm run test:a11y    # Audit aksesibilitas axe-core pada 5 layar (0 pelanggaran)
 ```
 
-Skrip peramban memakai `playwright-core` dengan Chromium yang sudah ada di mesin
-(tidak mengunduh peramban baru). Untuk menunjuk server atau peramban lain:
+---
 
+## Konfigurasi Lingkungan (Deployment)
+
+### Vercel
+Aplikasi siap dideploy ke Vercel dengan konfigurasi `07-webapp/vercel.json`. Bila dideploy dari subdirektori repo monorepo, tetapkan *Root Directory* pada Vercel ke `07-webapp`.
+
+### Supabase
+Salin berkas `.env.example` ke `.env.local` dan isi URL serta kunci API proyek Supabase Anda:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
+Jalankan migrasi dan seeding database:
 ```bash
-BASE_URL=http://127.0.0.1:3111 CHROME=/path/ke/chrome npm run test:ui
+supabase db push
+# atau jalankan skrip supabase/migrations/20261116000000_init.sql dan supabase/seed.sql via SQL Editor di Supabase Dashboard
 ```
 
-## Struktur
+---
+
+## Struktur Berkas
 
 ```
-app/
-  layout.tsx        # metadata + pembungkus
-  page.tsx          # dashboard interaktif (client component)
-  globals.css       # token warna/tipe, gaya sel matriks, fokus
-  icon.svg          # favicon
-components/
-  NumberCell.tsx    # sel angka aman (draft string, koma, jepit saat blur)
-lib/
-  engine.ts         # MESIN AHP-TOPSIS (mandiri, data-driven, tanpa impor internal)
-  format.ts         # format deterministik + parser input + ekspor CSV
-scripts/
-  parity.mts        # paritas angka kanonik + format + parser
-  ui-check.mjs      # uji interaksi peramban
-  ui-bugs.mjs       # uji regresi perilaku input angka
-  ui-export.mjs     # uji ekspor CSV (unduhan nyata + isi berkas)
-  ui-a11y.mjs       # audit aksesibilitas axe-core
+07-webapp/
+├── app/
+│   ├── layout.tsx             # Root layout, metadata, dan Sidebar navigation
+│   ├── page.tsx               # Layar 1: Dashboard interaktif
+│   ├── kriteria/page.tsx      # Layar 2: Data Kriteria Segmen & edit form
+│   ├── ahp/page.tsx           # Layar 3: Pembobotan AHP & slider kuesioner Saaty
+│   ├── hasil/page.tsx         # Layar 4: Hasil TOPSIS, alokasi bertahap & CSV export
+│   ├── sensitivitas/page.tsx  # Layar 5: Uji sensitivitas OAT ±20%
+│   ├── globals.css            # Token desain, warna Saaty, dan styling
+│   └── icon.svg               # Favicon
+├── components/
+│   ├── Sidebar.tsx            # Navigasi utama, pemilih dataset & toggle peran
+│   ├── NumberCell.tsx         # Sel input angka terlindungi (anti-blur bug)
+│   └── map/
+│       ├── PriorityMap3D.tsx  # Komponen visualisasi 3D Three.js
+│       ├── PriorityMap2D.tsx  # Fallback visualisasi 2D berbasis SVG
+│       └── MapModeToggle.tsx  # Pengalih mode layer (Urgensi/Kelayakan/Gap)
+├── lib/
+│   ├── engine/                # Mesin komputasi AHP-TOPSIS modular (TypeScript murni)
+│   │   ├── types.ts           # Definisi tipe kriteria, alternatif, dan hasil
+│   │   ├── ahp.ts             # Solver AHP nilai eigen & konsistensi Saaty
+│   │   ├── topsis.ts          # Normalisasi Euclidean, jarak ideal & kedekatan CC
+│   │   ├── allocation.ts      # Logika alokasi fase anggaran & filter C9
+│   │   ├── sensitivity.ts     # Analisis sensitivitas one-at-a-time (OAT)
+│   │   └── index.ts           # Evaluator orkestrasi
+│   ├── store.tsx              # React Context penyimpan state global aplikasi
+│   ├── format.ts              # Utilitas format angka deterministik & CSV
+│   ├── supabase.ts            # Klien Supabase
+│   └── supabase-repository.ts # Repository layer dengan graceful local fallback
+├── data/
+│   ├── ilustratif.json        # Data hasil ekstraksi xlsx (default)
+│   ├── naskah-uts.json        # Data naskah UTS kanonik (flat 8x8)
+│   ├── cctv-eksisting.sim.json# Data titik CCTV eksisting [SIMULASI]
+│   └── jalan.sim.json         # Data garis jalan skematik [SIMULASI]
+├── supabase/
+│   ├── migrations/            # SQL migration skema tabel, RLS, audit log
+│   └── seed.sql               # Data benih awal PostgreSQL
+├── scripts/
+│   ├── import-xlsx.py         # Skrip ekstraktor XML dari file .xlsx ke JSON
+│   ├── generate-data.py       # Pembangkit dataset kanonik & spasial skematik
+│   ├── parity.mts             # 75 pengujian paritas numerik
+│   ├── ui-check.mjs           # E2E test 5 layar via Chromium
+│   ├── ui-bugs.mjs            # Regresi input angka
+│   ├── ui-export.mjs          # Verifikasi unduhan CSV
+│   └── ui-a11y.mjs            # Audit aksesibilitas WCAG 2.1 AA
+└── vercel.json                # Konfigurasi deployment Vercel
 ```
-
-`lib/engine.ts` sengaja dibuat **mandiri tanpa impor internal** supaya dapat dijalankan
-langsung oleh Next.js maupun oleh `node scripts/parity.mts` tanpa langkah build.
-
-## Perilaku input angka
-
-Seluruh sel angka memakai `components/NumberCell.tsx`. Alasannya: input yang dikendalikan
-langsung oleh state numerik (`value={n} onChange={e => setN(Number(e.target.value))}`)
-merusak pengetikan. Saat sel dikosongkan, `Number("")` bernilai `0`, React mengisi ulang `"0"`,
-lalu karakter berikutnya menempel sehingga `"7.5"` menjadi `"75"` dan `"1250"` menjadi `"01250"`.
-
-| Perilaku | Jaminan |
-|---|---|
-| Mengetik desimal | Teks dipertahankan selama fokus (`7.5` tetap `7.5`) |
-| Pemisah desimal | Titik maupun koma diterima (`6,5` → `6.5`) |
-| Nilai di luar rentang | Dijepit saat blur (C9 → 1..5, biaya ≥ 0, AHP → 1/9..9) |
-| Sel dikosongkan | Kembali ke nilai sah sebelumnya, bukan `0` |
-| Teks tidak valid | Ditolak, nilai sah sebelumnya dipertahankan |
-| Format angka | `lib/format.ts` tidak memakai `toLocaleString`, jadi keluaran identik di server dan klien (bebas risiko hydration) |
-
-## Paritas dengan model kanonik
-
-Sumber kebenaran: `dss_revisi_markdown/dss_revisi.md`. Angka yang dijaga `npm run parity`:
-
-| Besaran | Nilai |
-|---|---|
-| λmax / CI / CR | 8,1031 / 0,0147 / 0,0104 |
-| Bobot C1 | 23,95% |
-| Bobot C2 = C3 | 14,29% |
-| Bobot C5 = C8 | 12,45% |
-| Bobot C7 / C4 / C6 | 9,74% / 7,70% / 5,15% |
-| CC A3 / A1 / A4 / A2 / A5 | 0,6445 / 0,5774 / 0,4995 / 0,4638 / 0,1820 |
-| Fase anggaran | [1, 2, 1, 2, 3] |
-| Sensitivitas ±20% | 16 skenario, 2 pembalikan (C1 −20%, C2 +20%) |
-
-### Catatan penting tentang `A0`
-
-Matriks AHP memakai `0,33` sebagai pendekatan desimal `1/3`, sehingga pasangan
-`0,33 × 3 = 0,99` dan matriks **tidak** resiprokal sempurna. Ini dipertahankan dengan sengaja:
-nilai `0,33` itulah yang mereproduksi λmax 8,1031 dan CR 0,0104. Bila diubah menjadi `1/3`
-tepat, λmax bergeser ke 8,1067 dan paritas dengan naskah kanonik hilang.
-
-## Perlakuan C9 dan RAB
-
-- C1–C8 adalah kriteria urgensi yang masuk TOPSIS.
-- C9 dan RAB adalah **kendala alokasi**, bukan kriteria perankingan.
-- Ambang `C9 ≥ 3` adalah **kebijakan implementasi terdokumentasi**, bukan angka yang
-  dinyatakan eksplisit dalam `dss_revisi.md`.
-- Alternatif dengan biaya satu titik melebihi plafon tidak dialokasikan, sehingga subtotal
-  fase tidak pernah melampaui plafon.
-
-## Status data
-
-Dataset `resmi` (5 segmen) adalah keluaran utama dan bersifat **hybrid**: kalibrasi dari
-sumber sekunder level desa/kecamatan, sedangkan sel per-segmen merupakan estimasi
-terdokumentasi. Dataset `perluasan` (12 desa) adalah **[SIMULASI]** untuk demonstrasi
-skalabilitas dan tidak boleh dijadikan hasil utama.
-
-## Belum dikerjakan
-
-- Deploy ke Vercel dan integrasi Supabase (tahap 2 pada rencana teknologi).
-- Data masih statis di `lib/engine.ts`; belum ada pemuatan dari basis data.
