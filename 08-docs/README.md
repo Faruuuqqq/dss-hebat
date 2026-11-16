@@ -11,6 +11,8 @@ Dokumen pada folder ini melengkapi aplikasi DSS prioritisasi penempatan CCTV Jat
 | [`uml.md`](uml.md) | Diagram use case, activity, dan sequence dalam Mermaid. | Selesai |
 | [`mockup/README.md`](mockup/README.md) | Keterangan dan cara reproduksi screenshot desktop/mobile aplikasi aktual. | Selesai |
 | [`data-dan-sumber.md`](data-dan-sumber.md) | Status data riil, estimasi, simulasi, serta daftar sumber. | Selesai |
+| [`../tasks/plan.md`](../tasks/plan.md) | Roadmap implementasi aplikasi dari kebutuhan paper hingga website, dengan status aktual dan fase lanjutan. | Roadmap |
+| [`../tasks/todo.md`](../tasks/todo.md) | Checklist penyelarasan data dummy dan opsi deployment/Three.js. | Open items |
 
 ## Catatan penting model
 

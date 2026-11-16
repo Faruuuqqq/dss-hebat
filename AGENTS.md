@@ -30,7 +30,10 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 - `dss_revisi_markdown/dss_revisi.md` adalah **satu-satunya sumber kebenaran** untuk model, angka, dan alur PRISMA.
 - Semua luaran hidup (`05-aplikasi/`, `06-paper-hasil/`, `08-docs/`) wajib konsisten dengan naskah itu.
 - **Kontradiksi internal yang sudah diputuskan:** narasi metodologi `dss_revisi.md` menyebut AHP hierarki 3 kluster (10 perbandingan), tetapi hasil numeriknya (λmax 8,1031; n=8; RI=1,41; bobot C1 23,95%) hanya dapat dihasilkan matriks **datar 8×8**. Model numerik kanonik = **datar 8×8** (terverifikasi: model hierarki pilot menghasilkan C1 24,31% dan A3 0,6441, sedangkan datar 8×8 menghasilkan C1 23,95%, A3 0,6445, λmax 8,1031, CI 0,0147, CR 0,0104, persis `dss_revisi`). Angka hierarki (C1 24,31%; A3 0,6441; PRISMA 401/181) adalah artefak historis dan **tidak dipakai** di luaran hidup.
-- **Operasionalisasi C9:** teks rinci `dss_revisi.md` menetapkan C1–C8 sebagai urgensi TOPSIS, sedangkan C9 dan RAB menjadi kendala fase. Tabel VII menegaskan C9 sebagai kelayakan teknis berskala 1–5, tetapi tidak menetapkan ambang numerik. Gambar 3 memakai label generik “AHP: bobot C1–C9”, sehingga tidak mengalahkan teks rinci maupun hasil 8×8 yang terkunci. Implementasi memakai C9 ≥ 3 sebagai **ambang kelayakan operasional** saat alokasi fase, bukan kutipan aturan numerik verbatim dari `dss_revisi.md`.
+- **Operasionalisasi C9:** teks rinci `dss_revisi.md` menetapkan C1–C8 sebagai urgensi TOPSIS, sedangkan C9 dan RAB menjadi kendala fase. Tabel VII menegaskan C9 sebagai kelayakan teknis berskala 1–5, tetapi tidak menetapkan ambang numerik. Gambar 3 memakai label generik “AHP: bobot C1–C9”, sehingga tidak mengalahkan teks rinci maupun hasil 8×8 yang terkunci. Implementasi memakai C9 ≥ 3 sebagai **ambang kelayakan operasional** saat alokasi fase, bukan kutipan aturan numerik verbatim dari `dss_revisi.md`. Pada aplikasi modern `07-webapp/` (mengikuti mockup `SiPrioCCTV Jatinangor.html`), C9 < ambang (default 3) tidak boleh dialokasikan pada Fase 1, namun tetap dapat dialokasikan pada fase berikutnya (Fase 2+) dengan catatan peringatan kesiapan tiang/listrik.
+- **Dua Preset Dataset Aplikasi:** Untuk menjaga keselarasan naskah paper sekaligus memenuhi spesifikasi mockup `SiPrioCCTV Jatinangor.html` & `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx`:
+  1. **Preset `ilustratif` (default aplikasi):** AHP hierarki 3 klaster × 3 kelompok stakeholder (agregat rata-rata geometrik). Nilai: bobot C1 31,56%, C3 19,88%, C2 16,14%, C5 10,50%, C8 6,83%, C4 6,81%, C7 5,17%, C6 3,11%; TOPSIS A3 (0,7674) > A1 (0,5650) > A4 (0,4287) > A2 (0,4128) > A5 (0,1397); alokasi F1 {A3, A1} Rp 14,0 Jt, F2 {A4, A2} Rp 12,5 Jt, F3 {A5} Rp 5,5 Jt.
+  2. **Preset `naskah_uts`:** AHP datar 8×8 kanonik (C1 23,95%, A3 0,6445) untuk paritas dengan paper hasil dan naskah proposal UTS.
 - Artefak historis wajib diberi banner status: `03-sintesis/pilot_ahp_topsis.py`, `03-sintesis/tahap-4-pilot-dummy-numerik.md`, `04-paper/catatan-perubahan-dan-perbaikan.md`, `04-paper/diagram/`.
 
 ## 3. Aturan kerja (wajib)
@@ -74,10 +77,10 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 ## 6. Keputusan teknologi yang sudah dikunci (untuk tugas aplikasi)
 
 - **Next.js** (App Router) + **TypeScript** + **Tailwind CSS**, deploy **Vercel**.
-- **Supabase** (Postgres) menyusul (tahap 2); mulai dengan data statis.
-- **Mockup**: wireframe dibuat dari kode → ekspor PNG (sudah ada di `08-docs/mockup/`).
-- Mesin AHP–TOPSIS harus dipisah dari data (**data-driven**), diuji paritas dengan angka invarian di atas.
-- Visualisasi pakai **SVG tanpa dependensi berat** (bukan Three.js).
+- **Supabase** (Postgres + Auth + RLS) terintegrasi pada repository data aplikasi, dengan fallback graceful ke berkas JSON statis jika env Supabase tidak ada.
+- **Mockup**: desain UI mengikuti mockup 5 layar [`SiPrioCCTV Jatinangor.html`](SiPrioCCTV Jatinangor.html) (Dashboard, Data Kriteria, Pembobotan AHP, Hasil TOPSIS & Anggaran, Uji Sensitivitas).
+- Mesin AHP–TOPSIS harus dipisah dari data (**data-driven**), mendukung mode hierarki maupun datar, diuji paritas dengan angka invarian di atas.
+- Visualisasi peta: **Peta 3D prioritas berbasis Three.js** (React Three Fiber / `@react-three/fiber` client-only dengan dynamic import) dengan fallback **SVG 2D** bila WebGL tidak tersedia atau dinonaktifkan.
 - **Gambar arsitektur**: satu sumber TikZ `assets/diagram/arsitektur-4-lapis-kanonik.tex`, dimuat vektor oleh kedua paper. PNG (jika perlu) dibangun via `assets/diagram/build-arsitektur-png.sh`. Jangan pakai PNG lama.
 
 ## 7. Peta file penting

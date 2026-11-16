@@ -56,3 +56,12 @@ desktop.ini
 .env
 .env.*
 !.env.example
+
+# ---------------------------------------------------------------------------
+# Konfigurasi agen AI / tooling lokal
+# ---------------------------------------------------------------------------
+.agents/
+.claude/
+.commandcode/
+skills-lock.json
+
