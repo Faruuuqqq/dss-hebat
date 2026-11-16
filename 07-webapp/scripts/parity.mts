@@ -154,8 +154,77 @@ chk("parse 'abc' -> null", parseNumber("abc"), null);
 chk("parse '1.2.3' -> null", parseNumber("1.2.3"), null);
 chk("parse '1e5' -> null (notasi eksponen ditolak)", parseNumber("1e5"), null);
 
+console.log("\n=== 11. Engine Modular (lib/engine) — Paritas Dataset Ilustratif (xlsx) ===");
+import fs from "node:fs";
+import path from "node:path";
+import { solveDataset } from "../lib/engine/index.ts";
+
+const ilustratifRaw = JSON.parse(
+  fs.readFileSync(path.join(import.meta.dirname, "../data/ilustratif.json"), "utf8")
+);
+const dssIlustratif = solveDataset(ilustratifRaw);
+
+// AHP Hierarki
+chk("AHP mode", dssIlustratif.ahp.mode, "hierarki");
+const hRes = dssIlustratif.ahp.hierarchicalResult!;
+chk("CR klaster", Number(hRes.cluster.CR.toFixed(4)), 0.0009, 1e-4);
+chk("bobot klaster Risiko", Number(hRes.cluster.weights["Risiko"].toFixed(4)), 0.5145, 1e-4);
+chk("bobot klaster Paparan", Number(hRes.cluster.weights["Paparan"].toFixed(4)), 0.3346, 1e-4);
+chk("bobot klaster Spasial", Number(hRes.cluster.weights["Spasial"].toFixed(4)), 0.1509, 1e-4);
+
+// Bobot Global
+const expGW: Record<string, number> = {
+  C1: 0.3156, C2: 0.1614, C3: 0.1988, C4: 0.0681,
+  C5: 0.1050, C6: 0.0311, C7: 0.0517, C8: 0.0683
+};
+for (const [c, val] of Object.entries(expGW)) {
+  chk(`global w_${c}`, Number(dssIlustratif.ahp.weights[c].toFixed(4)), val, 1e-4);
+}
+
+// TOPSIS CC
+const expCC: Record<string, number> = {
+  A1: 0.5650, A2: 0.4128, A3: 0.7674, A4: 0.4287, A5: 0.1397
+};
+dssIlustratif.alternatives.forEach((alt, idx) => {
+  chk(`CC_${alt.id}`, Number(dssIlustratif.topsis.CC[idx].toFixed(4)), expCC[alt.id], 1e-4);
+});
+chk("urutan TOPSIS ilustratif",
+  dssIlustratif.topsis.sortedIndices.map((i) => dssIlustratif.alternatives[i].id).join(">"),
+  "A3>A1>A4>A2>A5"
+);
+
+// Alokasi fase
+const allocMap: Record<string, number | null> = {};
+dssIlustratif.allocation.items.forEach((it) => { allocMap[it.alternatif_id] = it.fase; });
+chk("fase A3 (Segera)", allocMap["A3"], 1);
+chk("fase A1 (Segera)", allocMap["A1"], 1);
+chk("fase A4 (C9=2, Fase 2)", allocMap["A4"], 2);
+chk("fase A2 (Fase 2)", allocMap["A2"], 2);
+chk("fase A5 (Fase 3)", allocMap["A5"], 3);
+chk("subtotal F1", dssIlustratif.allocation.subtotals[1], 14000000);
+chk("subtotal F2", dssIlustratif.allocation.subtotals[2], 12500000);
+chk("subtotal F3", dssIlustratif.allocation.subtotals[3], 5500000);
+
+// Sensitivitas
+chk("sensitivitas total skenario", dssIlustratif.sensitivity.summary.totalScenarios, 16);
+chk("peringkat 1 tetap 16/16", dssIlustratif.sensitivity.summary.rank1PreservedCount, 16);
+chk("urutan penuh tetap 14/16", dssIlustratif.sensitivity.summary.fullOrderPreservedCount, 14);
+chk("pembalikan urutan = 2", dssIlustratif.sensitivity.summary.reversalsCount, 2);
+
+console.log("\n=== 12. Engine Modular (lib/engine) — Paritas Dataset Naskah UTS ===");
+const naskahUtsRaw = JSON.parse(
+  fs.readFileSync(path.join(import.meta.dirname, "../data/naskah-uts.json"), "utf8")
+);
+const dssNaskahUts = solveDataset(naskahUtsRaw);
+chk("AHP mode naskah_uts", dssNaskahUts.ahp.mode, "datar");
+chk("lambda_max naskah_uts", Number(dssNaskahUts.ahp.flatResult!.lam.toFixed(4)), 8.1031, 1e-4);
+chk("CR naskah_uts", Number(dssNaskahUts.ahp.flatResult!.CR.toFixed(4)), 0.0104, 1e-4);
+chk("CC A3 naskah_uts", Number(dssNaskahUts.topsis.CC[2].toFixed(4)), 0.6445, 1e-4);
+chk("CC A1 naskah_uts", Number(dssNaskahUts.topsis.CC[0].toFixed(4)), 0.5774, 1e-4);
+
 if (fail > 0) {
   console.log(`\n${fail} CHECK GAGAL`);
   process.exit(1);
 }
-console.log("\nSEMUA PARITY CHECK LULUS — mesin cocok dengan angka kanonik.");
+console.log("\nSEMUA PARITY CHECK LULUS — mesin cocok dengan angka kanonik & xlsx.");
+
