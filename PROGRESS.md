@@ -27,6 +27,20 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-17 · Sesi 27 — Bahan Presentasi: Penjelasan Halaman/Paper dan Justifikasi Data
+
+**Konteks:** Pengguna akan mempresentasikan progres (fokus mockup) ke dosen; butuh penjelasan fungsi halaman, isi paper, dan justifikasi data dummy vs riil.
+
+**Keputusan:** Dua dokumen baru di `08-docs/`, semua angka dirujuk dari `data-dan-sumber.md`, `draft-paper-hasil.md`, dan `alternatif-kriteria.csv` (tanpa angka baru).
+
+**File:** `08-docs/penjelasan-halaman-dan-paper.md`, `08-docs/justifikasi-data.md`, `PROGRESS.md`.
+
+**Verifikasi:** angka dicocokkan manual dengan sumber di atas.
+
+**Open items:** label segmen dan angka pada mockup Figma (Sesi 26) memakai nama ilustratif (mis. Ciseke Besar, Koridor Kulon) yang tidak sama dengan A1-A5 di paper (Gang Kos Sayang, Ruas Jalan Cikeruh, Persimpangan Hegarmanah, Gang Cipacing, Ruas Jalan Cileles); perlu diselaraskan sebelum presentasi.
+
+---
+
 ### 2026-11-16 · Sesi 26 — Desain Mockup 5 Layar Native Figma SiPrioCCTV
 
 **Konteks:** Merespons instruksi pengguna untuk mendesain mockup lengkap 5 layar aplikasi SiPrioCCTV Jatinangor langsung di file Figma pengguna (`https://www.figma.com/design/KAYBMTvny7wen9CZtxOJFO/Untitled?node-id=3-3&t=nXJVs1dXcvDSw3oS-4`) via Figma MCP plugin API.
