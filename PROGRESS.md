@@ -37,6 +37,8 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 **Verifikasi:** audit teks seluruh halaman (tanpa string lama, emoji, atau desimal bertitik) dan screenshot kelima frame.
 
+**Tindak lanjut (sesi sama):** tabel sensitivitas Layar 5 diganti 16 skenario penuh + baseline (nilai CC Tabel VIII; 2 reversal terhitung otomatis); label buatan ("Kritis", "Menengah", "Lanjutan", "Segera", "Akhir") diganti "Fase 1/2/3" dan "Peringkat n". Frame 11:2 diperpanjang menjadi tinggi 1160.
+
 **Open items:** website `07-webapp/` masih default `ilustratif` (angka berbeda dari paper); ganti default ke `naskah_uts`, perbarui `AGENTS.md` §2.1, ambil ulang screenshot `08-docs/mockup/`.
 
 ---
