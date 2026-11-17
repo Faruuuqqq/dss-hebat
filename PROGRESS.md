@@ -27,6 +27,20 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-17 · Sesi 28 — Mockup Figma Diselaraskan ke Paper (preset naskah_uts)
+
+**Konteks:** Mockup Figma Sesi 26 memakai nama segmen dan angka karangan yang tidak cocok dengan paper.
+
+**Keputusan:** Acuan tunggal = paper dan preset `naskah_uts` (AHP datar 8x8). Nama segmen A1-A5, Tabel III (matriks), IV (AHP 8x8), VI (D+/D-/CC), VII (fase; Fase 2 Rp 13,0 Jt), VIII (sensitivitas; reversal hanya A4/A2) dipakai di kelima frame. Layar 3 dibangun ulang dari hierarki 3 klaster menjadi matriks 8x8. Badge "100% Data Riil" diganti "Data hybrid".
+
+**File:** file Figma `KAYBMTvny7wen9CZtxOJFO` (frame 3:3, 8:2, 9:2, 10:2, 11:2, banner 11:164); `PROGRESS.md`.
+
+**Verifikasi:** audit teks seluruh halaman (tanpa string lama, emoji, atau desimal bertitik) dan screenshot kelima frame.
+
+**Open items:** website `07-webapp/` masih default `ilustratif` (angka berbeda dari paper); ganti default ke `naskah_uts`, perbarui `AGENTS.md` §2.1, ambil ulang screenshot `08-docs/mockup/`.
+
+---
+
 ### 2026-11-17 · Sesi 27 — Bahan Presentasi: Penjelasan Halaman/Paper dan Justifikasi Data
 
 **Konteks:** Pengguna akan mempresentasikan progres (fokus mockup) ke dosen; butuh penjelasan fungsi halaman, isi paper, dan justifikasi data dummy vs riil.
