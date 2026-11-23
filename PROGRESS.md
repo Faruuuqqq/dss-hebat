@@ -7,17 +7,17 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ---
 
-## Status ringkas (per 16 Nov 2026)
+## Status ringkas (per 20 Nov 2026)
 
 | Area | Status |
 |---|---|
 | **Sumber kebenaran** | `dss_revisi_markdown/dss_revisi.md` (AHP datar 8×8; PRISMA 582→416→121→12) |
 | Proposal SCR (UTS) `dss_revisi.md` | SELESAI, sudah dikumpulkan ke dosen |
 | Aplikasi DSS Offline (`05-aplikasi/`) | SELESAI (web app 1 file, offline; fokus edit diperbaiki; ambang C9 operasional; biaya > plafon tidak dialokasikan) |
-| Aplikasi Modern (`07-webapp/`) | SELESAI — Next.js 16 + Three.js + Supabase; 5 layar terintegrasi; 2 preset dataset; 3D map + 2D fallback; 0 pelanggaran a11y |
+| Aplikasi Modern (`07-webapp/`) | SELESAI — Next.js 16 + Leaflet GIS (OSM) + Three.js + Supabase; 5 layar terintegrasi; 2 preset dataset; Tri-View map (GIS OSM + 3D Kolom + 2D Skematik) dengan koordinat dunia nyata Jatinangor; 0 pelanggaran a11y |
 | Test suite | SELESAI — 75 parity check, Chromium UI check (5 layar), ekspor CSV terverifikasi, a11y WCAG 2.1 AA |
 | Paper hasil IEEE | SELESAI (.md + .tex), diselaraskan ke `dss_revisi` (BPS >98.000; 24 ref); tercompile **5 halaman** tanpa error (Tectonic) |
-| Data lapangan | RIIL level desa terkumpul; per-gang = hybrid (estimasi) |
+| Data lapangan & spasial | RIIL level desa + koordinat lokasi jalan/gang nyata Jatinangor via OpenStreetMap Nominatim (jarak geodesik selaras $C_7$); nilai matriks per-gang = hybrid (estimasi) |
 | Commit git | branch `main`; siap di-commit berurutan |
 
 **Blokir aktif:** data per-gang belum dari observasi lapangan.
@@ -26,6 +26,70 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 ---
 
 ## Log
+
+### 2026-11-23 · Sesi 31 — Rapikan Repo: Pulihkan NumberCell, Perbaiki Uji, Perkuat Paper & Instrumen Survei
+
+**Konteks:** Lanjutan verifikasi data CCTV (Sesi 30). Pengguna meminta repo dirapikan: putuskan A5, sinkronkan dokumen stale, perbaiki test stale, perkuat paper, dan siapkan instrumen survei.
+
+**Keputusan:**
+1. **Pulihkan `NumberCell` (input angka aman).** Komponen ada tetapi **tidak dipakai** lagi; `/kriteria` memakai `<input type="number">` mentah sehingga koma salah ("6,5"→65), nilai tidak dijepit (C9 bisa 9), kosong→0, dan teks tidak valid→0 (kehilangan nilai). `NumberCell` kini dipakai di `/kriteria` (C1–C9 + biaya) dengan tambahan prop `id` agar tetap terhubung ke `<label htmlFor>`. Kontrak (draft string, koma→titik, jepit saat blur, kosong→nilai sah) kembali aktif.
+2. **Perbaiki `test:bugs` & `test:export`** agar sesuai UI Next.js sekarang: pilih alternatif lewat baris tabel, target `aria-label` benar; AHP kini **slider** (bukan input angka); ekspor CSV kini **12 kolom** bernama `Hasil_DSS_CCTV_Jatinangor_<preset>.csv` (dulu 17 kolom `dss-cctv-resmi.csv`). Kedua suite LULUS.
+3. **Perkuat paper hasil** (`06-paper-hasil/`): paragraf inventaris CCTV riil (ETLE 2025; 64 kamera ATCS tak menjangkau Jatinangor; CCTV APBD 2026) + **3 referensi baru** ([25]–[27]) + keterbatasan kelima (koordinat = aproksimasi OSM). `.md`↔`.tex` sinkron; **tercompile 6 halaman**, 0 overfull, 0 undefined.
+4. **Instrumen survei lapangan** (`08-docs/instrumen-survei-lapangan.md`): template GPS, counting malam (C2), skor PJU (C3), POI (C8), RAB/C9, kuesioner AHP — siap pakai saat validasi lapangan (**belum dijalankan**).
+5. **Sinkronkan `AGENTS.md`** §4 (status per 23 Nov), §8 (perintah uji), §9 (open items); catatan A5 di `08-docs/data-dan-sumber.md`.
+
+**File:** `07-webapp/components/NumberCell.tsx`, `07-webapp/app/kriteria/page.tsx`, `07-webapp/scripts/{ui-bugs,ui-export}.mjs`, `06-paper-hasil/draft-paper-hasil.{md,tex,pdf,log}`, `08-docs/{instrumen-survei-lapangan.md,data-dan-sumber.md}`, `AGENTS.md`, `PROGRESS.md`.
+
+**Verifikasi:** `npm run lint` bersih; `npm run parity` 75/75 PASS; `npm run build` sukses; `test:bugs`, `test:export`, `test:ui`, `test:a11y` semua LULUS; `build-papers.sh` 6 + 8 halaman tanpa error.
+
+**Open items:** commit & (opsional) push; validasi lapangan memakai instrumen survei.
+
+---
+
+### 2026-11-20 · Sesi 30 — Data CCTV Riil Jatinangor, Verifikasi Koordinat OSM & Layer Referensi Peta
+
+**Konteks:** Pengguna meminta data CCTV riil Jatinangor untuk memperkaya peta & aplikasi, sekaligus verifikasi koordinat titik A1–A5 terhadap peta nyata.
+
+**Keputusan:**
+1. **Inventaris CCTV riil (riset kanal resmi + media):** ETLE statis (Polres+Pemda, terpasang Nov 2025, Jl. Raya Jatinangor depan bank dekat Unpad) = satu-satunya kamera lalu lintas riil terdokumentasi; CCTV Desa Hegarmanah (Jl. Cigede, pantau sampah liar) dan CCTV APBD Pemda 2026 juga riil tetapi tanpa lokasi presisi; kampus Unpad 420 unit (internal). **Koreksi: 64 kamera ATCS Dishub semuanya di Sumedang Kota — tidak ada di Jatinangor.**
+2. **Koreksi label kamera eksisting:** `CCTV-EX-02` tidak lagi disebut "ATCS" (kini "CCTV komersial Simpang Sayang"); `CCTV-EX-01` dilabeli eksplisit sebagai ETLE riil. Ditambah field `kepastian` (riil/simulasi) dan `sumber`.
+3. **Perbaikan koordinat segmen** (verifikasi OpenStreetMap): A1 → simpang Jl. Sayang `-6.9335, 107.7733`; A5 → Desa Cileles `-6.9118, 107.7774`. A2/A3/A4 tidak berubah (A3 terverifikasi tepat di Jl. Hegarmanah, Δ 6 m).
+4. **Batas peta (`MAP_BOUNDS`) diperluas** ke utara (`maxLat -6.9185 → -6.9080`) agar A5 tetap di dalam kanvas GIS/SVG/3D.
+5. **Titik referensi riil** `referensi.riil.json` (Kampus Unpad, Gerbang ITB, Gerbang IPDN, Halte Metro Jabar Trans Unpad, Simpang Sayang) ditampilkan sebagai layer konteks di peta GIS.
+
+**Catatan penting:** nilai **C7 tetap** (tidak diturunkan dari koordinat), sehingga angka kanonik & paritas **tidak berubah**. Koordinat berfungsi sebagai visualisasi; paper tetap mendeskripsikan peta sebagai skematik.
+
+**File:** `07-webapp/data/{ilustratif,naskah-uts,cctv-eksisting.sim,jalan.sim,referensi.riil}.json`, `07-webapp/scripts/{generate-data,import-xlsx}.py`, `07-webapp/supabase/seed.sql`, `07-webapp/lib/map-projection.ts`, `07-webapp/components/map/PriorityMapGIS.tsx`, `08-docs/data-dan-sumber.md`, `PROGRESS.md`.
+
+**Verifikasi:** `npm run lint` bersih; `npm run parity` 75/75 PASS (angka kanonik utuh); `npm run build` sukses.
+
+**Open items:** validasi GPS lapangan A1–A5; kepastian lokasi `CCTV-EX-02`; sinkronkan `AGENTS.md` §4 (tabel status masih 14 Nov).
+
+---
+
+### 2026-11-20 · Sesi 29 — Integrasi Peta GIS Interaktif (Leaflet + OpenStreetMap) & Tri-View Switcher
+
+**Konteks:** Menjawab kebutuhan pengguna untuk menambahkan visualisasi peta geografis riil Jatinangor yang bebas ketergantungan API key/billing Google Maps, sekaligus tetap mempertahankan visualisasi 3D Three.js dan 2D skematik SVG.
+
+**Keputusan:**
+1. **Vanilla Leaflet Imperatif (`PriorityMapGIS.tsx`) + `next/dynamic` (`ssr: false`):** Menghindari konflik *peer dependency* `react-leaflet` pada React 19 serta menjamin siklus hidup (`map.remove()`) bebas *memory leak* dengan pemisahan 4 `useEffect` (inisialisasi peta, pergantian basemap, render ulang layer vektor/marker, dan sinkronisasi kamera `panTo` saat `selectedAltId` berubah).
+2. **Basemap OpenStreetMap Resmi + Mode Minimalis DSS & Fallback Offline:** Menyediakan 3 pilihan peta dasar: `OSM Minimalis (DSS)` (tile resmi `tile.openstreetmap.org` dengan filter monokrom CSS agar warna prioritas kontras dan 100% bebas watermark API key), `OSM Warna`, serta `Grid Lokal` (*inline SVG Data URI* yang juga menjadi `errorTileUrl` saat luring).
+3. **4-Layer GIS Cartography & Penyelarasan Koordinat Dunia Nyata (OpenStreetMap Nominatim):**
+   - Mencocokkan seluruh koordinat segmen kandidat (`A1` Gang Kos Sayang `-6.9359, 107.7735`; `A2` Ruas Jalan Cikeruh/Ciseke `-6.9340, 107.7768`; `A3` Persimpangan Jl. Hegarmanah `-6.9336, 107.7783`; `A4` Gang Cipacing/Jl. GKPN `-6.9428, 107.7622`; `A5` Ruas Jalan Cileles `-6.9212, 107.7786`), titik kamera eksisting (`CCTV-EX-01` ETLE Jl. Raya Bandung–Sumedang depan Unpad `-6.9327, 107.7779` & `CCTV-EX-02` ATCS Simpang Sayang/Jatos `-6.9335, 107.7728`), serta geometri koridor jalan (`jalan.sim.json`) ke lokasi geografis nyata di OpenStreetMap.
+   - Jarak geodesik nyata (*Haversine*) antar titik terverifikasi selaras dengan nilai $C_7$ di dataset (`A3` ke `CCTV-EX-01` $\approx 109{,}4\text{ m}$ vs $C_7=110\text{ m}$; `A2` ke `CCTV-EX-01` $\approx 188{,}8\text{ m}$ vs $C_7=190\text{ m}$; `A1` ke `CCTV-EX-02` $\approx 277{,}8\text{ m}$ vs $C_7=280\text{ m}$).
+   - Menampilkan lingkaran *coverage buffer* 75 m untuk titik kandidat A1–A5, lingkaran referensi 100 m putus-putus untuk CCTV eksisting, tombol cepat `Fokus Kampus` & `Koridor Penuh`, serta *custom SVG `L.divIcon`* berperingkat (`#1`–`#5`) dengan *popup* analitik TOPSIS/C9/C7/RAB/Fase.
+4. **Tri-View Switcher (`PriorityMap3D.tsx`):** Menyediakan pemilih mode tampilan `GIS (OSM)` (default), `3D Kolom` (Three.js), dan `2D Skematik` (SVG), dengan kepatuhan penuh terhadap WCAG 2.1 AA (`keyboard: false` & pembersihan `tabindex` container/marker untuk menghindari `nested-interactive`).
+
+**File:** `07-webapp/package.json`, `07-webapp/package-lock.json`, `07-webapp/app/globals.css`, `07-webapp/components/map/PriorityMapGIS.tsx`, `07-webapp/components/map/PriorityMap3D.tsx`, `07-webapp/lib/map-projection.ts`, `07-webapp/data/ilustratif.json`, `07-webapp/data/naskah-uts.json`, `07-webapp/data/cctv-eksisting.sim.json`, `07-webapp/data/jalan.sim.json`, `07-webapp/scripts/generate-data.py`, `07-webapp/scripts/import-xlsx.py`, `07-webapp/supabase/seed.sql`, `PROGRESS.md`.
+
+**Verifikasi:**
+- `cd 07-webapp && npm run verify`: `eslint` 0 error/warning, `parity.mts` 75/75 PASS, `next build` sukses.
+- `npm run test:ui`: seluruh 5 layar LULUS di Chromium tanpa error konsol/jaringan; tangkapan layar terverifikasi menampilkan peta riil Jatinangor (Jl. Raya Jatinangor, Sayang, Cikeruh, Gang Ciseke, ITB/IPDN/Ikopin).
+- `npm run test:a11y`: `axe-core` WCAG 2.1 A/AA mencatat **0 pelanggaran** pada desktop (1440px) dan mobile (390px).
+
+**Open items:** opsional selaraskan preset default `07-webapp` ke `naskah_uts` jika diinginkan sebelum presentasi akhir, deploy Vercel + Supabase.
+
+---
 
 ### 2026-11-17 · Sesi 28 — Mockup Figma Diselaraskan ke Paper (preset naskah_uts)
 

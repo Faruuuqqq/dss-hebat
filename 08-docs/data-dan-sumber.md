@@ -111,6 +111,22 @@ Insiden relevan: tindak kejahatan di **gang sempit Desa Hegarmanah** (Polres Sum
 Tidak ditemukan di portal open data (data.go.id / Galura Jabar), LPSE Sumedang, Dishub, maupun Polres.
 Yang beredar hanya proposal/jasa pemasangan dan CCTV kampus (internal).
 
+### 6.1 Inventaris kamera riil Jatinangor (riset 20 Nov 2026)
+
+Koreksi verifikasi ulang: seluruh kamera **ATCS Dishub (64 unit) berada di Sumedang Kota, bukan Jatinangor** —
+daftar resmi `atcs.sumedangkab.go.id/lokasicctv` hanya memuat Alun-alun, Binokasih, Cimayor, Taman Endog, dll.
+Karena itu label lama "CCTV ATCS Simpang Sayang" pada aplikasi **dihapus** (ATCS tidak melayani Jatinangor).
+
+| Kamera riil | Jumlah | Lokasi | Catatan |
+|---|---|---|---|
+| ETLE statis (Polres Sumedang + Pemda) | 1 | Jl. Raya Jatinangor, depan bank (BRI Unit Ultras Mikro/PNM; disebut juga "depan Bank BJB"/"depan Kampus Unpad") | Terpasang 20–30 Nov 2025; ±4.000 pelanggaran/hari (Korlantas, Apr 2026). Lokasi deskriptif, tanpa lat/lng resmi. Sumber: Koran Gala, Radar Sumedang, Korlantas |
+| CCTV Desa Hegarmanah | tidak dirinci | Sekitar Jalan Cigede, Hegarmanah (jalur Hegarmanah–Cikeruh) | Untuk memantau pembuang sampah liar (Kades Hegarmanah, Radar Sumedang 19 Nov 2025) |
+| CCTV APBD Pemda di Jatinangor | tidak dirinci | Kawasan Jatinangor; terhubung pusat kendali, rencana integrasi ETLE | Bupati Dony A. Munir, Tribun Jabar 7 Agu 2026 |
+| CCTV kampus Unpad | 420 | Area Unpad Jatinangor | Internal kampus (cctv.unpad.net) |
+| Smart Pole Sumedang | 1 kawasan | Sumedang Kota (bukan Jatinangor) | Pemkab Sumedang |
+
+**Implikasi aplikasi:** `cctv-eksisting.sim.json` memuat 2 kamera — 1 **riil** (ETLE, ditandai `kepastian: "riil"`) dan 1 **simulasi** (komersial Simpang Sayang, `kepastian: "simulasi"`).
+
 ---
 
 ## 7. Data DUMMY — CCTV permukiman per segmen (SIMULASI)
@@ -173,8 +189,11 @@ Sistem mengorganisasikan dataset digital ke dalam dua preset dan berkas spasial 
    - Menghasilkan bobot global C1 23,95%, C2=C3 14,29%, C5=C8 12,45%, C7 9,74%, C4 7,70%, C6 5,15%.
    - Menghasilkan nilai TOPSIS $CC$: $A_3$ ($0{,}6445$) > $A_1$ ($0{,}5774$) > $A_4$ ($0{,}4995$) > $A_2$ ($0{,}4638$) > $A_5$ ($0{,}1820$).
 
-4. **`07-webapp/data/cctv-eksisting.sim.json` & `jalan.sim.json` `[SIMULASI]`:**
-   - Memuat koordinat skematik titik CCTV eksisting dan segmen jaringan jalan yang digunakan oleh komponen visualisasi Peta 3D Three.js (`PriorityMap3D.tsx`) dan Peta 2D SVG (`PriorityMap2D.tsx`). Seluruh koordinat berstatus simulasi visual, bukan koordinat survei GPS lapangan.
+4. **`07-webapp/data/cctv-eksisting.sim.json`, `jalan.sim.json`, `referensi.riil.json`:**
+   - `cctv-eksisting.sim.json`: 2 kamera — 1 **riil** (ETLE Jatinangor; lokasi deskriptif, `kepastian: "riil"`) dan 1 **simulasi** (komersial Simpang Sayang, `kepastian: "simulasi"`).
+   - `jalan.sim.json`: geometri koridor jalan (polyline) untuk peta GIS/3D/2D.
+   - `referensi.riil.json`: titik referensi dunia nyata (Kampus Unpad, Gerbang ITB, Gerbang IPDN, Halte Metro Jabar Trans Unpad, Simpang Sayang) dari OpenStreetMap sebagai konteks spasial di peta GIS.
+   - Koordinat segmen A1–A5 diselaraskan ke lokasi nyata OpenStreetMap (A1 ≈ simpang Jl. Sayang; A3 tepat di Jl. Hegarmanah; A5 ≈ Desa Cileles). Nilai C7 tetap **estimasi dataset**, bukan diturunkan dari koordinat peta. Catatan A5: diposisikan di pendekatan Desa Cileles, sedangkan deskripsi tipologi paper ("lingkar timur kampus") tetap berlaku sebagai peran koridor.
 
 ---
 

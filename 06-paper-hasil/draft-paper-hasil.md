@@ -68,6 +68,8 @@ Kontribusi makalah ini:
 
 **C. Dataset hybrid dan sumber.** Data publik tidak menyediakan nilai per-gang untuk kedelapan kriteria, sehingga dataset disusun hybrid. Angka riil dari sumber sekunder dipakai sebagai kalibrasi, antara lain: populasi desa (Cipacing 15.096; Hegarmanah 9.712; Sayang 8.474; Cikeruh 7.848; Cileles 6.331) [19]; statistik kriminalitas Kecamatan Jatinangor yang naik dari 11 (2022) ke 155 kasus (2023) dengan Jatinangor menjadi salah satu dari tiga wilayah prioritas [20] dan klaim penurunan pada 2024 [21]; jumlah kamar sewa di Desa Hegarmanah sebanyak 4.250 unit [24]; serta bukti defisiensi PJU di ruas Cileles–Narongtong [22] dan keluhan penerangan di Jatinangor [23]. Sel per-segmen yang tidak tersedia diberi label estimasi terdokumentasi. Matriks keputusan hasilnya disajikan pada Tabel III.
 
+Selain itu, inventaris kamera pengawas publik di Jatinangor masih tipis. Pemerintah Kabupaten Sumedang baru memasang satu kamera *Electronic Traffic Law Enforcement* (ETLE) statis di Jl. Raya Jatinangor pada akhir 2025 [25], sementara seluruh 64 kamera *Area Traffic Control System* (ATCS) Dishub Kabupaten Sumedang berada di kawasan perkotaan Sumedang dan belum menjangkau Jatinangor [26]. Pada 2026 Pemda mulai menambah CCTV berbasis APBD di Jatinangor dan mengarahkannya ke pusat kendali [27]. Karena itu, inventaris kamera per-gang yang menjadi basis kriteria C7 belum tersedia publik dan tetap diisi estimasi.
+
 **Tabel III. Matriks keputusan (data hybrid)**
 
 | Alternatif | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | Biaya (Rp Jt) |
@@ -201,7 +203,7 @@ $$\sum_{i\in \mathrm{Fase}\ k} Cost_i\le B_k\qquad(8)$$
 
 **F. Verifikasi implementasi.** Skrip pengujian mengekstrak blok `<script>` dari `index.html` dan menjalankannya di Node `vm` dengan DOM stub, sehingga yang diuji adalah kode aplikasi yang sebenarnya, bukan salinan. Hasilnya, aplikasi mereproduksi angka naskah konseptual secara persis: CR = 0,0104; bobot C1 = 23,95%; dan CCᵢ A3 = 0,6445, A1 = 0,5774, A4 = 0,4995, A2 = 0,4638, A5 = 0,1820. Hasil ini menegaskan bahwa alur komputasi model dapat dijalankan secara runtut dan dapat direproduksi, sehingga kandidat penerapan di tingkat lokal menjadi lebih realistis.
 
-**G. Keterbatasan.** Pertama, dataset bersifat hybrid: angka per-segmen merupakan estimasi terdokumentasi, sehingga hasil belum merupakan validasi empiris dan perlu digantikan data survei lapangan (geometri gang, counting mobilitas malam, survei PJU, pemetaan GPS CCTV, RAB). Kedua, matriks keputusan dan bobot AHP dalam makalah ini adalah penilaian konsensus ilustratif; bobot empiris harus diturunkan melalui kuesioner perbandingan berpasangan kepada pemangku kepentingan riil. Ketiga, hasil yang dilaporkan memakai lima segmen representatif; aplikasi menyediakan skenario perluasan 12 segmen (simulasi) untuk menunjukkan skalabilitas, tetapi perluasan ke data lapangan nyata belum diuji. Keempat, korelasi antarkriteria belum dimodelkan (peluang riset lanjutan dengan ANP).
+**G. Keterbatasan.** Pertama, dataset bersifat hybrid: angka per-segmen merupakan estimasi terdokumentasi, sehingga hasil belum merupakan validasi empiris dan perlu digantikan data survei lapangan (geometri gang, counting mobilitas malam, survei PJU, pemetaan GPS CCTV, RAB). Kedua, matriks keputusan dan bobot AHP dalam makalah ini adalah penilaian konsensus ilustratif; bobot empiris harus diturunkan melalui kuesioner perbandingan berpasangan kepada pemangku kepentingan riil. Ketiga, hasil yang dilaporkan memakai lima segmen representatif; aplikasi menyediakan skenario perluasan 12 segmen (simulasi) untuk menunjukkan skalabilitas, tetapi perluasan ke data lapangan nyata belum diuji. Keempat, korelasi antarkriteria belum dimodelkan (peluang riset lanjutan dengan ANP). Kelima, koordinat titik pada peta aplikasi merupakan aproksimasi OpenStreetMap, bukan hasil survei GPS lapangan.
 
 ## VI. KESIMPULAN
 
@@ -256,3 +258,9 @@ Model DSS prioritisasi penempatan CCTV untuk permukiman mahasiswa Jatinangor tel
 [23] Sumedang Tandang, "Minimnya penerangan di Jatinangor dan dampaknya terhadap masyarakat," 18 Apr. 2023. [Online]. Available: https://sumedangtandang.com/warta/minimnya-penerangan-di-jatinangor-dan-dampaknya-terhadap-masyarakat
 
 [24] Pemerintah Desa Hegarmanah, "Profil Desa Hegarmanah, Kecamatan Jatinangor," 2014. [Online]. Available: http://hegarmanah-jatinangor.blogspot.com/p/profil-desa.html
+
+[25] Korlantas Polri, "ETLE Jatinangor deteksi ribuan pelanggaran setiap hari, Satlantas Polres Sumedang imbau masyarakat tertib," 5 Apr. 2026. [Online]. Available: https://korlantas.polri.go.id/2026-04-05-etle-jatinangor-deteksi-ribuan-pelanggaran-setiap-hari-satlantas-polres-sumedang-imbau-masyarakat-tertib/
+
+[26] Dinas Perhubungan Kabupaten Sumedang, "ATCS Kabupaten Sumedang — lokasi CCTV," ATCS Sumedang. [Online]. Available: https://atcs.sumedangkab.go.id/lokasicctv
+
+[27] K. Andriana, "Bupati Sumedang siapkan CCTV terintegrasi di Jatinangor, trotoar diusulkan dibangun kembali," *Tribun Jabar*, 7 Agu. 2026. [Online]. Available: https://jabar.tribunnews.com/advertorial/1180843/bupati-sumedang-siapkan-cctv-terintegrasi-di-jatinangor-trotoar-diusulkan-dibangun-kembali

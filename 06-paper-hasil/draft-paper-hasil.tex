@@ -161,6 +161,8 @@ A5 & 1,5 & 160 & 3 & 420 & 30 & 2 & 250 & 5 & 4 & 5,5 \\
 \end{tabular}
 \end{table*}
 
+Selain itu, inventaris kamera pengawas publik di Jatinangor masih tipis. Pemerintah Kabupaten Sumedang baru memasang satu kamera \textit{Electronic Traffic Law Enforcement} (ETLE) statis di Jl.\ Raya Jatinangor pada akhir 2025 \cite{etle}, sementara seluruh 64 kamera \textit{Area Traffic Control System} (ATCS) Dishub Kabupaten Sumedang berada di kawasan perkotaan Sumedang dan belum menjangkau Jatinangor \cite{atcs}. Pada 2026 Pemda mulai menambah CCTV berbasis APBD di Jatinangor dan mengarahkannya ke pusat kendali \cite{cctvapbd}. Karena itu, inventaris kamera per-gang yang menjadi basis kriteria C7 belum tersedia publik dan tetap diisi estimasi.
+
 \subsection{Pembobotan AHP}
 Bobot diturunkan dari matriks perbandingan berpasangan konsensus $8\times8$ (Tabel~\ref{tab:ahp}). Agregasi lintas pemangku kepentingan memakai rata-rata geometrik (Persamaan~\ref{eq:geo}). Konsistensi diperiksa dengan CR (Persamaan~\ref{eq:cr}) dan $RI=1{,}41$ untuk $n=8$.
 
@@ -371,7 +373,7 @@ C8 & $-20\%$ & 0,5863 & 0,4535 & 0,6306 & 0,5170 & 0,1859 & A3$>$A1$>$A4$>$A2$>$
 Skrip pengujian mengekstrak blok \texttt{<script>} dari \texttt{index.html} dan menjalankannya di Node \texttt{vm} dengan DOM stub, sehingga yang diuji adalah kode aplikasi yang sebenarnya. Hasilnya, aplikasi mereproduksi angka naskah konseptual secara persis: $CR=0{,}0104$; bobot C1 $=23{,}95\%$; dan $CC_i$ A3 $=0{,}6445$, A1 $=0{,}5774$, A4 $=0{,}4995$, A2 $=0{,}4638$, A5 $=0{,}1820$. Hasil ini menegaskan bahwa alur komputasi model dapat dijalankan secara runtut dan direproduksi, sehingga kandidat penerapan di tingkat lokal menjadi lebih realistis.
 
 \subsection{Keterbatasan}
-Dataset bersifat \textit{hybrid}: angka per-segmen merupakan estimasi terdokumentasi, sehingga hasil belum merupakan validasi empiris dan perlu digantikan data survei lapangan (geometri gang, \textit{counting} mobilitas malam, survei PJU, pemetaan GPS CCTV, RAB). Bobot AHP merupakan penilaian konsensus ilustratif; bobot empiris harus diturunkan melalui kuesioner perbandingan berpasangan kepada pemangku kepentingan riil. Jumlah alternatif dibatasi lima segmen representatif; aplikasi menyediakan skenario perluasan 12 segmen (simulasi) untuk menunjukkan skalabilitas, tetapi perluasan ke data lapangan nyata belum diuji. Korelasi antarkriteria belum dimodelkan (peluang riset lanjutan dengan ANP).
+Dataset bersifat \textit{hybrid}: angka per-segmen merupakan estimasi terdokumentasi, sehingga hasil belum merupakan validasi empiris dan perlu digantikan data survei lapangan (geometri gang, \textit{counting} mobilitas malam, survei PJU, pemetaan GPS CCTV, RAB). Bobot AHP merupakan penilaian konsensus ilustratif; bobot empiris harus diturunkan melalui kuesioner perbandingan berpasangan kepada pemangku kepentingan riil. Jumlah alternatif dibatasi lima segmen representatif; aplikasi menyediakan skenario perluasan 12 segmen (simulasi) untuk menunjukkan skalabilitas, tetapi perluasan ke data lapangan nyata belum diuji. Korelasi antarkriteria belum dimodelkan (peluang riset lanjutan dengan ANP). Kelima, koordinat titik pada peta aplikasi merupakan aproksimasi OpenStreetMap, bukan hasil survei GPS lapangan.
 
 \section{Kesimpulan}
 
@@ -404,6 +406,9 @@ Model DSS prioritisasi penempatan CCTV untuk permukiman mahasiswa Jatinangor tel
 \bibitem{kapol} KAPOL.ID, ``Jalan Narongtong-Cileles minim PJU,'' 12 Apr.\ 2021. [Online]. Available: https://kapol.id
 \bibitem{sumedangtandang} Sumedang Tandang, ``Minimnya penerangan di Jatinangor dan dampaknya terhadap masyarakat,'' 18 Apr.\ 2023. [Online]. Available: https://sumedangtandang.com
 \bibitem{hegarmanah} Pemerintah Desa Hegarmanah, ``Profil Desa Hegarmanah, Kecamatan Jatinangor,'' 2014. [Online]. Available: http://hegarmanah-jatinangor.blogspot.com/p/profil-desa.html
+\bibitem{etle} Korlantas Polri, ``ETLE Jatinangor deteksi ribuan pelanggaran setiap hari, Satlantas Polres Sumedang imbau masyarakat tertib,'' 5 Apr. 2026. [Online]. Available: https://korlantas.polri.go.id/2026-04-05-etle-jatinangor-deteksi-ribuan-pelanggaran-setiap-hari-satlantas-polres-sumedang-imbau-masyarakat-tertib/
+\bibitem{atcs} Dinas Perhubungan Kabupaten Sumedang, ``ATCS Kabupaten Sumedang --- lokasi CCTV.'' [Online]. Available: https://atcs.sumedangkab.go.id/lokasicctv
+\bibitem{cctvapbd} K. Andriana, ``Bupati Sumedang siapkan CCTV terintegrasi di Jatinangor, trotoar diusulkan dibangun kembali,'' \textit{Tribun Jabar}, 7 Agu. 2026. [Online]. Available: https://jabar.tribunnews.com/advertorial/1180843/bupati-sumedang-siapkan-cctv-terintegrasi-di-jatinangor-trotoar-diusulkan-dibangun-kembali
 \end{thebibliography}
 
 \end{document}

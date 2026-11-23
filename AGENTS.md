@@ -46,20 +46,21 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 - **Data yang belum dari lapangan wajib dilabeli** `[SIMULASI]` / "estimasi terdokumentasi".
 - **Konvensi commit:** satu baris (one-liner) `feat|fix|docs|data|refactor|chore|test|build(<scope>): <ringkas>`, maksimal ~72 karakter, tanpa bullet di badan pesan. Satu commit = satu perubahan logis. Commit **berurutan**, bukan paralel: satu repo hanya punya satu index sehingga commit bersamaan akan bentrok di `index.lock`.
 
-## 4. Status terkini (per 14 Nov 2026)
+## 4. Status terkini (per 23 Nov 2026)
 
 | Area | Status |
 |---|---|
 | **Sumber kebenaran** | `dss_revisi_markdown/dss_revisi.md` (lihat §2.1) |
 | Proposal SCR (`dss_revisi_markdown/dss_revisi.md`) | SELESAI, sudah dinilai/dikumpulkan |
-| Aplikasi web (`05-aplikasi/`) | SELESAI — 1 file HTML offline, engine data-driven, fokus edit diperbaiki, filter C9 aktif, **biaya satu titik > plafon tidak dialokasikan** |
-| Test aplikasi (`05-aplikasi/test-algoritma.mjs`) | SELESAI — mengekstrak & menjalankan engine dari `index.html`, cek paritas CSV, C9, dan biaya > plafon |
+| Aplikasi offline (`05-aplikasi/`) | SELESAI — 1 file HTML offline, engine data-driven, filter C9 aktif |
+| Aplikasi modern (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; 5 layar; Tri-View peta (GIS Leaflet/OSM + 3D Three.js + 2D SVG); 2 preset dataset; `NumberCell` (input angka aman) aktif; Supabase opsional |
+| Data CCTV & spasial | ETLE resmi 1 titik (lokasi deskriptif) + CCTV Desa Hegarmanah; **ATCS tidak melayani Jatinangor**; koordinat A1–A5 diselaraskan ke OpenStreetMap, nilai C7 tetap estimasi dataset |
 | Paper hasil (`06-paper-hasil/`) | SELESAI — diselaraskan ke `dss_revisi`, **tercompile 5 halaman** tanpa error (Tectonic) |
-| Paper fase proposal (`04-paper/`) | SELESAI — diselaraskan ke AHP 8×8/PRISMA 416, **tercompile 8 halaman**; diagram arsitektur kini TikZ kanonik |
-| Data & sumber (`08-docs/data-dan-sumber.md`) | SELESAI — BPS + E-Office dicatat, data riil + dummy CCTV + sumber |
-| Dokumentasi SE (`08-docs/`) | SELESAI — SRS (FR/NFR/acceptance), traceability, UML Mermaid, mockup desktop/mobile aktual |
-| Migrasi Next.js (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; bug input angka, format, dan `lint` diperbaiki; 3 suite uji LULUS |
-| Git | ter-commit (16 commit s.d. sesi 15); branch `main`; belum di-push |
+| Paper fase proposal (`04-paper/`) | SELESAI — AHP 8×8/PRISMA 416, **tercompile 8 halaman**; diagram arsitektur TikZ kanonik |
+| Data & sumber (`08-docs/data-dan-sumber.md`) | SELESAI — BPS + E-Office; inventaris kamera riil Jatinangor |
+| Dokumentasi SE (`08-docs/`) | SELESAI — SRS (FR/NFR/acceptance), traceability, UML Mermaid, mockup; instrumen survei lapangan |
+| Verifikasi | `npm run verify` LULUS; suite peramban `test:ui`, `test:a11y`, `test:bugs`, `test:export` |
+| Git | branch `main`; siap di-commit/`push` |
 
 ## 5. Invarian (JANGAN dilanggar tanpa alasan kuat)
 
@@ -135,17 +136,18 @@ TECTONIC=/path/ke/tectonic bash build-papers.sh
 bash assets/diagram/build-arsitektur-png.sh
 
 # webapp Next.js
-cd 07-webapp && npm run verify        # lint + parity + build (harus lulus)
-# uji peramban: jalankan `npm start` lalu
-#   npm run test:bugs                 # perilaku input angka (16 cek)
-#   npm run test:ui                   # interaksi dashboard (18 cek)
+cd 07-webapp && npm run verify        # lint + parity (75 cek) + build (harus lulus)
+# uji peramban: jalankan `npx next start -p 3111` lebih dulu, lalu (skrip default BASE_URL=http://127.0.0.1:3111):
+#   npm run test:bugs                 # perilaku input angka NumberCell
+#   npm run test:ui                   # interaksi 5 layar + peta GIS
+#   npm run test:export               # ekspor CSV dua preset (unduhan nyata)
+#   npm run test:a11y                 # axe-core WCAG 2.1 A/AA (desktop + mobile)
 ```
 Aplikasi: buka `05-aplikasi/index.html` di browser (tanpa server). Screenshot headless opsional via Chromium/Playwright.
 
 ## 9. Rencana berikutnya (open items)
 
 1. (Opsional) Deploy `07-webapp/` ke Vercel + integrasi Supabase (tahap 2 rencana teknologi).
-2. (Opsional) Konfigurasi ESLint untuk `07-webapp/` (`npm run lint` belum aktif).
-3. (Opsional) Perdalam data lapangan: koordinat GPS titik CCTV, counting malam, survei PJU.
-4. (Opsional) Tinjau panjang paper hasil: 5 halaman padat (halaman terakhir 86% terisi). Jika venue menuntut 6–8 halaman, tambah pembahasan substantif, bukan penambahan kosmetik.
-5. (Opsional) Push branch `main` ke `origin` bila diinginkan.
+2. (Opsional) Validasi lapangan: koordinat GPS A1–A5 & kamera ETLE, *counting* malam, survei PJU, RAB — lihat `08-docs/instrumen-survei-lapangan.md`.
+3. (Opsional) Tambah pembahasan substantif bila venue menuntut paper 6–8 halaman (saat ini 5 halaman padat).
+4. (Opsional) Push branch `main` ke `origin` bila diinginkan.
