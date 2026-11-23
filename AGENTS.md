@@ -54,7 +54,7 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 | Proposal SCR (`dss_revisi_markdown/dss_revisi.md`) | SELESAI, sudah dinilai/dikumpulkan |
 | Aplikasi offline (`05-aplikasi/`) | SELESAI — 1 file HTML offline, engine data-driven, filter C9 aktif |
 | Aplikasi modern (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; 5 layar; peta **GIS Leaflet/OSM** + alt **2D SVG** (3D Three.js dihapus); 2 preset dataset; `NumberCell` (input angka aman) aktif; Supabase opsional |
-| Data CCTV & spasial | ETLE resmi 1 titik (lokasi deskriptif) + CCTV Desa Hegarmanah; **ATCS tidak melayani Jatinangor**; koordinat A1–A5 diselaraskan ke OpenStreetMap, nilai C7 tetap estimasi dataset |
+| Data CCTV & spasial | ETLE resmi 1 titik (lokasi deskriptif) + CCTV Desa Hegarmanah; daftar ATCS publik tidak memuat titik Jatinangor; koordinat A1–A5 diselaraskan ke OpenStreetMap, nilai C7 tetap estimasi dataset |
 | Paper hasil (`06-paper-hasil/`) | SELESAI — diselaraskan ke `dss_revisi`, **tercompile 5 halaman** tanpa error (Tectonic) |
 | Paper fase proposal (`04-paper/`) | SELESAI — AHP 8×8/PRISMA 416, **tercompile 8 halaman**; diagram arsitektur TikZ kanonik |
 | Data & sumber (`08-docs/data-dan-sumber.md`) | SELESAI — BPS + E-Office; inventaris kamera riil Jatinangor |

@@ -113,9 +113,10 @@ Yang beredar hanya proposal/jasa pemasangan dan CCTV kampus (internal).
 
 ### 6.1 Inventaris kamera riil Jatinangor (riset 20 Nov 2026)
 
-Koreksi verifikasi ulang: seluruh kamera **ATCS Dishub (64 unit) berada di Sumedang Kota, bukan Jatinangor** —
-daftar resmi `atcs.sumedangkab.go.id/lokasicctv` hanya memuat Alun-alun, Binokasih, Cimayor, Taman Endog, dll.
-Karena itu label lama "CCTV ATCS Simpang Sayang" pada aplikasi **dihapus** (ATCS tidak melayani Jatinangor).
+Koreksi verifikasi ulang: daftar lokasi publik ATCS Dishub (64 unit) yang diperiksa **tidak memuat titik di Jatinangor** —
+hanya Alun-alun, Binokasih, Cimayor, Taman Endog, dll. Ini hasil penelusuran terbatas pada satu halaman publik,
+**bukan** bukti bahwa ATCS tidak melayani Jatinangor. Karena itu label lama "CCTV ATCS Simpang Sayang" pada aplikasi
+**dihapus** (tidak ada dasar sumber).
 
 | Kamera riil | Jumlah | Lokasi | Catatan |
 |---|---|---|---|
