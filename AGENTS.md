@@ -53,7 +53,7 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 | **Sumber kebenaran** | `dss_revisi_markdown/dss_revisi.md` (lihat §2.1) |
 | Proposal SCR (`dss_revisi_markdown/dss_revisi.md`) | SELESAI, sudah dinilai/dikumpulkan |
 | Aplikasi offline (`05-aplikasi/`) | SELESAI — 1 file HTML offline, engine data-driven, filter C9 aktif |
-| Aplikasi modern (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; 5 layar; Tri-View peta (GIS Leaflet/OSM + 3D Three.js + 2D SVG); 2 preset dataset; `NumberCell` (input angka aman) aktif; Supabase opsional |
+| Aplikasi modern (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; 5 layar; peta **GIS Leaflet/OSM** + alt **2D SVG** (3D Three.js dihapus); 2 preset dataset; `NumberCell` (input angka aman) aktif; Supabase opsional |
 | Data CCTV & spasial | ETLE resmi 1 titik (lokasi deskriptif) + CCTV Desa Hegarmanah; **ATCS tidak melayani Jatinangor**; koordinat A1–A5 diselaraskan ke OpenStreetMap, nilai C7 tetap estimasi dataset |
 | Paper hasil (`06-paper-hasil/`) | SELESAI — diselaraskan ke `dss_revisi`, **tercompile 5 halaman** tanpa error (Tectonic) |
 | Paper fase proposal (`04-paper/`) | SELESAI — AHP 8×8/PRISMA 416, **tercompile 8 halaman**; diagram arsitektur TikZ kanonik |
@@ -81,7 +81,7 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 - **Supabase** (Postgres + Auth + RLS) terintegrasi pada repository data aplikasi, dengan fallback graceful ke berkas JSON statis jika env Supabase tidak ada.
 - **Mockup**: desain UI mengikuti mockup 5 layar [`SiPrioCCTV Jatinangor.html`](SiPrioCCTV Jatinangor.html) (Dashboard, Data Kriteria, Pembobotan AHP, Hasil TOPSIS & Anggaran, Uji Sensitivitas).
 - Mesin AHP–TOPSIS harus dipisah dari data (**data-driven**), mendukung mode hierarki maupun datar, diuji paritas dengan angka invarian di atas.
-- Visualisasi peta: **Peta 3D prioritas berbasis Three.js** (React Three Fiber / `@react-three/fiber` client-only dengan dynamic import) dengan fallback **SVG 2D** bila WebGL tidak tersedia atau dinonaktifkan.
+- Visualisasi peta: **peta GIS interaktif Leaflet + OpenStreetMap** (client-only via `next/dynamic`, `ssr: false`) sebagai tampilan utama, dengan alternatif **SVG 2D skematik**. Tampilan **3D Three.js dihapus** (kurang informatif dibanding peta dasar nyata).
 - **Gambar arsitektur**: satu sumber TikZ `assets/diagram/arsitektur-4-lapis-kanonik.tex`, dimuat vektor oleh kedua paper. PNG (jika perlu) dibangun via `assets/diagram/build-arsitektur-png.sh`. Jangan pakai PNG lama.
 
 ## 7. Peta file penting
@@ -95,6 +95,8 @@ assets/diagram/
   build-arsitektur-png.sh          # regenerasi PNG 400 dpi dari sumber TikZ
 07-webapp/                   # Next.js 16 + TS + Tailwind 4 (migrasi aplikasi)
   app/page.tsx               # dashboard interaktif (client component)
+  components/map/            # PriorityMapPanel (pemilih GIS/2D), PriorityMapGIS (Leaflet/OSM), PriorityMap2D (SVG)
+  data/referensi.riil.json   # titik referensi dunia nyata (OSM): kampus/gate/halte
   components/NumberCell.tsx  # sel angka aman (draft string, koma, jepit saat blur)
   lib/engine.ts              # mesin AHP-TOPSIS TS (mandiri, data-driven)
   scripts/parity.mts         # paritas angka kanonik (node, tanpa build)

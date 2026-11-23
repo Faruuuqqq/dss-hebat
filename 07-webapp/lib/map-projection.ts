@@ -28,19 +28,3 @@ export function projectLatLngTo2D(
   return [Math.round(x), Math.round(y)];
 }
 
-export function projectLatLngTo3D(
-  lat: number,
-  lng: number,
-  scale = 6
-): [number, number] {
-  const { minLat, maxLat, minLng, maxLng } = MAP_BOUNDS;
-  const midLat = (minLat + maxLat) / 2;
-  const midLng = (minLng + maxLng) / 2;
-  const xSpan = maxLng - minLng;
-  const ySpan = maxLat - minLat;
-
-  const x = ((lng - midLng) / xSpan) * scale * 11;
-  const z = ((midLat - lat) / ySpan) * scale * 8.5;
-
-  return [x, z];
-}

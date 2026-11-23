@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useDSS } from "../lib/store";
 import { MapModeToggle } from "../components/map/MapModeToggle";
-import { PriorityMap3D } from "../components/map/PriorityMap3D";
+import { PriorityMapPanel } from "../components/map/PriorityMapPanel";
 
 export default function DashboardPage() {
   const { dataset, result, activeMapMode, setActiveMapMode, plafonPerFase, resetDataset } = useDSS();
@@ -114,7 +114,7 @@ export default function DashboardPage() {
             <MapModeToggle mode={activeMapMode} onChange={setActiveMapMode} />
           </div>
 
-          <PriorityMap3D />
+          <PriorityMapPanel />
         </div>
 
         {/* Right Column: TOPSIS Ranking List */}

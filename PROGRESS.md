@@ -27,6 +27,24 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-23 · Sesi 32 — Hapus Tampilan 3D Three.js (Fokus Peta GIS)
+
+**Konteks:** Pengguna menilai peta dasar nyata (GIS/OSM) lebih informatif dibanding kolom 3D Three.js, dan meminta tampilan 3D dihapus.
+
+**Keputusan:**
+1. Tampilan **3D Three.js dihapus**; pembungkus `PriorityMap3D.tsx` diganti `PriorityMapPanel.tsx` yang hanya menyediakan **GIS (Leaflet/OSM)** dan **2D Skematik (SVG)**.
+2. Fungsi `projectLatLngTo3D` di `lib/map-projection.ts` dihapus (tidak terpakai lagi).
+3. Dependensi `three` & `@types/three` dilepas dari `package.json` (8 paket npm dihapus).
+4. `AGENTS.md` §4 & §6 diselaraskan: peta = GIS Leaflet/OSM + alternatif 2D SVG.
+
+**File:** `07-webapp/components/map/{PriorityMapPanel.tsx (baru), PriorityMap3D.tsx (dihapus)}`, `07-webapp/app/page.tsx`, `07-webapp/lib/map-projection.ts`, `07-webapp/package.json`, `07-webapp/package-lock.json`, `AGENTS.md`, `PROGRESS.md`.
+
+**Verifikasi:** `npm run verify` LULUS (lint + parity 75/75 + build); `test:ui`, `test:a11y`, `test:bugs`, `test:export` LULUS; grep memastikan tak ada sisa `three`/`PriorityMap3D`.
+
+**Open items:** push branch `main`; validasi lapangan.
+
+---
+
 ### 2026-11-23 · Sesi 31 — Rapikan Repo: Pulihkan NumberCell, Perbaiki Uji, Perkuat Paper & Instrumen Survei
 
 **Konteks:** Lanjutan verifikasi data CCTV (Sesi 30). Pengguna meminta repo dirapikan: putuskan A5, sinkronkan dokumen stale, perbaiki test stale, perkuat paper, dan siapkan instrumen survei.
