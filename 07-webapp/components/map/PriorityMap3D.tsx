@@ -1,12 +1,48 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import * as THREE from "three";
 import { useDSS } from "../../lib/store";
 import { projectLatLngTo3D } from "../../lib/map-projection";
 import cctvEksistingData from "../../data/cctv-eksisting.sim.json";
 import jalanData from "../../data/jalan.sim.json";
 import { PriorityMap2D } from "./PriorityMap2D";
+
+export type MapViewType = "gis" | "3d" | "2d";
+
+const PriorityMapGIS = dynamic(
+  () => import("./PriorityMapGIS").then((m) => m.PriorityMapGIS),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[280px] sm:h-[340px] md:h-[380px] rounded-xl bg-[#EAF0EE] border border-[#DDE3E1] flex items-center justify-center text-xs text-[#55625F]">
+        <svg
+          className="w-5 h-5 mr-2 animate-spin text-[#0E6B66]"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeOpacity="0.25"
+          />
+          <path
+            d="M12 2a10 10 0 0 1 10 10"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        </svg>
+        Memuat peta GIS Jatinangor...
+      </div>
+    ),
+  }
+);
 
 export function PriorityMap3D() {
   const { dataset, result, activeMapMode, selectedAltId, setSelectedAltId } = useDSS();
@@ -21,15 +57,20 @@ export function PriorityMap3D() {
     }
   });
   const [hoveredAltId, setHoveredAltId] = useState<string | null>(null);
-  const [view3D, setView3D] = useState(true);
+  const [viewType, setViewType] = useState<MapViewType>("gis");
 
   const getRankColor = (rank: number) => {
     switch (rank) {
-      case 1: return 0xa8231a;
-      case 2: return 0xb45309;
-      case 3: return 0x8a6a00;
-      case 4: return 0x2f6f8f;
-      default: return 0x55625f;
+      case 1:
+        return 0xa8231a;
+      case 2:
+        return 0xb45309;
+      case 3:
+        return 0x8a6a00;
+      case 4:
+        return 0x2f6f8f;
+      default:
+        return 0x55625f;
     }
   };
 
@@ -47,20 +88,23 @@ export function PriorityMap3D() {
     return 0x0e6b66;
   };
 
-  const getNodeColorHex = React.useCallback((altId: string, rank: number) => {
-    if (activeMapMode === "c9") {
-      const c9 = dataset.values[altId]?.c9 ?? 3;
-      return getC9Color(c9);
-    }
-    if (activeMapMode === "gap") {
-      const gap = dataset.values[altId]?.kriteria["C7"] ?? 200;
-      return getGapColor(gap);
-    }
-    return getRankColor(rank);
-  }, [activeMapMode, dataset.values]);
+  const getNodeColorHex = React.useCallback(
+    (altId: string, rank: number) => {
+      if (activeMapMode === "c9") {
+        const c9 = dataset.values[altId]?.c9 ?? 3;
+        return getC9Color(c9);
+      }
+      if (activeMapMode === "gap") {
+        const gap = dataset.values[altId]?.kriteria["C7"] ?? 200;
+        return getGapColor(gap);
+      }
+      return getRankColor(rank);
+    },
+    [activeMapMode, dataset.values]
+  );
 
   useEffect(() => {
-    if (!view3D || !webglSupported) return;
+    if (viewType !== "3d" || !webglSupported) return;
     const container = containerRef.current;
     if (!container) return;
 
@@ -221,7 +265,6 @@ export function PriorityMap3D() {
     let angle = 0;
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      // Gentle orbit camera
       angle += 0.0015;
       camera.position.x = Math.sin(angle) * 55;
       camera.position.z = Math.cos(angle) * 55;
@@ -237,19 +280,69 @@ export function PriorityMap3D() {
       renderer.dispose();
       if (container) container.innerHTML = "";
     };
-  }, [view3D, webglSupported, dataset, result, activeMapMode, selectedAltId, getNodeColorHex, setSelectedAltId]);
+  }, [viewType, webglSupported, dataset, result, activeMapMode, selectedAltId, getNodeColorHex, setSelectedAltId]);
 
-  if (!webglSupported || !view3D) {
+  const switcherHeader = (
+    <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[#DDE3E1]">
+      <span className="text-xs font-semibold text-[#55625F]">Mode Visualisasi Peta:</span>
+      <div
+        className="inline-flex items-center gap-1 bg-white p-1 rounded-lg border border-[#DDE3E1]"
+        role="group"
+        aria-label="Pilih Jenis Visualisasi Peta"
+      >
+        <button
+          type="button"
+          aria-pressed={viewType === "gis"}
+          onClick={() => setViewType("gis")}
+          className={`px-2.5 py-1 rounded text-[11px] sm:text-xs font-semibold transition-colors cursor-pointer ${
+            viewType === "gis"
+              ? "bg-[#0E6B66] text-white shadow-xs"
+              : "text-[#55625F] hover:text-[#14201F]"
+          }`}
+        >
+          GIS (OSM)
+        </button>
+        <button
+          type="button"
+          aria-pressed={viewType === "3d"}
+          onClick={() => setViewType("3d")}
+          className={`px-2.5 py-1 rounded text-[11px] sm:text-xs font-semibold transition-colors cursor-pointer ${
+            viewType === "3d"
+              ? "bg-[#0E6B66] text-white shadow-xs"
+              : "text-[#55625F] hover:text-[#14201F]"
+          }`}
+        >
+          3D Kolom
+        </button>
+        <button
+          type="button"
+          aria-pressed={viewType === "2d"}
+          onClick={() => setViewType("2d")}
+          className={`px-2.5 py-1 rounded text-[11px] sm:text-xs font-semibold transition-colors cursor-pointer ${
+            viewType === "2d"
+              ? "bg-[#0E6B66] text-white shadow-xs"
+              : "text-[#55625F] hover:text-[#14201F]"
+          }`}
+        >
+          2D Skematik
+        </button>
+      </div>
+    </div>
+  );
+
+  if (viewType === "gis") {
     return (
-      <div className="relative">
-        <div className="absolute top-3 right-3 z-20">
-          <button
-            onClick={() => setView3D(true)}
-            className="px-2.5 py-1 text-xs bg-white/90 hover:bg-white text-[#0B3B38] font-medium rounded-lg border border-[#DDE3E1] shadow-xs"
-          >
-            Aktifkan Mode 3D
-          </button>
-        </div>
+      <div className="relative w-full rounded-2xl bg-[#EAF0EE] border border-[#DDE3E1] overflow-hidden p-4">
+        {switcherHeader}
+        <PriorityMapGIS />
+      </div>
+    );
+  }
+
+  if (viewType === "2d" || !webglSupported) {
+    return (
+      <div className="relative w-full rounded-2xl bg-[#EAF0EE] border border-[#DDE3E1] overflow-hidden p-4">
+        {switcherHeader}
         <PriorityMap2D />
       </div>
     );
@@ -257,22 +350,17 @@ export function PriorityMap3D() {
 
   return (
     <div className="relative w-full rounded-2xl bg-[#EAF0EE] border border-[#DDE3E1] overflow-hidden p-4">
-      {/* 2D / 3D Switch Button */}
-      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-2">
-        <button
-          onClick={() => setView3D(false)}
-          className="px-2.5 py-1 text-xs bg-white/90 hover:bg-white text-[#0B3B38] font-medium rounded-lg border border-[#DDE3E1] shadow-xs transition-colors cursor-pointer"
-        >
-          Ganti ke Peta 2D
-        </button>
-      </div>
+      {switcherHeader}
 
       {/* Three.js Canvas Container */}
-      <div ref={containerRef} className="w-full h-[280px] sm:h-[340px] md:h-[380px] cursor-grab active:cursor-grabbing rounded-xl overflow-hidden" />
+      <div
+        ref={containerRef}
+        className="w-full h-[280px] sm:h-[340px] md:h-[380px] cursor-grab active:cursor-grabbing rounded-xl overflow-hidden"
+      />
 
       {/* Floating Hover Info Card */}
       {hoveredAltId && (
-        <div className="absolute top-3 left-3 sm:top-5 sm:left-5 bg-white/95 backdrop-blur-sm p-2.5 sm:p-3 rounded-xl border border-[#DDE3E1] shadow-md text-xs pointer-events-none z-10 max-w-[190px] sm:max-w-[230px]">
+        <div className="absolute top-16 left-4 sm:left-6 bg-white/95 backdrop-blur-sm p-2.5 sm:p-3 rounded-xl border border-[#DDE3E1] shadow-md text-xs pointer-events-none z-10 max-w-[190px] sm:max-w-[230px]">
           {(() => {
             const alt = dataset.alternatives.find((a) => a.id === hoveredAltId);
             const idx = dataset.alternatives.findIndex((a) => a.id === hoveredAltId);
@@ -282,13 +370,25 @@ export function PriorityMap3D() {
             const cost = dataset.values[hoveredAltId]?.biaya_rp ?? 0;
             return (
               <div>
-                <p className="font-bold text-[#14201F] text-sm">{hoveredAltId} · {alt?.nama_segmen}</p>
-                <p className="text-[#55625F]">{alt?.desa} · {alt?.tipe_segmen}</p>
+                <p className="font-bold text-[#14201F] text-sm">
+                  {hoveredAltId} · {alt?.nama_segmen}
+                </p>
+                <p className="text-[#55625F]">
+                  {alt?.desa} · {alt?.tipe_segmen}
+                </p>
                 <div className="mt-2 space-y-1 text-[11px] pt-1 border-t border-[#EEF2F1]">
-                  <p>Peringkat: <span className="font-semibold text-[#A8231A]">#{rank}</span></p>
-                  <p>Tinggi Kolom (CC): <span className="font-mono font-medium">{cc.toFixed(4)}</span></p>
-                  <p>Kelayakan C9: <span className="font-semibold">{c9}/5</span></p>
-                  <p>Biaya: <span className="font-medium">Rp {(cost / 1e6).toFixed(1)} Jt</span></p>
+                  <p>
+                    Peringkat: <span className="font-semibold text-[#A8231A]">#{rank}</span>
+                  </p>
+                  <p>
+                    Tinggi Kolom (CC): <span className="font-mono font-medium">{cc.toFixed(4)}</span>
+                  </p>
+                  <p>
+                    Kelayakan C9: <span className="font-semibold">{c9}/5</span>
+                  </p>
+                  <p>
+                    Biaya: <span className="font-medium">Rp {(cost / 1e6).toFixed(1)} Jt</span>
+                  </p>
                 </div>
               </div>
             );
