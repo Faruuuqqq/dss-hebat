@@ -27,6 +27,20 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-23 · Sesi 33 — Rencana peta berbukti dan tambah titik skenario
+
+**Konteks:** pengguna meminta rencana peningkatan ketepatan peta dan penambahan titik langsung melalui UI, serta penilaian realistis tanpa survei lapangan.
+
+**Keputusan:** rencana P1–P7 ditambahkan sebagai kelanjutan roadmap di `tasks/plan.md` dan `tasks/todo.md`; checklist lama dipertahankan. MVP memakai skenario lokal salinan preset, draf titik lengkap sebelum perhitungan, persistensi dan backup JSON. Supabase lintas pengguna menjadi tahap berikutnya. Catatan bukti dikoreksi pada rencana: kedekatan ke jalan/node desa tidak membuktikan akurasi lokasi, berita keberadaan kamera tidak memverifikasi koordinatnya, dan daftar ATCS yang tidak mencantumkan Jatinangor tidak membuktikan ketiadaan layanan. Buffer tetap ilustratif; C7 baseline tidak otomatis dihitung dari marker.
+
+**File:** `tasks/plan.md`, `tasks/todo.md`, `PROGRESS.md`.
+
+**Verifikasi:** membaca store, repository Supabase, engine, metadata kamera dan implementasi GIS. Store belum memakai `fetchDataset` atau persistensi; engine memberi nilai bawaan pada data kosong. Semua tugas baru memiliki acceptance criteria, dependensi, sasaran file, dan langkah verifikasi. Tidak ada implementasi aplikasi pada sesi perencanaan ini.
+
+**Open items:** tinjau rencana; implementasikan P1–P7 setelah persetujuan. Koreksi klaim berlebihan pada metadata/paper saat P1–P2, lalu tambah skenario tanpa mengganti fixture kanonik.
+
+---
+
 ### 2026-11-23 · Sesi 32 — Hapus Tampilan 3D Three.js (Fokus Peta GIS)
 
 **Konteks:** Pengguna menilai peta dasar nyata (GIS/OSM) lebih informatif dibanding kolom 3D Three.js, dan meminta tampilan 3D dihapus.
