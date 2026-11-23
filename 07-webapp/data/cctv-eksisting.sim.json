@@ -1,20 +1,24 @@
 [
   {
     "id": "CCTV-EX-01",
-    "nama": "ETLE Koridor Unpad / Hegarmanah",
-    "lat": -6.9292,
-    "lng": 107.7715,
-    "jenis": "ETLE / PTZ",
+    "nama": "ETLE Jatinangor (Polres/Pemda) — Jl. Raya Jatinangor",
+    "lat": -6.9327,
+    "lng": 107.7779,
+    "jenis": "ETLE statis",
     "status": "Aktif",
-    "catatan": "Kamera lalu lintas koridor utama"
+    "kepastian": "riil",
+    "sumber": "Koran Gala / Radar Sumedang (terpasang Nov 2025)",
+    "catatan": "Kamera tilang elektronik resmi Jatinangor; koridor Jl. Raya dekat Unpad/Cikeruh"
   },
   {
     "id": "CCTV-EX-02",
-    "nama": "CCTV Koridor Sayang Timur",
-    "lat": -6.9315,
-    "lng": 107.772,
-    "jenis": "Bullet",
+    "nama": "CCTV komersial Simpang Sayang / Jatos",
+    "lat": -6.9335,
+    "lng": 107.7728,
+    "jenis": "CCTV komersial",
     "status": "Aktif",
-    "catatan": "Kamera komersial / pertigaan jalan"
+    "kepastian": "simulasi",
+    "sumber": "estimasi visual (bukan ATCS)",
+    "catatan": "Kamera komersial pertigaan Jl. Raya Jatinangor - Jl. Sayang"
   }
 ]

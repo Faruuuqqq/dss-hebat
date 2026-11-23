@@ -1,0 +1,47 @@
+[
+  {
+    "id": "REF-01",
+    "nama": "Kampus Unpad Jatinangor",
+    "jenis": "Kampus (420 CCTV internal)",
+    "lat": -6.9210,
+    "lng": 107.7730,
+    "kepastian": "riil",
+    "sumber": "OSM + unpad.ac.id"
+  },
+  {
+    "id": "REF-02",
+    "nama": "Gerbang Utama ITB Jatinangor",
+    "jenis": "Gerbang kampus",
+    "lat": -6.93358,
+    "lng": 107.76833,
+    "kepastian": "riil",
+    "sumber": "OSM"
+  },
+  {
+    "id": "REF-03",
+    "nama": "Gerbang IPDN Jatinangor",
+    "jenis": "Gerbang kampus",
+    "lat": -6.93584,
+    "lng": 107.76421,
+    "kepastian": "riil",
+    "sumber": "OSM"
+  },
+  {
+    "id": "REF-04",
+    "nama": "Halte Metro Jabar Trans Unpad",
+    "jenis": "Halte",
+    "lat": -6.93241,
+    "lng": 107.77329,
+    "kepastian": "riil",
+    "sumber": "OSM"
+  },
+  {
+    "id": "REF-05",
+    "nama": "Pertigaan Jl. Raya–Jl. Sayang (Simpang Sayang)",
+    "jenis": "Simpul jalan",
+    "lat": -6.93350,
+    "lng": 107.77330,
+    "kepastian": "riil",
+    "sumber": "OSM"
+  }
+]

@@ -10,11 +10,11 @@ ON CONFLICT (id) DO NOTHING;
 -- 2. Alternatives (Ilustratif)
 INSERT INTO public.alternatives (id, dataset_id, nama_segmen, tipe_segmen, desa, lat, lng, karakteristik)
 VALUES
-  ('A1', 'ilustratif', 'Gang Kos Sayang', 'Gang residensial', 'Sayang', -6.9272, 107.7731, 'Gang sempit 1,5–2,5 m, padat indekos, buntu'),
-  ('A2', 'ilustratif', 'Ruas Jalan Cikeruh', 'Ruas jalan', 'Cikeruh', -6.9265, 107.7712, 'Koridor 3–4 m dekat kampus, jalur mahasiswa malam'),
-  ('A3', 'ilustratif', 'Persimpangan Hegarmanah', 'Persimpangan', 'Hegarmanah', -6.9298, 107.7698, 'Simpul 5 cabang; ATM, minimarket, halte'),
-  ('A4', 'ilustratif', 'Gang Cipacing', 'Gang residensial', 'Cipacing', -6.9327, 107.7745, 'Gang panjang berliku, gelap, jauh dari CCTV aktif'),
-  ('A5', 'ilustratif', 'Ruas Jalan Cileles', 'Ruas jalan', 'Cileles', -6.9241, 107.7790, 'Ruas sekunder lingkar timur kampus')
+  ('A1', 'ilustratif', 'Gang Kos Sayang', 'Gang residensial', 'Sayang', -6.9335, 107.7733, 'Gang sempit 1,5–2,5 m, padat indekos, buntu'),
+  ('A2', 'ilustratif', 'Ruas Jalan Cikeruh', 'Ruas jalan', 'Cikeruh', -6.9340, 107.7768, 'Koridor 3–4 m dekat kampus, jalur mahasiswa malam'),
+  ('A3', 'ilustratif', 'Persimpangan Hegarmanah', 'Persimpangan', 'Hegarmanah', -6.9336, 107.7783, 'Simpul 5 cabang; ATM, minimarket, halte'),
+  ('A4', 'ilustratif', 'Gang Cipacing', 'Gang residensial', 'Cipacing', -6.9428, 107.7622, 'Gang panjang berliku, gelap, jauh dari CCTV aktif'),
+  ('A5', 'ilustratif', 'Ruas Jalan Cileles', 'Ruas jalan', 'Cileles', -6.9118, 107.7774, 'Ruas sekunder lingkar timur kampus')
 ON CONFLICT (id, dataset_id) DO NOTHING;
 
 -- 3. Criteria (Ilustratif)

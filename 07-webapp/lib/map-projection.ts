@@ -1,8 +1,8 @@
 export const MAP_BOUNDS = {
-  minLat: -6.9340,
-  maxLat: -6.9230,
-  minLng: 107.7685,
-  maxLng: 107.7805,
+  minLat: -6.9455,
+  maxLat: -6.9080,
+  minLng: 107.7585,
+  maxLng: 107.7825,
 };
 
 export function projectLatLngTo2D(
@@ -31,14 +31,16 @@ export function projectLatLngTo2D(
 export function projectLatLngTo3D(
   lat: number,
   lng: number,
-  scale = 20
+  scale = 6
 ): [number, number] {
   const { minLat, maxLat, minLng, maxLng } = MAP_BOUNDS;
   const midLat = (minLat + maxLat) / 2;
   const midLng = (minLng + maxLng) / 2;
+  const xSpan = maxLng - minLng;
+  const ySpan = maxLat - minLat;
 
-  const x = (lng - midLng) * scale * 800;
-  const z = (lat - midLat) * scale * 800; // inverted for 3D coordinates
+  const x = ((lng - midLng) / xSpan) * scale * 11;
+  const z = ((midLat - lat) / ySpan) * scale * 8.5;
 
   return [x, z];
 }

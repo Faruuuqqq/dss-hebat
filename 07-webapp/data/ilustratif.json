@@ -12,8 +12,8 @@
       "nama_segmen": "Gang Kos Sayang",
       "tipe_segmen": "Gang residensial",
       "desa": "Sayang",
-      "lat": -6.9272,
-      "lng": 107.7731,
+      "lat": -6.9335,
+      "lng": 107.7733,
       "karakteristik": "Gang sempit 1,5–2,5 m, padat indekos, buntu"
     },
     {
@@ -21,8 +21,8 @@
       "nama_segmen": "Ruas Jalan Cikeruh",
       "tipe_segmen": "Ruas jalan",
       "desa": "Cikeruh",
-      "lat": -6.9265,
-      "lng": 107.7712,
+      "lat": -6.934,
+      "lng": 107.7768,
       "karakteristik": "Koridor 3–4 m dekat kampus, jalur mahasiswa malam"
     },
     {
@@ -30,8 +30,8 @@
       "nama_segmen": "Persimpangan Hegarmanah",
       "tipe_segmen": "Persimpangan",
       "desa": "Hegarmanah",
-      "lat": -6.9298,
-      "lng": 107.7698,
+      "lat": -6.9336,
+      "lng": 107.7783,
       "karakteristik": "Simpul 5 cabang; ATM, minimarket, halte"
     },
     {
@@ -39,8 +39,8 @@
       "nama_segmen": "Gang Cipacing",
       "tipe_segmen": "Gang residensial",
       "desa": "Cipacing",
-      "lat": -6.9327,
-      "lng": 107.7745,
+      "lat": -6.9428,
+      "lng": 107.7622,
       "karakteristik": "Gang panjang berliku, gelap, jauh dari CCTV aktif"
     },
     {
@@ -48,8 +48,8 @@
       "nama_segmen": "Ruas Jalan Cileles",
       "tipe_segmen": "Ruas jalan",
       "desa": "Cileles",
-      "lat": -6.9241,
-      "lng": 107.779,
+      "lat": -6.9118,
+      "lng": 107.7774,
       "karakteristik": "Ruas sekunder lingkar timur kampus"
     }
   ],

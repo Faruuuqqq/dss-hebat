@@ -100,19 +100,27 @@ def main():
     
     get_sheet = extract_xlsx(xlsx_path)
     
-    # 1. alternatif
+    # 1. alternatif (koordinat diselaraskan ke lokasi geografis nyata OpenStreetMap Jatinangor)
+    REAL_COORDS = {
+        'A1': (-6.9335, 107.7733),
+        'A2': (-6.9340, 107.7768),
+        'A3': (-6.9336, 107.7783),
+        'A4': (-6.9428, 107.7622),
+        'A5': (-6.9118, 107.7774),
+    }
     raw_alt = get_sheet('alternatif')
     header_alt = raw_alt[0]
     alternatives = []
     for r in raw_alt[1:]:
         if not r or r[0] is None: continue
+        lat, lng = REAL_COORDS.get(r[0], (float(r[4]), float(r[5])))
         alternatives.append({
             'id': r[0],
             'nama_segmen': r[1],
             'tipe_segmen': r[2],
             'desa': r[3],
-            'lat': float(r[4]),
-            'lng': float(r[5]),
+            'lat': lat,
+            'lng': lng,
             'karakteristik': r[6]
         })
         

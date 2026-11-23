@@ -16,11 +16,11 @@ naskah_uts = {
   "plafon_per_fase_rp": 15000000,
   "c9_min_fase1": 3,
   "alternatives": [
-    { "id": "A1", "nama_segmen": "Gang Kos Sayang", "tipe_segmen": "Gang residensial", "desa": "Sayang", "lat": -6.9272, "lng": 107.7731, "karakteristik": "Gang sempit, padat indekos" },
-    { "id": "A2", "nama_segmen": "Ruas Jalan Cikeruh", "tipe_segmen": "Ruas jalan", "desa": "Cikeruh", "lat": -6.9265, "lng": 107.7712, "karakteristik": "Koridor dekat kampus, jalur malam" },
-    { "id": "A3", "nama_segmen": "Persimpangan Hegarmanah", "tipe_segmen": "Persimpangan", "desa": "Hegarmanah", "lat": -6.9298, "lng": 107.7698, "karakteristik": "Simpul utama 5 cabang" },
-    { "id": "A4", "nama_segmen": "Gang Cipacing", "tipe_segmen": "Gang residensial", "desa": "Cipacing", "lat": -6.9327, "lng": 107.7745, "karakteristik": "Gang panjang, jauh dari CCTV" },
-    { "id": "A5", "nama_segmen": "Ruas Jalan Cileles", "tipe_segmen": "Ruas jalan", "desa": "Cileles", "lat": -6.9241, "lng": 107.7790, "karakteristik": "Ruas sekunder lingkar timur" }
+    { "id": "A1", "nama_segmen": "Gang Kos Sayang", "tipe_segmen": "Gang residensial", "desa": "Sayang", "lat": -6.9335, "lng": 107.7733, "karakteristik": "Gang sempit, padat indekos" },
+    { "id": "A2", "nama_segmen": "Ruas Jalan Cikeruh", "tipe_segmen": "Ruas jalan", "desa": "Cikeruh", "lat": -6.9340, "lng": 107.7768, "karakteristik": "Koridor dekat kampus, jalur malam" },
+    { "id": "A3", "nama_segmen": "Persimpangan Hegarmanah", "tipe_segmen": "Persimpangan", "desa": "Hegarmanah", "lat": -6.9336, "lng": 107.7783, "karakteristik": "Simpul utama 5 cabang" },
+    { "id": "A4", "nama_segmen": "Gang Cipacing", "tipe_segmen": "Gang residensial", "desa": "Cipacing", "lat": -6.9428, "lng": 107.7622, "karakteristik": "Gang panjang, jauh dari CCTV" },
+    { "id": "A5", "nama_segmen": "Ruas Jalan Cileles", "tipe_segmen": "Ruas jalan", "desa": "Cileles", "lat": -6.9118, "lng": 107.7774, "karakteristik": "Ruas sekunder lingkar timur" }
   ],
   "criteria": [
     { "kode": "C1", "nama": "Riwayat Kerawanan", "satuan": "insiden/km/th", "peran": "benefit" },
@@ -81,8 +81,8 @@ with open(os.path.join(data_dir, 'naskah-uts.json'), 'w', encoding='utf-8') as f
 
 # 2. cctv-eksisting.sim.json
 cctv_eksisting = [
-  { "id": "CCTV-EX-01", "nama": "ETLE Koridor Unpad / Hegarmanah", "lat": -6.9292, "lng": 107.7715, "jenis": "ETLE / PTZ", "status": "Aktif", "catatan": "Kamera lalu lintas koridor utama" },
-  { "id": "CCTV-EX-02", "nama": "CCTV Koridor Sayang Timur", "lat": -6.9315, "lng": 107.7720, "jenis": "Bullet", "status": "Aktif", "catatan": "Kamera komersial / pertigaan jalan" }
+  { "id": "CCTV-EX-01", "nama": "ETLE Jatinangor (Polres/Pemda) — Jl. Raya Jatinangor", "lat": -6.9327, "lng": 107.7779, "jenis": "ETLE statis", "status": "Aktif", "kepastian": "riil", "sumber": "Koran Gala / Radar Sumedang (terpasang Nov 2025)", "catatan": "Kamera tilang elektronik resmi Jatinangor; koridor Jl. Raya dekat Unpad/Cikeruh" },
+  { "id": "CCTV-EX-02", "nama": "CCTV komersial Simpang Sayang / Jatos", "lat": -6.9335, "lng": 107.7728, "jenis": "CCTV komersial", "status": "Aktif", "kepastian": "simulasi", "sumber": "estimasi visual (bukan ATCS)", "catatan": "Kamera komersial pertigaan Jl. Raya Jatinangor - Jl. Sayang" }
 ]
 
 with open(os.path.join(data_dir, 'cctv-eksisting.sim.json'), 'w', encoding='utf-8') as f:
@@ -90,11 +90,12 @@ with open(os.path.join(data_dir, 'cctv-eksisting.sim.json'), 'w', encoding='utf-
 
 # 3. jalan.sim.json
 jalan = [
-  { "id": "J01", "nama": "Koridor Raya Jatinangor (Barat-Timur)", "coords": [[-6.9250, 107.7680], [-6.9270, 107.7710], [-6.9290, 107.7750], [-6.9310, 107.7800]] },
-  { "id": "J02", "nama": "Ruas Hegarmanah - Sayang", "coords": [[-6.9270, 107.7710], [-6.9298, 107.7698], [-6.9320, 107.7705]] },
-  { "id": "J03", "nama": "Ruas Gang Sayang - Cipacing", "coords": [[-6.9272, 107.7731], [-6.9300, 107.7735], [-6.9327, 107.7745]] },
-  { "id": "J04", "nama": "Ruas Cikeruh Lingkar", "coords": [[-6.9240, 107.7700], [-6.9265, 107.7712], [-6.9285, 107.7725]] },
-  { "id": "J05", "nama": "Ruas Lingkar Timur Cileles", "coords": [[-6.9220, 107.7760], [-6.9241, 107.7790], [-6.9270, 107.7810]] }
+  { "id": "J01", "nama": "Koridor Jl. Raya Jatinangor (Cipacing - IPDN - ITB - Unpad - Hegarmanah)", "coords": [[-6.9412, 107.7595], [-6.9360, 107.7642], [-6.9340, 107.7689], [-6.9335, 107.7728], [-6.9328, 107.7768], [-6.9327, 107.7779], [-6.9293, 107.7811]] },
+  { "id": "J02", "nama": "Ruas Jl. Hegarmanah (A3)", "coords": [[-6.9327, 107.7779], [-6.9336, 107.7783], [-6.9375, 107.7786]] },
+  { "id": "J03", "nama": "Ruas Jl. Sayang - Gang Kos Sayang (A1)", "coords": [[-6.9335, 107.7728], [-6.9335, 107.7733], [-6.9360, 107.7734], [-6.9387, 107.7735]] },
+  { "id": "J04", "nama": "Ruas Gang Ciseke - Cikeruh (A2)", "coords": [[-6.9328, 107.7768], [-6.9340, 107.7768], [-6.9365, 107.7765]] },
+  { "id": "J05", "nama": "Ruas Gang Cipacing - Jl. GKPN (A4)", "coords": [[-6.9412, 107.7595], [-6.9428, 107.7622], [-6.9448, 107.7628]] },
+  { "id": "J06", "nama": "Ruas Jl. Cikuda - Lingkar Timur Cileles (A5)", "coords": [[-6.9293, 107.7811], [-6.9253, 107.7798], [-6.9212, 107.7786], [-6.9188, 107.7778], [-6.9150, 107.7776], [-6.9118, 107.7774]] }
 ]
 
 with open(os.path.join(data_dir, 'jalan.sim.json'), 'w', encoding='utf-8') as f:
