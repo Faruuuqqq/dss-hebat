@@ -81,8 +81,32 @@ with open(os.path.join(data_dir, 'naskah-uts.json'), 'w', encoding='utf-8') as f
 
 # 2. cctv-eksisting.sim.json
 cctv_eksisting = [
-  { "id": "CCTV-EX-01", "nama": "ETLE Jatinangor (Polres/Pemda) — Jl. Raya Jatinangor", "lat": -6.9327, "lng": 107.7779, "jenis": "ETLE statis", "status": "Aktif", "kepastian": "riil", "sumber": "Koran Gala / Radar Sumedang (terpasang Nov 2025)", "catatan": "Kamera tilang elektronik resmi Jatinangor; koridor Jl. Raya dekat Unpad/Cikeruh" },
-  { "id": "CCTV-EX-02", "nama": "CCTV komersial Simpang Sayang / Jatos", "lat": -6.9335, "lng": 107.7728, "jenis": "CCTV komersial", "status": "Aktif", "kepastian": "simulasi", "sumber": "estimasi visual (bukan ATCS)", "catatan": "Kamera komersial pertigaan Jl. Raya Jatinangor - Jl. Sayang" }
+  {
+    "id": "CCTV-EX-01",
+    "nama": "ETLE Jatinangor (Polres/Pemda) — Jl. Raya Jatinangor",
+    "lat": -6.9327, "lng": 107.7779,
+    "jenis": "ETLE statis",
+    "keberadaan": "Terdokumentasi berita (Nov 2025 – Apr 2026)",
+    "koordinat_status": "Aproksimasi — tidak ada lat/lng resmi",
+    "operasional": "Dilaporkan aktif s.d. Apr 2026",
+    "sumber": "Korlantas Polri; Koran Gala; Radar Sumedang",
+    "sumber_url": "https://korlantas.polri.go.id/2026-04-05-etle-jatinangor-deteksi-ribuan-pelanggaran-setiap-hari-satlantas-polres-sumedang-imbau-masyarakat-tertib/",
+    "tanggal_sumber": "2026-04-05",
+    "catatan": "Lokasi deskriptif: Jl. Raya Jatinangor depan bank dekat Unpad. Titik peta adalah perkiraan.",
+  },
+  {
+    "id": "CCTV-EX-02",
+    "nama": "CCTV komersial Simpang Sayang / Jatos",
+    "lat": -6.9335, "lng": 107.7728,
+    "jenis": "CCTV komersial",
+    "keberadaan": "Simulasi — tidak ada laporan publik",
+    "koordinat_status": "Estimasi visual",
+    "operasional": "Tidak diverifikasi",
+    "sumber": "Estimasi visual penulis (bukan ATCS)",
+    "sumber_url": "",
+    "tanggal_sumber": "",
+    "catatan": "Kamera komersial pertigaan Jl. Raya Jatinangor – Jl. Sayang; keberadaan dan status tidak terverifikasi.",
+  },
 ]
 
 with open(os.path.join(data_dir, 'cctv-eksisting.sim.json'), 'w', encoding='utf-8') as f:

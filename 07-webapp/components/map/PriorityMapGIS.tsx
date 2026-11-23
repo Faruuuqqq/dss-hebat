@@ -258,19 +258,23 @@ export function PriorityMapGIS() {
         if (el) el.removeAttribute("tabindex");
       });
 
+      const sumberLink = c.sumber_url
+        ? `<a href="${c.sumber_url}" target="_blank" rel="noopener noreferrer" style="color:#0E6B66;text-decoration:underline;">${c.sumber}</a>`
+        : c.sumber;
+
       exMarker.bindPopup(`
-        <div style="min-width:185px;font-size:12px;color:#14201F;">
+        <div style="min-width:205px;font-size:12px;color:#14201F;">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
             <span style="display:inline-block;width:10px;height:10px;background:#14201F;border-radius:2px;"></span>
             <strong style="font-size:12px;">${c.nama}</strong>
           </div>
           <div style="color:#55625F;font-size:11px;margin-bottom:6px;">${c.catatan}</div>
-          <div style="border-top:1px solid #EEF2F1;padding-top:4px;font-size:11px;display:flex;justify-content:space-between;">
-            <span>Jenis: <strong>${c.jenis}</strong></span>
-            <span style="color:#0E6B66;font-weight:600;">${c.status}</span>
-          </div>
-          <div style="font-size:10px;color:#55625F;margin-top:3px;">
-            ${c.kepastian === "riil" ? "Kamera riil (terdokumentasi)" : "Simulasi visual"} · ${c.sumber}
+          <div style="border-top:1px solid #EEF2F1;padding-top:4px;font-size:11px;">Jenis: <strong>${c.jenis}</strong></div>
+          <div style="border-top:1px solid #EEF2F1;margin-top:4px;padding-top:4px;font-size:10px;color:#55625F;line-height:1.5;">
+            <div>Keberadaan: <strong>${c.keberadaan}</strong></div>
+            <div>Koordinat: <strong>${c.koordinat_status}</strong></div>
+            <div>Operasional: <strong>${c.operasional}</strong></div>
+            <div style="margin-top:2px;">Sumber: ${sumberLink}</div>
           </div>
         </div>
       `);
@@ -590,7 +594,7 @@ export function PriorityMapGIS() {
             <span className="w-2.5 h-2.5 rounded-full bg-[#55625F]" /> #5
           </span>
           <span className="flex items-center gap-1 ml-1">
-            <span className="w-2.5 h-2.5 bg-[#14201F] rounded-xs" /> CCTV Eksisting (100m)
+            <span className="w-2.5 h-2.5 bg-[#14201F] rounded-xs" /> CCTV Eksisting
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 bg-[#5B6B68] rotate-45" /> Referensi riil (kampus/halte)
@@ -599,8 +603,8 @@ export function PriorityMapGIS() {
             <span className="w-2.5 h-2.5 rounded-full border border-[#A8231A] bg-[#A8231A]/15" /> Buffer Usulan (75m)
           </span>
         </div>
-        <span className="text-[10px] text-[#475467] italic">
-          Peta GIS OpenStreetMap · koordinat segmen representatif [SIMULASI]
+        <span className="text-[10px] text-[#475467] italic max-w-[430px]">
+          Peta dasar OpenStreetMap. Koordinat segmen representatif [SIMULASI]; radius 75 m hanya ilustrasi, bukan cakupan efektif kamera. C7 adalah nilai input dataset, bukan hasil ukur.
         </span>
       </div>
     </div>
