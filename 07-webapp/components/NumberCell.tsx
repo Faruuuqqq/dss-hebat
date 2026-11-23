@@ -25,6 +25,8 @@ type Props = {
   value: number;
   onCommit: (v: number) => void;
   label: string;
+  /** Id stabil untuk dihubungkan ke <label htmlFor>. Bila kosong, dibuat otomatis. */
+  id?: string;
   min?: number;
   max?: number;
   /** Jumlah desimal tetap saat tidak fokus. Kosong = tampilan ringkas. */
@@ -38,6 +40,7 @@ export function NumberCell({
   value,
   onCommit,
   label,
+  id: idProp,
   min,
   max,
   decimals,
@@ -45,7 +48,8 @@ export function NumberCell({
   widthClass = "",
 }: Props) {
   const [draft, setDraft] = useState<string | null>(null);
-  const id = useId();
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
 
   const clamp = (v: number): number => {
     let out = v;

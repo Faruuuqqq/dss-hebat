@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useDSS } from "../../lib/store";
+import { NumberCell } from "../../components/NumberCell";
 
 export default function KriteriaPage() {
   const {
@@ -160,13 +161,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c1" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C1 Riwayat kerawanan
               </label>
-              <input
+              <NumberCell
                 id="input-c1"
-                aria-label="C1 Riwayat kerawanan"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C1"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C1", Number(e.target.value))}
+                label="C1 Riwayat kerawanan"
+                min={0}
+                value={selectedValues.kriteria["C1"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C1", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -175,13 +175,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c2" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C2 Mobilitas malam
               </label>
-              <input
+              <NumberCell
                 id="input-c2"
-                aria-label="C2 Mobilitas malam"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C2"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C2", Number(e.target.value))}
+                label="C2 Mobilitas malam"
+                min={0}
+                value={selectedValues.kriteria["C2"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C2", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -190,13 +189,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c3" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C3 Defisiensi penerangan
               </label>
-              <input
+              <NumberCell
                 id="input-c3"
-                aria-label="C3 Defisiensi penerangan"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C3"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C3", Number(e.target.value))}
+                label="C3 Defisiensi penerangan"
+                min={0}
+                value={selectedValues.kriteria["C3"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C3", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -205,13 +203,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c4" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C4 Efisiensi coverage
               </label>
-              <input
+              <NumberCell
                 id="input-c4"
-                aria-label="C4 Efisiensi coverage"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C4"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C4", Number(e.target.value))}
+                label="C4 Efisiensi coverage"
+                min={0}
+                value={selectedValues.kriteria["C4"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C4", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -220,13 +217,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c5" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C5 Kepadatan penghuni
               </label>
-              <input
+              <NumberCell
                 id="input-c5"
-                aria-label="C5 Kepadatan penghuni"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C5"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C5", Number(e.target.value))}
+                label="C5 Kepadatan penghuni"
+                min={0}
+                value={selectedValues.kriteria["C5"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C5", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -235,13 +231,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c6" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C6 Derajat simpul
               </label>
-              <input
+              <NumberCell
                 id="input-c6"
-                aria-label="C6 Derajat simpul"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C6"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C6", Number(e.target.value))}
+                label="C6 Derajat simpul"
+                min={0}
+                value={selectedValues.kriteria["C6"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C6", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -250,13 +245,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c7" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C7 Coverage gap CCTV (m)
               </label>
-              <input
+              <NumberCell
                 id="input-c7"
-                aria-label="C7 Coverage gap CCTV (m)"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C7"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C7", Number(e.target.value))}
+                label="C7 Coverage gap CCTV (m)"
+                min={0}
+                value={selectedValues.kriteria["C7"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C7", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -265,13 +259,12 @@ export default function KriteriaPage() {
               <label htmlFor="input-c8" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C8 Fasilitas rentan (POI)
               </label>
-              <input
+              <NumberCell
                 id="input-c8"
-                aria-label="C8 Fasilitas rentan (POI)"
-                type="number"
-                step="any"
-                value={selectedValues.kriteria["C8"] ?? ""}
-                onChange={(e) => updateCriterionValue(selectedAlt.id, "C8", Number(e.target.value))}
+                label="C8 Fasilitas rentan (POI)"
+                min={0}
+                value={selectedValues.kriteria["C8"] ?? 0}
+                onCommit={(v) => updateCriterionValue(selectedAlt.id, "C8", v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -280,15 +273,13 @@ export default function KriteriaPage() {
               <label htmlFor="input-c9" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
                 C9 Kelayakan (kendala)
               </label>
-              <input
+              <NumberCell
                 id="input-c9"
-                aria-label="C9 Kelayakan (kendala)"
-                type="number"
-                step="1"
-                min="1"
-                max="5"
+                label="C9 Kelayakan (kendala)"
+                min={1}
+                max={5}
                 value={selectedValues.c9}
-                onChange={(e) => updateC9Value(selectedAlt.id, Number(e.target.value))}
+                onCommit={(v) => updateC9Value(selectedAlt.id, v)}
                 className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono font-bold text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
               />
             </div>
@@ -298,13 +289,12 @@ export default function KriteriaPage() {
             <label htmlFor="input-biaya" className="text-[11px] font-medium text-[#3D4A47] block mb-1">
               Biaya estimasi (Rp juta)
             </label>
-            <input
+            <NumberCell
               id="input-biaya"
-              aria-label="Biaya estimasi (Rp juta)"
-              type="number"
-              step="any"
-              value={(selectedValues.biaya_rp / 1e6) || ""}
-              onChange={(e) => updateCostValue(selectedAlt.id, Number(e.target.value) * 1e6)}
+              label="Biaya estimasi (Rp juta)"
+              min={0}
+              value={selectedValues.biaya_rp / 1e6}
+              onCommit={(v) => updateCostValue(selectedAlt.id, v * 1e6)}
               className="w-full p-2 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
             />
           </div>
