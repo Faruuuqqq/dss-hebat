@@ -12,6 +12,8 @@ export default function KriteriaPage() {
     updateCriterionValue,
     updateC9Value,
     updateCostValue,
+    scenario,
+    removeAlternative,
   } = useDSS();
 
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
@@ -34,9 +36,9 @@ export default function KriteriaPage() {
     { code: "C1", source: "Rekap Polsek/desa, wawancara RT", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
     { code: "C2", source: "Counting manual 18.00–24.00", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
     { code: "C3", source: "Survei malam, data Dishub", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
-    { code: "C4", source: "Geometri jalan OSM, uji pandang", tag: "Otomatis OSM", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
+    { code: "C4", source: "Geometri jalan OSM, uji pandang", tag: "Estimasi OSM", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
     { code: "C5", source: "Pendataan indekos, profil desa", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
-    { code: "C6", source: "Ekstraksi jaringan OSM", tag: "Otomatis OSM", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
+    { code: "C6", source: "Ekstraksi jaringan OSM", tag: "Estimasi OSM", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
     { code: "C7", source: "Koordinat GPS kamera eksisting", tag: "Perlu GPS", tagClass: "bg-[#FBE4E1] text-[#A8231A]" },
     { code: "C8", source: "POI OSM + observasi lapangan", tag: "OSM + survei", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
     { code: "C9", source: "Survei teknis, estimasi RAB", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
@@ -303,12 +305,27 @@ export default function KriteriaPage() {
             <span className="text-[11px] text-[#475467]">
               Sumber dan tanggal input dicatat otomatis untuk jejak audit.
             </span>
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-sm transition-colors cursor-pointer w-full sm:w-auto"
-            >
-              Simpan {selectedAlt.id}
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              {scenario && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm(`Hapus ${selectedAlt.id} dari Skenario Saya?`)) {
+                      removeAlternative(selectedAlt.id);
+                    }
+                  }}
+                  className="px-3 py-2 text-xs font-semibold text-[#A8231A] bg-white hover:bg-[#FBE4E1] border border-[#F5C2BC] rounded-lg transition-colors cursor-pointer"
+                >
+                  Hapus dari skenario
+                </button>
+              )}
+              <button
+                onClick={handleSave}
+                className="px-4 py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-sm transition-colors cursor-pointer w-full sm:w-auto"
+              >
+                Simpan {selectedAlt.id}
+              </button>
+            </div>
           </div>
         </div>
 

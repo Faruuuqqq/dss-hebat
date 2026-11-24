@@ -54,7 +54,17 @@ const CAMPUS_CORE_BOUNDS: L.LatLngBoundsExpression = [
 ];
 
 export function PriorityMapGIS() {
-  const { dataset, result, activeMapMode, selectedAltId, setSelectedAltId } = useDSS();
+  const {
+    dataset,
+    result,
+    activeMapMode,
+    selectedAltId,
+    setSelectedAltId,
+    pickMode,
+    setPickMode,
+    setDraftLatLng,
+    draftLatLng,
+  } = useDSS();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
@@ -165,6 +175,20 @@ export function PriorityMapGIS() {
       overlayGroupRef.current = null;
     };
   }, []);
+
+  // Effect #1b: Mode pilih lokasi — klik peta mengisi koordinat draf segmen baru
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !pickMode) return;
+    const handlePick = (e: L.LeafletMouseEvent) => {
+      setDraftLatLng([e.latlng.lat, e.latlng.lng]);
+      setPickMode(false);
+    };
+    map.on("click", handlePick);
+    return () => {
+      map.off("click", handlePick);
+    };
+  }, [pickMode, setDraftLatLng, setPickMode]);
 
   // Effect #2: Update Basemap Tile URL without re-creating map instance
   useEffect(() => {
@@ -427,7 +451,19 @@ export function PriorityMapGIS() {
 
       marker.addTo(group);
     });
-  }, [dataset, result, activeMapMode, selectedAltId, showBuffer, getNodeColor, setSelectedAltId]);
+
+    // 4) Pin draf segmen baru (hasil klik peta)
+    if (draftLatLng) {
+      L.circleMarker(draftLatLng, {
+        radius: 7,
+        color: "#0B3B38",
+        weight: 2,
+        fillColor: "#0E6B66",
+        fillOpacity: 0.9,
+        interactive: false,
+      }).addTo(group);
+    }
+  }, [dataset, result, activeMapMode, selectedAltId, showBuffer, getNodeColor, setSelectedAltId, draftLatLng]);
 
   // Effect #4: Bi-directional camera focus when selectedAltId changes from table/list
   useEffect(() => {
@@ -532,10 +568,16 @@ export function PriorityMapGIS() {
       >
         <div
           ref={mapContainerRef}
-          className="w-full h-[280px] sm:h-[340px] md:h-[380px]"
+          className={`w-full h-[280px] sm:h-[340px] md:h-[380px] ${pickMode ? "cursor-crosshair" : ""}`}
           role="region"
           aria-label="Peta GIS Interaktif Prioritas CCTV Jatinangor"
         />
+
+        {pickMode && (
+          <div className="absolute bottom-3 left-3 right-3 sm:right-auto bg-[#0B3B38] text-white text-[11px] font-semibold px-3 py-2 rounded-lg shadow-md pointer-events-none z-20">
+            Klik peta untuk menaruh koordinat segmen baru.
+          </div>
+        )}
 
         {/* Floating Active Segment Summary Overlay */}
         {activeAlt && (

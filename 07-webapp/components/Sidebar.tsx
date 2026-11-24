@@ -15,7 +15,7 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { role, setRole, datasetId, setDatasetId, resetDataset } = useDSS();
+  const { role, setRole, datasetId, setDatasetId, resetDataset, scenario, discardScenario } = useDSS();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const activeItem = navItems.find((i) => i.href === pathname) ?? navItems[0];
@@ -97,24 +97,43 @@ export function Sidebar() {
 
       {/* Preset & Role Controls Footer */}
       <div className="p-4 border-t border-[#144F4B] space-y-3">
-        {/* Dataset selector */}
-        <div className="bg-[#082D2B] p-3 rounded-lg border border-[#144F4B]">
-          <label
-            htmlFor={isMobile ? "dataset-preset-select-m" : "dataset-preset-select"}
-            className="text-xs font-medium text-[#95B5B0] block mb-1"
-          >
-            Preset Dataset:
-          </label>
-          <select
-            id={isMobile ? "dataset-preset-select-m" : "dataset-preset-select"}
-            value={datasetId}
-            onChange={(e) => setDatasetId(e.target.value)}
-            className="w-full bg-[#0B3B38] border border-[#144F4B] text-white text-xs rounded p-1.5 focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
-          >
-            <option value="ilustratif">Ilustratif (xlsx - Hierarki)</option>
-            <option value="naskah_uts">Naskah UTS (AHP 8×8)</option>
-          </select>
-        </div>
+        {/* Dataset selector / status skenario */}
+        {scenario ? (
+          <div className="bg-[#082D2B] p-3 rounded-lg border border-[#144F4B] space-y-1">
+            <p className="text-xs font-semibold text-white">
+              Skenario Saya <span className="text-[#3DD6CB]">aktif</span>
+            </p>
+            <p className="text-[11px] text-[#95B5B0]">
+              Dasar preset: {scenario.preset} · {scenario.alternatives.length} segmen
+            </p>
+            <button
+              onClick={() => {
+                if (window.confirm("Kembali ke preset dan hapus Skenario Saya?")) discardScenario();
+              }}
+              className="w-full mt-1 py-1.5 text-[11px] font-medium text-[#DDE3E1] bg-[#0E4B47] hover:bg-[#135A55] rounded transition-colors cursor-pointer"
+            >
+              Kembali ke preset
+            </button>
+          </div>
+        ) : (
+          <div className="bg-[#082D2B] p-3 rounded-lg border border-[#144F4B]">
+            <label
+              htmlFor={isMobile ? "dataset-preset-select-m" : "dataset-preset-select"}
+              className="text-xs font-medium text-[#95B5B0] block mb-1"
+            >
+              Preset Dataset:
+            </label>
+            <select
+              id={isMobile ? "dataset-preset-select-m" : "dataset-preset-select"}
+              value={datasetId}
+              onChange={(e) => setDatasetId(e.target.value)}
+              className="w-full bg-[#0B3B38] border border-[#144F4B] text-white text-xs rounded p-1.5 focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
+            >
+              <option value="ilustratif">Ilustratif (xlsx - Hierarki)</option>
+              <option value="naskah_uts">Naskah UTS (AHP 8×8)</option>
+            </select>
+          </div>
+        )}
 
         {/* Role toggle card */}
         <div className="bg-[#082D2B] p-3 rounded-lg border border-[#144F4B]">

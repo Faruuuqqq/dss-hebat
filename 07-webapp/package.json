@@ -10,9 +10,11 @@
     "start": "next start",
     "lint": "eslint .",
     "parity": "node scripts/parity.mts",
+    "scenario-check": "node scripts/scenario-check.mts",
     "test:bugs": "node scripts/ui-bugs.mjs",
     "test:ui": "node scripts/ui-check.mjs",
-    "verify": "npm run lint && npm run parity && npm run build",
+    "test:scenario": "node scripts/ui-scenario.mjs",
+    "verify": "npm run lint && npm run scenario-check && npm run parity && npm run build",
     "test:export": "node scripts/ui-export.mjs",
     "test:a11y": "node scripts/ui-a11y.mjs"
   },

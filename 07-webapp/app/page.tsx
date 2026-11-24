@@ -1,13 +1,61 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useDSS } from "../lib/store";
 import { MapModeToggle } from "../components/map/MapModeToggle";
 import { PriorityMapPanel } from "../components/map/PriorityMapPanel";
+import { SegmentForm } from "../components/SegmentForm";
+import { parseScenario } from "../lib/scenario";
 
 export default function DashboardPage() {
-  const { dataset, result, activeMapMode, setActiveMapMode, plafonPerFase, resetDataset } = useDSS();
+  const {
+    dataset,
+    result,
+    activeMapMode,
+    setActiveMapMode,
+    plafonPerFase,
+    resetDataset,
+    scenario,
+    discardScenario,
+    applyScenario,
+    storageError,
+  } = useDSS();
+
+  const [showForm, setShowForm] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  const handleExport = () => {
+    if (!scenario) return;
+    const blob = new Blob([JSON.stringify(scenario, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `skenario-sipriocctv-${scenario.preset}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    const parsed = parseScenario(await file.text());
+    if (!parsed) {
+      setNotice("Berkas skenario tidak valid atau versinya tidak didukung.");
+      return;
+    }
+    applyScenario(parsed);
+    setNotice("Skenario dipulihkan dari berkas.");
+  };
+
+  const handleReset = () => {
+    if (scenario && !window.confirm("Reset akan menghapus Skenario Saya dan kembali ke preset. Lanjutkan?")) {
+      return;
+    }
+    resetDataset();
+    setShowForm(false);
+  };
 
   // Find top ranked alternative
   const topAltIdx = result.topsis.sortedIndices[0] ?? 0;
@@ -66,13 +114,81 @@ export default function DashboardPage() {
             Data ilustratif
           </span>
           <button
-            onClick={resetDataset}
+            onClick={handleReset}
             className="bg-[#0E6B66] hover:bg-[#0B5652] text-white text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-xs transition-colors cursor-pointer"
           >
-            Hitung ulang
+            Reset nilai
           </button>
         </div>
       </div>
+
+      {/* Scenario bar */}
+      <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-[#DDE3E1] shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div className="text-xs">
+          <p className="font-bold text-[#14201F]">
+            {scenario
+              ? `Skenario Saya aktif · dasar preset ${scenario.preset} · ${dataset.alternatives.length} segmen`
+              : "Preset acuan terkunci"}
+          </p>
+          <p className="text-[#55625F] mt-0.5 max-w-2xl">
+            {scenario
+              ? "Peringkat di bawah dihitung dari skenario ini, sehingga tidak identik dengan angka acuan paper."
+              : "Menambah titik hanya mengubah salinan skenario; angka acuan paper tetap utuh."}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowForm((v) => !v)}
+            aria-expanded={showForm}
+            className="px-3 py-1.5 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg transition-colors cursor-pointer"
+          >
+            {showForm ? "Tutup form" : "+ Tambah titik"}
+          </button>
+          {scenario && (
+            <>
+              <button
+                type="button"
+                onClick={handleExport}
+                className="px-3 py-1.5 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg transition-colors cursor-pointer"
+              >
+                Ekspor JSON
+              </button>
+              <label className="px-3 py-1.5 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg transition-colors cursor-pointer">
+                Impor JSON
+                <input
+                  type="file"
+                  accept="application/json,.json"
+                  onChange={handleImport}
+                  className="sr-only"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm("Hapus Skenario Saya dan kembali ke preset?")) discardScenario();
+                }}
+                className="px-3 py-1.5 text-xs font-semibold text-[#A8231A] bg-white hover:bg-[#FBE4E1] border border-[#F5C2BC] rounded-lg transition-colors cursor-pointer"
+              >
+                Hapus skenario
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {notice && (
+        <p className="text-xs text-[#0B3B38] bg-[#E3F1EF] border border-[#A7D7D1] rounded-xl px-3 py-2" role="status">
+          {notice}
+        </p>
+      )}
+      {storageError && (
+        <p className="text-xs text-[#A8231A] bg-[#FBE4E1] border border-[#F5C2BC] rounded-xl px-3 py-2" role="alert">
+          {storageError}
+        </p>
+      )}
+
+      {showForm && <SegmentForm onClose={() => setShowForm(false)} />}
 
       {/* 4 KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -209,8 +325,15 @@ export default function DashboardPage() {
             </p>
             <p className="text-xs text-[#55625F]">
               Rp{((result.allocation.subtotals[2] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt
-              {phase2Items.some((i) => i.skor_c9 < 3) && " · A4 kelayakan C9 rendah (2)"}
             </p>
+            {phase2Items.some((i) => i.warning) && (
+              <p className="text-[11px] text-[#8A6A00]">
+                {phase2Items
+                  .filter((i) => i.warning)
+                  .map((i) => i.warning)
+                  .join(" · ")}
+              </p>
+            )}
           </div>
 
           {/* Phase 3 Card */}
