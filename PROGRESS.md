@@ -27,6 +27,24 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-24 · Sesi 34 — P1–P7: status bukti kamera + Skenario Saya (tambah titik)
+
+**Konteks:** pengguna meminta rencana peningkatan peta & penambahan titik, lalu "lanjutkan"; rencana P1–P7 (Sesi 33) dieksekusi.
+
+**Keputusan:**
+1. **P1 — status bukti kamera:** `cctv-eksisting.sim.json` memisahkan `keberadaan`, `koordinat_status`, `operasional`, `sumber_url`, dan `tanggal_sumber`. EX-02 tidak lagi diklaim "Aktif" (simulasi, tidak terverifikasi). Popup peta dan generator data ikut diselaraskan; legenda menyatakan radius 75 m ilustratif dan C7 adalah input dataset.
+2. **P2 — klaim dilunakkan:** pernyataan ATCS di paper `.md`/`.tex`, `08-docs/data-dan-sumber.md`, dan `AGENTS.md` diubah menjadi "daftar lokasi publik yang diperiksa tidak memuat titik Jatinangor" (bukan bukti ketiadaan layanan).
+3. **P3–P6 — Skenario Saya:** salinan preset disimpan di `localStorage` (versi skema 1). Pengguna dapat menambah segmen lewat form manual atau klik peta (pin draf), menghapus segmen, serta mengekspor/mengimpor skenario JSON. Validasi menolak draf tidak lengkap sehingga nilai kosong tidak menjadi nol di mesin. Preset acuan tidak pernah dimutasi; saat skenario aktif, pemilih preset diganti status skenario agar pekerjaan tidak hilang diam-diam.
+4. **P7 — verifikasi:** suite baru `scenario-check` dan `test:scenario`; dokumen README/AGENTS/tasks diperbarui.
+
+**File:** `07-webapp/lib/{scenario.ts, store.tsx}`, `07-webapp/components/{SegmentForm.tsx, Sidebar.tsx}`, `07-webapp/components/map/PriorityMapGIS.tsx`, `07-webapp/app/{page.tsx, kriteria/page.tsx}`, `07-webapp/data/cctv-eksisting.sim.json`, `07-webapp/scripts/{generate-data.py, scenario-check.mts, ui-scenario.mjs}`, `07-webapp/package.json`, `07-webapp/README.md`, `AGENTS.md`, `tasks/{plan.md, todo.md}`, `PROGRESS.md`.
+
+**Verifikasi:** `npm run verify` LULUS (lint + scenario-check 15 cek + parity 75 cek + build); `test:scenario` LULUS (tambah manual & klik peta, reload persistensi, ekspor/impor, hapus, kembali ke preset, 0 error konsol); `test:ui`, `test:bugs`, `test:export`, `test:a11y` LULUS. Angka kanonik tidak berubah (ilustratif A3 0,7674; naskah_uts A3 0,6445).
+
+**Open items:** push branch `main`; validasi lapangan; opsional Supabase untuk skenario lintas perangkat.
+
+---
+
 ### 2026-11-23 · Sesi 33 — Rencana peta berbukti dan tambah titik skenario
 
 **Konteks:** pengguna meminta rencana peningkatan ketepatan peta dan penambahan titik langsung melalui UI, serta penilaian realistis tanpa survei lapangan.

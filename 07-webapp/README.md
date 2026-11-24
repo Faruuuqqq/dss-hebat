@@ -1,6 +1,6 @@
-# 07-webapp — SiPrioCCTV Jatinangor (Next.js 16 + Three.js + Supabase)
+# 07-webapp — SiPrioCCTV Jatinangor (Next.js 16 + Leaflet/OSM + Supabase)
 
-Implementasi aplikasi DSS (*Decision Support System*) prioritisasi penempatan kamera CCTV di permukiman mahasiswa Jatinangor berbasis **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + Three.js + Supabase**.
+Implementasi aplikasi DSS (*Decision Support System*) prioritisasi penempatan kamera CCTV di permukiman mahasiswa Jatinangor berbasis **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + Leaflet/OpenStreetMap + Supabase**.
 
 Aplikasi mengimplementasikan model keputusan **AHP–TOPSIS** multi-kriteria dengan alokasi anggaran bertahap dan uji sensitivitas *one-at-a-time* (OAT), mereproduksi antarmuka mockup [`SiPrioCCTV Jatinangor.html`](../SiPrioCCTV%20Jatinangor.html) dan dataset [`Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx`](../Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx).
 
@@ -9,7 +9,7 @@ Aplikasi mengimplementasikan model keputusan **AHP–TOPSIS** multi-kriteria den
 ## Fitur Utama
 
 1. **5 Layar Terintegrasi (Desain Mockup SiPrioCCTV):**
-   - **Dashboard (`/`):** 4 KPI utama, visualisasi peta 3D prioritas, peringkat TOPSIS interaktif, dan kartu alokasi bertahap.
+   - **Dashboard (`/`):** 4 KPI utama, peta GIS Jatinangor (Leaflet/OpenStreetMap), peringkat TOPSIS interaktif, dan kartu alokasi bertahap.
    - **Data Kriteria (`/kriteria`):** Matriks keputusan terkelompok (Risiko, Paparan, Spasial, Biaya & Kelayakan), form penyesuaian nilai alternatif, dan transparansi sumber data.
    - **Pembobotan AHP (`/ahp`):** Matriks perbandingan klaster, status konsistensi Saaty (CR, $\lambda_{\max}$, RI), kuesioner slider Saaty untuk responden pakar/stakeholder, dan kartu bobot global kriteria.
    - **Hasil & Anggaran (`/hasil`):** Tabel komprehensif TOPSIS ($D^+$, $D^-$, $CC$), alokasi bertahap dengan progress bar, pengaturan plafon dinamis & ambang C9, serta unduhan ekspor CSV.
@@ -19,18 +19,24 @@ Aplikasi mengimplementasikan model keputusan **AHP–TOPSIS** multi-kriteria den
    - **Preset `ilustratif` (Default):** Berbasis file Excel `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx` dengan AHP hierarki 3 klaster $\times$ 3 kelompok stakeholder (agregat rata-rata geometrik). Bobot global: C1 31,56%, C3 19,88%, C2 16,14%, C5 10,50%, C8 6,83%, C4 6,81%, C7 5,17%, C6 3,11%; TOPSIS A3 (0,7674) > A1 (0,5650) > A4 (0,4287) > A2 (0,4128) > A5 (0,1397).
    - **Preset `naskah_uts`:** AHP datar $8 \times 8$ kanonik sesuai paper IEEE dan proposal UTS (C1 23,95%; TOPSIS A3 0,6445 > A1 0,5774 > A4 0,4995 > A2 0,4638 > A5 0,1820).
 
-3. **Visualisasi Peta 3D (Three.js):**
-   - Kanvas WebGL interaktif dengan jalan, bangunan kubus, titik CCTV eksisting, dan pilar prioritas dengan tinggi proporsional terhadap skor urgensi ($CC$).
-   - Raycasting untuk hover/click segmen, kontrol rotasi orbit, serta tombol beralih ke fallback SVG 2D jika WebGL dinonaktifkan.
-   - Tiga mode tampilan layer: Urgensi ($CC$), Kelayakan teknis ($C_9$), dan Coverage gap ($C_7$).
+3. **Peta GIS + Alternatif 2D:**
+   - Peta dasar **OpenStreetMap** interaktif (Leaflet, client-only) dengan titik segmen A1–A5, kamera CCTV eksisting, dan landmark riil (kampus/gate/halte).
+   - Tampilan alternatif **2D skematik (SVG)**; tampilan 3D Three.js sudah dihapus karena kurang informatif dibanding peta dasar nyata.
+   - Tiga mode pewarnaan: Urgensi ($CC$), Kelayakan teknis ($C_9$), dan Coverage gap ($C_7$). Radius 75 m adalah ilustrasi, bukan cakupan efektif kamera.
 
-4. **Integrasi Supabase & Fallback Anggun (Graceful Local Fallback):**
+4. **Skenario Saya (tambah titik tanpa mengubah preset):**
+   - Tombol **+ Tambah titik** membuat salinan preset yang boleh ditambah/dihapus segmennya; angka acuan paper tetap utuh.
+   - Lokasi dapat diisi manual atau dengan **klik peta**; form menolak draf tidak lengkap (nilai kosong tidak diam-diam menjadi nol).
+   - Skenario tersimpan di `localStorage`, bertahan setelah muat ulang, serta dapat **diekspor/impor sebagai JSON**.
+   - Segmen tambahan otomatis ikut AHP–TOPSIS, alokasi anggaran, sensitivitas, peta, dan ekspor CSV.
+
+5. **Integrasi Supabase & Fallback Anggun (Graceful Local Fallback):**
    - Skema database PostgreSQL lengkap di `supabase/migrations/20261116000000_init.sql` (tabel profil, dataset, kriteria, alternatif, nilai, perbandingan AHP, dan log audit).
    - *Row Level Security* (RLS) policies untuk pemisahan hak akses publik (baca), pakar (input AHP), dan admin (tulis matriks kriteria).
    - Data awal otomatis dari `supabase/seed.sql`.
    - `lib/supabase-repository.ts` mendeteksi keberadaan variabel lingkungan; jika Supabase belum terhubung, aplikasi beralih secara transparan ke data statis lokal.
 
-5. **Aksesibilitas & Kerapian UI:**
+6. **Aksesibilitas & Kerapian UI:**
    - Memenuhi standar WCAG 2.1 AA (0 pelanggaran pada audit otomatis `axe-core`).
    - Kontras warna teks, label form (`htmlFor`, `aria-label`), navigasi keyboard, dan tabel responsif.
 
@@ -58,16 +64,18 @@ npm start            # Default port 3000 (atau gunakan -p 3111)
 Aplikasi dilengkapi suite pengujian otomatis berlapis:
 
 ```bash
-npm run verify       # Menjalankan: lint + parity + build produksi
+npm run verify       # lint + scenario-check + parity + build produksi
 
-npm run lint         # ESLint 9 (Next.js TypeScript config)
-npm run parity       # 75 pemeriksaan paritas numerik (AHP, TOPSIS, Alokasi, Sensitivitas)
+npm run lint           # ESLint 9 (Next.js TypeScript config)
+npm run scenario-check # 15 uji validasi draf, persistensi & mesin 6 alternatif
+npm run parity         # 75 pemeriksaan paritas numerik (AHP, TOPSIS, Alokasi, Sensitivitas)
 
 # Uji peramban (jalankan `npm start -p 3111` lebih dulu):
-npm run test:ui      # Uji interaksi di 5 layar peramban Chromium
-npm run test:bugs    # 16 pemeriksaan keandalan input angka NumberCell
-npm run test:export  # Pengujian unduhan nyata berkas CSV dan validasi isinya
-npm run test:a11y    # Audit aksesibilitas axe-core pada 5 layar (0 pelanggaran)
+npm run test:ui       # Uji interaksi di 5 layar peramban Chromium
+npm run test:bugs     # Regresi keandalan input angka NumberCell
+npm run test:scenario # Alur Skenario Saya: tambah titik, klik peta, reload, ekspor/impor, hapus
+npm run test:export   # Pengujian unduhan nyata berkas CSV dan validasi isinya
+npm run test:a11y     # Audit aksesibilitas axe-core pada 5 layar (0 pelanggaran)
 ```
 
 ---
@@ -106,11 +114,13 @@ supabase db push
 │   ├── globals.css            # Token desain, warna Saaty, dan styling
 │   └── icon.svg               # Favicon
 ├── components/
-│   ├── Sidebar.tsx            # Navigasi utama, pemilih dataset & toggle peran
+│   ├── Sidebar.tsx            # Navigasi utama, pemilih preset/status skenario, toggle peran
 │   ├── NumberCell.tsx         # Sel input angka terlindungi (anti-blur bug)
+│   ├── SegmentForm.tsx        # Form tambah segmen ke Skenario Saya
 │   └── map/
-│       ├── PriorityMap3D.tsx  # Komponen visualisasi 3D Three.js
-│       ├── PriorityMap2D.tsx  # Fallback visualisasi 2D berbasis SVG
+│       ├── PriorityMapPanel.tsx # Pemilih tampilan GIS / 2D
+│       ├── PriorityMapGIS.tsx # Peta Leaflet + OpenStreetMap (utama)
+│       ├── PriorityMap2D.tsx  # Visualisasi 2D berbasis SVG
 │       └── MapModeToggle.tsx  # Pengalih mode layer (Urgensi/Kelayakan/Gap)
 ├── lib/
 │   ├── engine/                # Mesin komputasi AHP-TOPSIS modular (TypeScript murni)
@@ -121,13 +131,15 @@ supabase db push
 │   │   ├── sensitivity.ts     # Analisis sensitivitas one-at-a-time (OAT)
 │   │   └── index.ts           # Evaluator orkestrasi
 │   ├── store.tsx              # React Context penyimpan state global aplikasi
+│   ├── scenario.ts            # Skenario Saya: validasi draf & persistensi localStorage
 │   ├── format.ts              # Utilitas format angka deterministik & CSV
 │   ├── supabase.ts            # Klien Supabase
 │   └── supabase-repository.ts # Repository layer dengan graceful local fallback
 ├── data/
 │   ├── ilustratif.json        # Data hasil ekstraksi xlsx (default)
 │   ├── naskah-uts.json        # Data naskah UTS kanonik (flat 8x8)
-│   ├── cctv-eksisting.sim.json# Data titik CCTV eksisting [SIMULASI]
+│   ├── referensi.riil.json    # Landmark riil OSM (kampus/gate/halte)
+│   ├── cctv-eksisting.sim.json# Titik CCTV eksisting + status bukti
 │   └── jalan.sim.json         # Data garis jalan skematik [SIMULASI]
 ├── supabase/
 │   ├── migrations/            # SQL migration skema tabel, RLS, audit log
@@ -136,7 +148,9 @@ supabase db push
 │   ├── import-xlsx.py         # Skrip ekstraktor XML dari file .xlsx ke JSON
 │   ├── generate-data.py       # Pembangkit dataset kanonik & spasial skematik
 │   ├── parity.mts             # 75 pengujian paritas numerik
+│   ├── scenario-check.mts     # Uji validasi draf & persistensi skenario
 │   ├── ui-check.mjs           # E2E test 5 layar via Chromium
+│   ├── ui-scenario.mjs        # E2E alur Skenario Saya (tambah titik s.d. impor)
 │   ├── ui-bugs.mjs            # Regresi input angka
 │   ├── ui-export.mjs          # Verifikasi unduhan CSV
 │   └── ui-a11y.mjs            # Audit aksesibilitas WCAG 2.1 AA

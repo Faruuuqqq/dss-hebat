@@ -53,7 +53,7 @@ Repo ini **bukan codebase perangkat lunak biasa**, melainkan repo proyek akademi
 | **Sumber kebenaran** | `dss_revisi_markdown/dss_revisi.md` (lihat §2.1) |
 | Proposal SCR (`dss_revisi_markdown/dss_revisi.md`) | SELESAI, sudah dinilai/dikumpulkan |
 | Aplikasi offline (`05-aplikasi/`) | SELESAI — 1 file HTML offline, engine data-driven, filter C9 aktif |
-| Aplikasi modern (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; 5 layar; peta **GIS Leaflet/OSM** + alt **2D SVG** (3D Three.js dihapus); 2 preset dataset; `NumberCell` (input angka aman) aktif; Supabase opsional |
+| Aplikasi modern (`07-webapp/`) | SELESAI — Next.js 16 + TS + Tailwind 4; 5 layar; peta **GIS Leaflet/OSM** + alt **2D SVG** (3D Three.js dihapus); 2 preset dataset; **Skenario Saya** (tambah titik via klik peta, localStorage, ekspor/impor JSON); `NumberCell` (input angka aman) aktif; Supabase opsional |
 | Data CCTV & spasial | ETLE resmi 1 titik (lokasi deskriptif) + CCTV Desa Hegarmanah; daftar ATCS publik tidak memuat titik Jatinangor; koordinat A1–A5 diselaraskan ke OpenStreetMap, nilai C7 tetap estimasi dataset |
 | Paper hasil (`06-paper-hasil/`) | SELESAI — diselaraskan ke `dss_revisi`, **tercompile 5 halaman** tanpa error (Tectonic) |
 | Paper fase proposal (`04-paper/`) | SELESAI — AHP 8×8/PRISMA 416, **tercompile 8 halaman**; diagram arsitektur TikZ kanonik |
@@ -96,11 +96,15 @@ assets/diagram/
 07-webapp/                   # Next.js 16 + TS + Tailwind 4 (migrasi aplikasi)
   app/page.tsx               # dashboard interaktif (client component)
   components/map/            # PriorityMapPanel (pemilih GIS/2D), PriorityMapGIS (Leaflet/OSM), PriorityMap2D (SVG)
+  components/SegmentForm.tsx # form tambah titik ke Skenario Saya
+  lib/scenario.ts            # validasi draf + persistensi localStorage skenario
   data/referensi.riil.json   # titik referensi dunia nyata (OSM): kampus/gate/halte
   components/NumberCell.tsx  # sel angka aman (draft string, koma, jepit saat blur)
   lib/engine.ts              # mesin AHP-TOPSIS TS (mandiri, data-driven)
   scripts/parity.mts         # paritas angka kanonik (node, tanpa build)
+  scripts/scenario-check.mts # uji validasi draf & persistensi skenario
   scripts/ui-check.mjs       # uji interaksi Chromium (playwright-core)
+  scripts/ui-scenario.mjs    # uji alur Skenario Saya (tambah titik s.d. impor)
   scripts/ui-bugs.mjs        # uji regresi perilaku input angka
   scripts/ui-export.mjs      # uji ekspor CSV (unduhan nyata)
 05-aplikasi/
@@ -138,10 +142,11 @@ TECTONIC=/path/ke/tectonic bash build-papers.sh
 bash assets/diagram/build-arsitektur-png.sh
 
 # webapp Next.js
-cd 07-webapp && npm run verify        # lint + parity (75 cek) + build (harus lulus)
+cd 07-webapp && npm run verify        # lint + scenario-check + parity (75 cek) + build (harus lulus)
 # uji peramban: jalankan `npx next start -p 3111` lebih dulu, lalu (skrip default BASE_URL=http://127.0.0.1:3111):
 #   npm run test:bugs                 # perilaku input angka NumberCell
 #   npm run test:ui                   # interaksi 5 layar + peta GIS
+#   npm run test:scenario             # alur Skenario Saya (tambah titik, klik peta, ekspor/impor)
 #   npm run test:export               # ekspor CSV dua preset (unduhan nyata)
 #   npm run test:a11y                 # axe-core WCAG 2.1 A/AA (desktop + mobile)
 ```

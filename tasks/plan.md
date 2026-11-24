@@ -119,7 +119,7 @@ Checklist pekerjaan tersisa, dependensi, dan kriteria lulus ada di [`tasks/todo.
 
 ## Rencana lanjutan: peta berbukti dan Skenario Saya
 
-**Tanggal:** 23 Nov 2026. **Status:** usulan untuk ditinjau; belum diimplementasikan.
+**Tanggal:** 23 Nov 2026; diimplementasikan 24 Nov 2026. **Status:** selesai & diuji (lihat PROGRESS Sesi 34).
 
 ### Tujuan dan hasil akhir
 
