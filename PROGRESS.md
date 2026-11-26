@@ -27,6 +27,48 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-26 · Sesi 37 — Perbaiki GIS, fase anggaran, dan impor kriteria
+
+**Konteks** — Pengguna meminta perbaikan tiga temuan pada webapp tayang. Mount checkout asal baca-saja, sehingga perubahan dibuat di salinan Git yang dapat ditulis.
+
+**Keputusan** — Muat stylesheet Leaflet dari layout Next.js. Gunakan satu ringkasan untuk menampilkan seluruh hasil fase dan alasan pengecualian di Dashboard serta Hasil. Atur plafon di dekat ringkasan dan hitung ulang saat input berubah. Simpan perubahan kriteria sebagai skenario browser. Validasi CSV dan tampilkan pratinjau sebelum menerapkan nilai ke ID segmen yang sudah ada.
+
+**File** — Layout dan tiga halaman di `07-webapp/app/`, komponen ringkasan dan impor, parser CSV, store skenario, uji browser, README webapp, dan perbaikan kutip pada dua label sumber di CSV acuan.
+
+**Verifikasi** — Empat uji regresi mereproduksi masalah pada versi tayang sebelum perbaikan, lalu lulus pada build produksi lokal. `npm run verify`, `test:ui`, `test:scenario`, `test:bugs`, `test:export`, `test:a11y`, dan `node 05-aplikasi/test-algoritma.mjs` lulus. CSV acuan terbaca sebagai lima baris oleh parser impor. Nilai numerik kanonik tetap sesuai uji paritas.
+
+**Open items** — Verifikasi commit yang dideploy pada domain Vercel dan sinkronkan checkout asal saat mount bisa ditulis.
+
+---
+
+### 2026-11-25 · Sesi 36 — Tinjau webapp yang tayang
+
+**Konteks** — Meninjau lima layar SiPrioCCTV di `https://siprio-cctv.vercel.app/` untuk menyusun prioritas perbaikan.
+
+**Keputusan** — Prioritaskan peta GIS, konsistensi ringkasan alokasi, dan kejelasan penyimpanan. Setelah itu, rapikan hierarki dashboard ponsel, keterbacaan tabel, penanda preset, dan status bukti data.
+
+**File** — `PROGRESS.md`.
+
+**Verifikasi** — Tinjauan Chromium pada 1440, 768, dan 390 px. Pada situs tayang, tile OSM termuat tetapi tile dan marker berposisi `static`, sehingga peta terlihat terpotong. Plafon Rp8 juta menghasilkan lima fase di tabel dan hanya tiga di ringkasan. `Impor CSV` membuka dialog teks tanpa pemilih berkas, dan perubahan nilai dalam preset kembali ke nilai awal setelah muat ulang meski UI menampilkan pesan tersimpan. Di ponsel, tabel Hasil perlu digeser untuk membaca fase dan biaya.
+
+**Open items** — Rekomendasi disampaikan untuk diprioritaskan sebelum implementasi.
+
+---
+
+### 2026-11-25 · Sesi 35 — Orientasi repositori SiPrioCCTV
+
+**Konteks** — Membaca naskah UTS, paper hasil, dokumentasi data, dan struktur kedua aplikasi untuk memahami status proyek saat ini.
+
+**Keputusan** — Gunakan `dss_revisi_markdown/dss_revisi.md` sebagai acuan model dan hasil numerik. Paper hasil membahas aplikasi luring. Webapp memakai preset `ilustratif` secara bawaan dan menyediakan `naskah_uts` untuk mereproduksi hasil paper. Di webapp, C9 di bawah ambang menunda alokasi ke Fase 2+ pada `ilustratif` dan mengecualikan segmen dari alokasi pada `naskah_uts`.
+
+**File** — `PROGRESS.md`.
+
+**Verifikasi** — `node 05-aplikasi/test-algoritma.mjs` dan `npm run verify` di `07-webapp/` lulus. `pdfinfo` menunjukkan PDF paper hasil 6 halaman dan PDF paper proposal 8 halaman. `main` cocok dengan referensi lokal `origin/main` saat diperiksa. Store webapp membaca preset dari JSON lokal dan menyimpan skenario di `localStorage`.
+
+**Open items** — Validasi data per segmen melalui survei lapangan. Tabel status lama dan beberapa dokumen masih menyebut peta 3D atau PDF hasil 5 halaman. Integrasi Supabase ke alur webapp dan deploy Vercel tetap opsional.
+
+---
+
 ### 2026-11-24 · Sesi 34 — P1–P7: status bukti kamera + Skenario Saya (tambah titik)
 
 **Konteks:** pengguna meminta rencana peningkatan peta & penambahan titik, lalu "lanjutkan"; rencana P1–P7 (Sesi 33) dieksekusi.
