@@ -112,7 +112,7 @@ console.log("\n=== 4. Layar Hasil & Anggaran (/hasil) ===");
 await page.goto(`${BASE}/hasil`, { waitUntil: "networkidle" });
 await page.screenshot({ path: ".shots/screen-4-hasil.png", fullPage: true });
 
-chk("judul hasil", (await page.locator("main h1").textContent())?.trim(), "Hasil TOPSIS & Alokasi Anggaran");
+chk("judul hasil", (await page.locator("main").getByRole("heading", { level: 1 }).innerText()).trim(), "Hasil TOPSIS & Alokasi Anggaran");
 const hasilText = await page.innerText("main");
 chk("tabel TOPSIS tampil", hasilText.includes("Peringkat urgensi dan jarak"), true);
 chk("A3 peringkat 1", hasilText.includes("A3 Persimpangan Hegarmanah"), true);

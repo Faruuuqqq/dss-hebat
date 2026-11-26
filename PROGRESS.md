@@ -27,6 +27,20 @@ Entri **terbaru di paling atas**. Setiap entri wajib memuat: tanggal · apa yang
 
 ## Log
 
+### 2026-11-26 · Sesi 38 — Alasan prioritas, perbandingan, dan ringkasan keputusan
+
+**Konteks** — Pengguna meminta implementasi lima peningkatan webapp. Checkout asal masih baca-saja, sehingga pekerjaan dilanjutkan di salinan Git yang sinkron dengan `main`.
+
+**Keputusan** — Tampilkan nilai kriteria, bobot AHP, jarak ideal, dan alasan alokasi titik terpilih dari hasil mesin yang sama. Bandingkan preset acuan dengan skenario aktif pada `/perbandingan`, dengan plafon uji yang hanya berlaku di layar itu. Catat sumber dan waktu input manual atau impor CSV di skenario, serta tampilkan daftar cek survei dan status estimasi. Siapkan ringkasan keputusan melalui dialog cetak browser dan rapikan tampilan Dashboard dan Hasil untuk ponsel.
+
+**File** — Halaman Dashboard, Hasil, Data Kriteria, dan Perbandingan. Komponen rincian segmen, sumber data, dan laporan; store skenario; tipe hasil mesin; stylesheet cetak; README dan suite browser.
+
+**Verifikasi** — `npm run verify`, sembilan uji `test:workflow`, `test:ui`, `test:scenario`, `test:bugs`, `test:export`, audit otomatis `test:a11y` desktop dan ponsel, serta verifikasi algoritma luring lulus. Ringkasan PDF A4 satu halaman diperiksa pada plafon bawaan, plafon Rp8 juta dengan lima fase, dan plafon Rp6 juta dengan pengecualian. Uji paritas mengonfirmasi angka kanonik tetap sama.
+
+**Open items** — Verifikasi rilis di domain Vercel, sinkronkan checkout asal saat mount bisa ditulis, dan lengkapi validasi lapangan.
+
+---
+
 ### 2026-11-26 · Sesi 37 — Perbaiki GIS, fase anggaran, dan impor kriteria
 
 **Konteks** — Pengguna meminta perbaikan tiga temuan pada webapp tayang. Mount checkout asal baca-saja, sehingga perubahan dibuat di salinan Git yang dapat ditulis.

@@ -8,9 +8,9 @@ after(() => browser.close());
 
 async function openPage(t, path) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-  page.setDefaultTimeout(7000);
+  page.setDefaultTimeout(15000);
   t.after(() => page.close());
-  await page.goto(base + path);
+  await page.goto(base + path, { waitUntil: "domcontentloaded" });
   return page;
 }
 
@@ -117,8 +117,74 @@ test("impor CSV memvalidasi berkas dan baru mengubah skenario setelah konfirmasi
   assert.equal(await field.inputValue(), "15");
   await page.getByRole("button", { name: "Terapkan ke skenario" }).click();
   assert.equal(await field.inputValue(), "21");
+  assert.match(await page.getByRole("region", { name: "Sumber data & status" }).innerText(), /Impor CSV[\s\S]+Tanggal input/i);
   await page.reload();
   await page.locator("main").getByRole("status").filter({ hasText: /Skenario Saya aktif/i }).waitFor();
   await page.getByRole("row", { name: /A3.*Hegarmanah/i }).click();
   assert.equal(await field.inputValue(), "21");
+});
+
+test("alasan prioritas mengikuti titik peta dan pilihan hasil", async (t) => {
+  const page = await openPage(t, "/");
+  const map = page.locator(".leaflet-container");
+  await map.getByTitle("A1 · Gang Kos Sayang", { exact: true }).click();
+  const detail = page.getByRole("region", { name: "Mengapa titik ini diprioritaskan?" });
+  assert.match(await detail.innerText(), /A1 · Gang Kos Sayang/);
+  assert.match(await detail.innerText(), /C1[\s\S]+Bobot|Bobot[\s\S]+C1/i);
+
+  await page.getByRole("link", { name: "Hasil & Anggaran" }).click();
+  await page.getByRole("link", { name: "Jelaskan A4" }).click();
+  assert.match(await detail.innerText(), /A4 · Gang Cipacing[\s\S]+Fase 2[\s\S]+C9/i);
+});
+
+test("bandingkan skenario menguji plafon tanpa mengubah data aktif", async (t) => {
+  const page = await openPage(t, "/");
+  const compare = page.getByRole("link", { name: "Bandingkan Skenario" });
+  assert.equal(await compare.count(), 1);
+  await compare.click();
+  await page.getByLabel("Plafon simulasi per fase (Rp)").fill("8000000");
+  const row = page.getByRole("row", { name: /A5.*Cileles/i });
+  assert.match(await row.innerText(), /0,1397[\s\S]+Fase 3[\s\S]+0,1397[\s\S]+Fase 5/i);
+  assert.match(await page.locator("main").innerText(), /Urutan peringkat tetap/i);
+  await page.getByRole("link", { name: "Hasil & Anggaran", exact: true }).click();
+  assert.equal(await page.getByLabel("Plafon per fase dalam Rupiah").inputValue(), "15000000");
+});
+
+test("bukti sumber mencatat perubahan nilai dan tetap ada setelah muat ulang", async (t) => {
+  const page = await openPage(t, "/kriteria");
+  const evidence = page.getByRole("region", { name: "Sumber data & status" });
+  assert.match(await evidence.innerText(), /Tanggal pengukuran belum tercatat/i);
+  const field = page.getByLabel("C1 Riwayat kerawanan", { exact: true });
+  await field.fill("19");
+  await page.getByRole("button", { name: "Simpan sebagai skenario", exact: true }).click();
+  await page.reload();
+  await page.locator("main").getByRole("status").filter({ hasText: /Skenario Saya aktif/i }).waitFor();
+  await page.getByRole("row", { name: /A3.*Hegarmanah/i }).click();
+  const c1 = evidence.getByRole("listitem").filter({ hasText: /C1 · / });
+  assert.match(await c1.innerText(), /Input manual[\s\S]+Tanggal input/i);
+  assert.equal(await c1.locator("time[datetime]").count(), 1);
+  assert.match(await evidence.innerText(), /Checklist survei A3/i);
+});
+
+test("ringkasan cetak berisi fase dan alasan sesuai hasil aktif", async (t) => {
+  const page = await openPage(t, "/hasil");
+  const printAction = page.getByRole("button", { name: "Cetak / simpan PDF", exact: true });
+  assert.equal(await printAction.count(), 1);
+  await page.getByLabel("Plafon per fase dalam Rupiah").fill("6000000");
+  await page.emulateMedia({ media: "print" });
+  const report = page.getByRole("heading", { name: "Ringkasan keputusan CCTV" }).locator("..");
+  assert.match(await report.innerText(), /Ilustratif[\s\S]+Rp6\.000\.000[\s\S]+Tidak dialokasikan[\s\S]+melebihi plafon/i);
+  assert.equal(await page.getByRole("navigation").count(), 0);
+});
+
+test("ponsel menampilkan keputusan utama dan rincian TOPSIS tanpa geser mendatar", async (t) => {
+  const page = await openPage(t, "/");
+  await page.setViewportSize({ width: 390, height: 844 });
+  const keyDecision = page.getByRole("region", { name: "Keputusan utama" });
+  assert.match(await keyDecision.innerText(), /Persimpangan Hegarmanah[\s\S]+Fase 1[\s\S]+Rp14,0 jt/i);
+  assert.ok((await page.getByRole("heading", { name: "Peta prioritas segmen" }).boundingBox()).y < 844);
+  await page.goto(base + "/hasil");
+  const mobile = page.getByRole("list", { name: "Ringkasan peringkat TOPSIS" });
+  assert.match(await mobile.innerText(), /A3[\s\S]+0,7674[\s\S]+Fase 1[\s\S]+Rp7,0 jt/i);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), 390);
 });

@@ -81,8 +81,13 @@ await audit("Pembobotan AHP", "/ahp", 1440);
 
 // 4) Hasil & Anggaran
 await audit("Hasil TOPSIS & Anggaran", "/hasil", 1440);
+await audit("Hasil TOPSIS & Anggaran Mobile", "/hasil", 390);
 
-// 5) Uji Sensitivitas
+// 5) Bandingkan Skenario
+await audit("Bandingkan Skenario", "/perbandingan", 1440);
+await audit("Bandingkan Skenario Mobile", "/perbandingan", 390);
+
+// 6) Uji Sensitivitas
 await audit("Uji Sensitivitas", "/sensitivitas", 1440);
 
 await browser.close();
