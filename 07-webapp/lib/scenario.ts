@@ -52,7 +52,9 @@ export function parseScenario(raw: string | null): ScenarioState | null {
       alternatives: x.alternatives,
       values: x.values,
       pairwise: Array.isArray(x.pairwise) ? x.pairwise : [],
-      plafonPerFase: Number(x.plafonPerFase) || 15_000_000,
+      plafonPerFase: typeof x.plafonPerFase === "number" && Number.isFinite(x.plafonPerFase) && x.plafonPerFase >= 0
+        ? x.plafonPerFase
+        : 15_000_000,
       c9MinFase1: Number(x.c9MinFase1) || 3,
     };
   } catch {

@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useDSS } from "../../lib/store";
+import type { AlternativeValue } from "../../lib/engine/index";
+import { CriteriaCsvImport } from "../../components/CriteriaCsvImport";
 import { NumberCell } from "../../components/NumberCell";
 
 export default function KriteriaPage() {
@@ -13,10 +15,13 @@ export default function KriteriaPage() {
     updateC9Value,
     updateCostValue,
     scenario,
+    persistScenarioValues,
     removeAlternative,
+    storageError,
   } = useDSS();
 
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [showImport, setShowImport] = useState(false);
 
   const selectedAlt =
     dataset.alternatives.find((a) => a.id === selectedAltId) ??
@@ -27,9 +32,11 @@ export default function KriteriaPage() {
     biaya_rp: 0,
   };
 
-  const handleSave = () => {
-    setSaveMessage(`Perubahan nilai ${selectedAlt.id} berhasil disimpan ke model.`);
-    setTimeout(() => setSaveMessage(null), 3000);
+  const saveLabel = scenario ? "Simpan skenario" : "Simpan sebagai skenario";
+  const handleSave = (updates?: Record<string, AlternativeValue>) => {
+    const saved = persistScenarioValues(updates);
+    setSaveMessage(saved ? "Skenario Saya tersimpan di browser." : null);
+    return saved;
   };
 
   const sourcesList = [
@@ -58,24 +65,34 @@ export default function KriteriaPage() {
         </div>
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <button
-            onClick={() => alert("Fitur impor CSV membaca berkas matriks keputusan dan memperbarui dataset aktif.")}
+            type="button"
+            aria-expanded={showImport}
+            aria-controls={showImport ? "criteria-csv-import" : undefined}
+            onClick={() => setShowImport(!showImport)}
             className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg shadow-2xs transition-colors cursor-pointer"
           >
             Impor CSV
           </button>
-          <button
-            onClick={handleSave}
-            className="px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-xs transition-colors cursor-pointer"
-          >
-            Simpan perubahan
-          </button>
         </div>
       </div>
 
-      {saveMessage && (
-        <div className="p-3 bg-[#E3F1EF] text-[#0E6B66] border border-[#A7D7D1] rounded-xl text-xs font-medium">
-          {saveMessage}
+      {storageError && (
+        <p role="alert" className="rounded-xl border border-[#F5C2BC] bg-[#FBE4E1] p-3 text-xs text-[#A8231A]">
+          {storageError}
+        </p>
+      )}
+      {scenario && !storageError && (
+        <div role="status" className="p-3 bg-[#E3F1EF] text-[#0E6B66] border border-[#A7D7D1] rounded-xl text-xs font-medium">
+          {saveMessage ?? "Skenario Saya aktif. Perubahan disimpan otomatis di browser."}
         </div>
+      )}
+      {showImport && (
+        <CriteriaCsvImport
+          key={dataset.id}
+          alternatives={dataset.alternatives}
+          onApply={handleSave}
+          onClose={() => setShowImport(false)}
+        />
       )}
 
       {/* Decision Matrix Table */}
@@ -303,7 +320,9 @@ export default function KriteriaPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <span className="text-[11px] text-[#475467]">
-              Sumber dan tanggal input dicatat otomatis untuk jejak audit.
+              {scenario
+                ? "Perubahan disimpan otomatis di Skenario Saya."
+                : "Perubahan langsung dihitung. Simpan sebagai skenario agar tetap ada setelah muat ulang."}
             </span>
             <div className="flex flex-wrap items-center gap-2">
               {scenario && (
@@ -320,10 +339,11 @@ export default function KriteriaPage() {
                 </button>
               )}
               <button
-                onClick={handleSave}
+                type="button"
+                onClick={() => handleSave()}
                 className="px-4 py-2 text-xs font-semibold text-white bg-[#0E6B66] hover:bg-[#0B5652] rounded-lg shadow-sm transition-colors cursor-pointer w-full sm:w-auto"
               >
-                Simpan {selectedAlt.id}
+                {saveLabel}
               </button>
             </div>
           </div>

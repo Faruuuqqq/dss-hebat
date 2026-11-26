@@ -40,6 +40,7 @@ interface DSSContextType {
   updatePairwiseScore: (kelompok: string, level: string, critA: string, critB: string, val: number) => void;
   resetDataset: () => void;
   scenario: ScenarioState | null;
+  persistScenarioValues: (updates?: Record<string, AlternativeValue>) => boolean;
   startScenario: () => void;
   discardScenario: () => void;
   applyScenario: (s: ScenarioState) => void;
@@ -58,6 +59,8 @@ const rawDatasets: Record<string, SolveDatasetInput> = {
   ilustratif: ilustratifData as unknown as SolveDatasetInput,
   naskah_uts: naskahUtsData as unknown as SolveDatasetInput,
 };
+
+const storageErrorMessage = "Skenario gagal disimpan. Penyimpanan browser mungkin penuh atau diblokir.";
 
 export function DSSProvider({ children }: { children: React.ReactNode }) {
   const [datasetId, setDatasetIdState] = useState<string>("ilustratif");
@@ -116,9 +119,29 @@ export function DSSProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated || !scenario) return;
     if (!saveScenario(scenario)) {
-      setStorageError("Skenario gagal disimpan ke browser (storage penuh atau diblokir).");
+      setStorageError(storageErrorMessage);
     }
   }, [hydrated, scenario]);
+
+  const persistScenarioValues = (updates: Record<string, AlternativeValue> = {}) => {
+    const current = scenario ?? cloneFromPreset(
+      { ...baseData, id: datasetId },
+      values,
+      pairwise,
+      plafonPerFase,
+      c9MinFase1,
+    );
+    const next = { ...current, values: { ...current.values, ...updates } };
+    if (!saveScenario(next)) {
+      setStorageError(storageErrorMessage);
+      return false;
+    }
+    setScenarioAlts(next.alternatives);
+    setScenarioPreset(next.preset);
+    setValues(next.values);
+    setStorageError(null);
+    return true;
+  };
 
   const setDatasetId = (newId: string) => {
     setDatasetIdState(newId);
@@ -310,6 +333,7 @@ export function DSSProvider({ children }: { children: React.ReactNode }) {
         updatePairwiseScore,
         resetDataset,
         scenario,
+        persistScenarioValues,
         startScenario,
         discardScenario,
         applyScenario,

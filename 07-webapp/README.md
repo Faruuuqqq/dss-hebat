@@ -28,6 +28,7 @@ Aplikasi mengimplementasikan model keputusan **AHP–TOPSIS** multi-kriteria den
    - Tombol **+ Tambah titik** membuat salinan preset yang boleh ditambah/dihapus segmennya; angka acuan paper tetap utuh.
    - Lokasi dapat diisi manual atau dengan **klik peta**; form menolak draf tidak lengkap (nilai kosong tidak diam-diam menjadi nol).
    - Skenario tersimpan di `localStorage`, bertahan setelah muat ulang, serta dapat **diekspor/impor sebagai JSON**.
+   - Di **Data Kriteria**, pilih **Simpan sebagai skenario** setelah mengedit nilai preset. **Impor CSV** menampilkan pratinjau sebelum memperbarui segmen yang sudah ada di skenario. CSV menerima pemisah koma atau titik koma, dengan kolom ID atau Kode, C1–C9, dan Biaya_Rp atau Biaya_JutaRp. [Contoh format dari dataset acuan](../05-aplikasi/data/alternatif-kriteria.csv).
    - Segmen tambahan otomatis ikut AHP–TOPSIS, alokasi anggaran, sensitivitas, peta, dan ekspor CSV.
 
 5. **Integrasi Supabase & Fallback Anggun (Graceful Local Fallback):**
@@ -74,6 +75,7 @@ npm run parity         # 75 pemeriksaan paritas numerik (AHP, TOPSIS, Alokasi, S
 npm run test:ui       # Uji interaksi di 5 layar peramban Chromium
 npm run test:bugs     # Regresi keandalan input angka NumberCell
 npm run test:scenario # Alur Skenario Saya: tambah titik, klik peta, reload, ekspor/impor, hapus
+npm run test:workflow # Regresi GIS, fase dinamis, simpan skenario, dan impor CSV (atur CHROME bila diperlukan)
 npm run test:export   # Pengujian unduhan nyata berkas CSV dan validasi isinya
 npm run test:a11y     # Audit aksesibilitas axe-core pada 5 layar (0 pelanggaran)
 ```
