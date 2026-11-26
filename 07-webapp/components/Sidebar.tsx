@@ -6,11 +6,12 @@ import { usePathname } from "next/navigation";
 import { useDSS } from "../lib/store";
 
 const navItems = [
-  { href: "/", label: "Dashboard", badge: "1" },
-  { href: "/kriteria", label: "Data Kriteria", badge: "2" },
-  { href: "/ahp", label: "Pembobotan AHP", badge: "3" },
-  { href: "/hasil", label: "Hasil & Anggaran", badge: "4" },
-  { href: "/sensitivitas", label: "Uji Sensitivitas", badge: "5" },
+  { href: "/", label: "Dashboard" },
+  { href: "/kriteria", label: "Data Kriteria" },
+  { href: "/ahp", label: "Pembobotan AHP" },
+  { href: "/hasil", label: "Hasil & Anggaran" },
+  { href: "/perbandingan", label: "Bandingkan Skenario" },
+  { href: "/sensitivitas", label: "Uji Sensitivitas" },
 ];
 
 export function Sidebar() {
@@ -82,13 +83,6 @@ export function Sidebar() {
                 aria-current={isActive ? "page" : undefined}
               >
                 <span>{item.label}</span>
-                <span
-                  className={`text-xs px-2 py-0.5 rounded-full ${
-                    isActive ? "bg-[#0B3B38] text-white" : "bg-[#144F4B] text-[#95B5B0]"
-                  }`}
-                >
-                  {item.badge}
-                </span>
               </Link>
             );
           })}

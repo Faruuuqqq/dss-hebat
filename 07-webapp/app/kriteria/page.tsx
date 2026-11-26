@@ -4,11 +4,13 @@ import React, { useState } from "react";
 import { useDSS } from "../../lib/store";
 import type { AlternativeValue } from "../../lib/engine/index";
 import { CriteriaCsvImport } from "../../components/CriteriaCsvImport";
+import { SegmentEvidence } from "../../components/SegmentEvidence";
 import { NumberCell } from "../../components/NumberCell";
 
 export default function KriteriaPage() {
   const {
     dataset,
+    baselineDataset,
     selectedAltId,
     setSelectedAltId,
     updateCriterionValue,
@@ -38,18 +40,6 @@ export default function KriteriaPage() {
     setSaveMessage(saved ? "Skenario Saya tersimpan di browser." : null);
     return saved;
   };
-
-  const sourcesList = [
-    { code: "C1", source: "Rekap Polsek/desa, wawancara RT", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
-    { code: "C2", source: "Counting manual 18.00–24.00", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
-    { code: "C3", source: "Survei malam, data Dishub", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
-    { code: "C4", source: "Geometri jalan OSM, uji pandang", tag: "Estimasi OSM", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
-    { code: "C5", source: "Pendataan indekos, profil desa", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
-    { code: "C6", source: "Ekstraksi jaringan OSM", tag: "Estimasi OSM", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
-    { code: "C7", source: "Koordinat GPS kamera eksisting", tag: "Perlu GPS", tagClass: "bg-[#FBE4E1] text-[#A8231A]" },
-    { code: "C8", source: "POI OSM + observasi lapangan", tag: "OSM + survei", tagClass: "bg-[#E3F1EF] text-[#0E6B66]" },
-    { code: "C9", source: "Survei teknis, estimasi RAB", tag: "Ilustratif", tagClass: "bg-[#FFF1D6] text-[#8A6A00]" },
-  ];
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -349,24 +339,13 @@ export default function KriteriaPage() {
           </div>
         </div>
 
-        {/* Sources Panel */}
-        <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-          <h2 className="font-bold text-base text-[#14201F]">Sumber data & status</h2>
-
-          <div className="space-y-3">
-            {sourcesList.map((s) => (
-              <div key={s.code} className="flex items-center justify-between text-xs py-1 border-b border-[#EEF2F1] last:border-0">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-[#14201F] w-6">{s.code}</span>
-                  <span className="text-[#55625F]">{s.source}</span>
-                </div>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold shrink-0 ${s.tagClass}`}>
-                  {s.tag}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <SegmentEvidence
+          segment={selectedAlt}
+          value={dataset.values[selectedAlt.id]}
+          baseline={baselineDataset.values[selectedAlt.id]}
+          criteria={dataset.criteria}
+          preset={dataset.id}
+        />
       </div>
     </div>
   );

@@ -174,3 +174,95 @@ body {
 .dss-map-muted .leaflet-tile-pane {
   filter: grayscale(68%) contrast(96%) brightness(103%);
 }
+
+.decision-report {
+  display: none;
+}
+
+@media print {
+  @page decision-summary {
+    size: A4;
+    margin: 14mm;
+  }
+
+  html:has(.decision-report) {
+    background: white;
+  }
+
+  body:has(.decision-report),
+  body:has(.decision-report) > main {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    background: white;
+  }
+
+  body:has(.decision-report) > :not(main),
+  .decision-page > :not(.decision-report) {
+    display: none !important;
+  }
+
+  .decision-report {
+    display: block;
+    page: decision-summary;
+    color: #14201f;
+    font-size: 10pt;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .decision-report h1 {
+    font-size: 22pt;
+    font-weight: 750;
+    margin: 2mm 0;
+  }
+
+  .decision-report h2 {
+    font-size: 12pt;
+    font-weight: 700;
+    margin: 5mm 0 2mm;
+    break-after: avoid;
+  }
+
+  .decision-report .report-kicker {
+    color: #0e6b66;
+    font-weight: 700;
+  }
+
+  .decision-report table {
+    border-collapse: collapse;
+    width: 100%;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .decision-report th,
+  .decision-report td {
+    border-bottom: 0.3mm solid #d5ddda;
+    padding: 1.8mm;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .decision-report th:last-child,
+  .decision-report td:last-child {
+    text-align: right;
+  }
+
+  .decision-report tr,
+  .decision-report li {
+    break-inside: avoid;
+  }
+
+  .decision-report ul {
+    margin-left: 5mm;
+    list-style: disc;
+  }
+
+  .decision-report .report-evidence {
+    border-top: 0.3mm solid #d5ddda;
+    margin-top: 5mm;
+    padding-top: 2mm;
+    font-size: 9pt;
+    break-inside: avoid;
+  }
+}

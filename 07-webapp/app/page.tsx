@@ -6,6 +6,8 @@ import { useDSS } from "../lib/store";
 import { MapModeToggle } from "../components/map/MapModeToggle";
 import { PriorityMapPanel } from "../components/map/PriorityMapPanel";
 import { AllocationSummary } from "../components/AllocationSummary";
+import { SegmentDecision } from "../components/SegmentDecision";
+import { fmt, presetLabel } from "../lib/format";
 import { SegmentForm } from "../components/SegmentForm";
 import { parseScenario } from "../lib/scenario";
 
@@ -13,6 +15,7 @@ export default function DashboardPage() {
   const {
     dataset,
     result,
+    setSelectedAltId,
     activeMapMode,
     setActiveMapMode,
     plafonPerFase,
@@ -69,11 +72,8 @@ export default function DashboardPage() {
     : result.ahp.flatResult?.CR ?? 0;
   const crText = crVal <= 0.002 ? "CR ≤ 0,002" : `CR = ${crVal.toFixed(4)}`;
 
-  // Budget Phase 1 subtotal
-  const fase1Spent = (result.allocation.subtotals[1] ?? 0) / 1_000_000;
-  const plafonJt = plafonPerFase / 1_000_000;
-
-  // Group alternatives by allocated phase
+  const phaseOne = result.allocation.items.filter((item) => item.fase === 1);
+  const phaseOneSpend = result.allocation.subtotals[1] ?? 0;
 
   const getRankBadgeColor = (rank: number) => {
     switch (rank) {
@@ -109,7 +109,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <span className="bg-[#FFF1D6] text-[#8A6A00] text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-[#F5DEB3]">
-            Data ilustratif
+            {presetLabel(dataset.id)}
           </span>
           <button
             onClick={handleReset}
@@ -120,6 +120,25 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      <section aria-label="Keputusan utama" className="grid gap-3 rounded-2xl border border-[#DDE3E1] bg-white p-4 sm:grid-cols-2 sm:p-5">
+        <div>
+          <p className="text-xs font-medium text-[#55625F]">Urgensi tertinggi</p>
+          <p className="text-base font-bold text-[#14201F]">{topAlt?.nama_segmen}</p>
+          <p className="text-sm font-semibold tabular-nums text-[#A8231A]">{topAlt?.id} · {fmt(topCC)}</p>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-[#55625F]">Anggaran Fase 1</p>
+          <p className="text-base font-bold text-[#14201F]">Rp{fmt(phaseOneSpend / 1e6, 1)} jt</p>
+          <p className="text-xs text-[#3D4A47]">
+            {phaseOne.map((item) => item.alternatif_id + " " + item.nama_segmen).join(" · ") || "Belum ada segmen"}
+          </p>
+          <p className="text-xs text-[#55625F]">Plafon Rp{fmt(plafonPerFase / 1e6, 1)} jt</p>
+        </div>
+        <p className="hidden border-t border-[#DDE3E1] pt-2 text-xs text-[#55625F] sm:col-span-2 sm:block">
+          Segmen dievaluasi {dataset.alternatives.length} · Konsistensi AHP {crText}
+        </p>
+      </section>
+
       {/* Scenario bar */}
       <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-[#DDE3E1] shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div className="text-xs">
@@ -128,7 +147,7 @@ export default function DashboardPage() {
               ? `Skenario Saya aktif · dasar preset ${scenario.preset} · ${dataset.alternatives.length} segmen`
               : "Preset acuan terkunci"}
           </p>
-          <p className="text-[#55625F] mt-0.5 max-w-2xl">
+          <p className="mt-0.5 hidden max-w-2xl text-[#55625F] sm:block">
             {scenario
               ? "Peringkat di bawah dihitung dari skenario ini, sehingga tidak identik dengan angka acuan paper."
               : "Menambah titik hanya mengubah salinan skenario; angka acuan paper tetap utuh."}
@@ -188,37 +207,6 @@ export default function DashboardPage() {
 
       {showForm && <SegmentForm onClose={() => setShowForm(false)} />}
 
-      {/* 4 KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
-          <p className="text-xs font-medium text-[#55625F]">Segmen dievaluasi</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-[#14201F] mt-1 sm:mt-1.5">{dataset.alternatives.length}</p>
-          <p className="text-xs text-[#475467] mt-1">A1–A{dataset.alternatives.length} · 8 kriteria urgensi</p>
-        </div>
-
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
-          <p className="text-xs font-medium text-[#55625F]">Urgensi tertinggi</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-[#A8231A] mt-1 sm:mt-1.5">
-            {topAlt?.id} · {topCC.toFixed(4).replace(".", ",")}
-          </p>
-          <p className="text-xs text-[#475467] mt-1 truncate">{topAlt?.nama_segmen}</p>
-        </div>
-
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
-          <p className="text-xs font-medium text-[#55625F]">Konsistensi AHP</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-[#0E6B66] mt-1 sm:mt-1.5">{crText}</p>
-          <p className="text-xs text-[#475467] mt-1">Agregat 3 kelompok · batas 0,10</p>
-        </div>
-
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#DDE3E1] shadow-xs">
-          <p className="text-xs font-medium text-[#55625F]">Anggaran Fase 1</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-[#14201F] mt-1 sm:mt-1.5">
-            Rp{fase1Spent.toFixed(1).replace(".", ",")} jt
-          </p>
-          <p className="text-xs text-[#475467] mt-1">dari plafon Rp{plafonJt.toFixed(1).replace(".", ",")} jt</p>
-        </div>
-      </div>
-
       {/* Main Grid: Map & Ranking List */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
         {/* Left Column: Map */}
@@ -229,6 +217,9 @@ export default function DashboardPage() {
           </div>
 
           <PriorityMapPanel />
+          <a href="#alasan-prioritas" className="inline-block text-sm font-semibold text-[#0E6B66] underline">
+            Lihat alasan prioritas titik terpilih
+          </a>
         </div>
 
         {/* Right Column: TOPSIS Ranking List */}
@@ -251,7 +242,10 @@ export default function DashboardPage() {
                         <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${getRankBadgeColor(rank)}`}>
                           {rank}
                         </span>
-                        <span className="text-[#14201F]">{alt.id} · {alt.nama_segmen}</span>
+                        <a href="#alasan-prioritas" aria-label={"Jelaskan " + alt.id} onClick={() => setSelectedAltId(alt.id)}
+                          className="font-semibold text-[#0E6B66] underline">
+                          {alt.id} · {alt.nama_segmen}
+                        </a>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-[#14201F]">{cc.toFixed(4).replace(".", ",")}</span>
@@ -293,6 +287,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      <SegmentDecision />
       <AllocationSummary allocation={result.allocation} title="Rencana pemasangan bertahap" />
     </div>
   );

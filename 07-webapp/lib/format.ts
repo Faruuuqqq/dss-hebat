@@ -99,3 +99,11 @@ export function download(filename: string, text: string, mime = "text/csv;charse
   a.click();
   URL.revokeObjectURL(url);
 }
+
+export function presetLabel(id: string): string {
+  return id === "naskah_uts" ? "Acuan Naskah UTS" : "Ilustratif";
+}
+
+export function formatPhase(phase: number | null): string {
+  return phase === null ? "Tidak dialokasikan" : "Fase " + phase;
+}

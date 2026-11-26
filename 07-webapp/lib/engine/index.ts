@@ -1,5 +1,6 @@
 import type {
   Alternative,
+  AlternativeValue,
   Criterion,
   FullDSSResult,
   PairwiseItem,
@@ -27,7 +28,7 @@ export interface SolveDatasetInput {
   c9_min_fase1?: number;
   alternatives: Alternative[];
   criteria: Criterion[];
-  values: Record<string, { kriteria: Record<string, number>; c9: number; biaya_rp: number }>;
+  values: Record<string, AlternativeValue>;
   pairwise?: PairwiseItem[];
   ahp_matrix_8x8?: number[][];
   overrides?: {
@@ -128,6 +129,7 @@ export function solveDataset(input: SolveDatasetInput): FullDSSResult {
       weights: ahpWeights,
     },
     topsis: topsisResult,
+    topsisCriterionCodes: critCodes,
     allocation: allocationResult,
     sensitivity: sensitivityResult,
   };

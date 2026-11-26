@@ -20,10 +20,16 @@ export interface Alternative {
   karakteristik: string;
 }
 
+export interface RecordedInput {
+  method: "manual" | "csv";
+  recordedAt: string;
+}
+
 export interface AlternativeValue {
   kriteria: Record<string, number>;
   c9: number;
   biaya_rp: number;
+  inputEvidence?: Record<string, RecordedInput>;
 }
 
 export interface Stakeholder {
@@ -138,6 +144,7 @@ export interface FullDSSResult {
     weights: Record<string, number>;
   };
   topsis: TopsisResult;
+  topsisCriterionCodes: string[];
   allocation: PhaseAllocationResult;
   sensitivity: SensitivityAnalysisResult;
 }

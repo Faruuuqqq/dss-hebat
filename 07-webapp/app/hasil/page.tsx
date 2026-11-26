@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { AllocationSummary } from "../../components/AllocationSummary";
+import { DecisionReport } from "../../components/DecisionReport";
+import { SegmentDecision } from "../../components/SegmentDecision";
+import { fmt, formatPhase, presetLabel } from "../../lib/format";
 import { NumberCell } from "../../components/NumberCell";
 import { useDSS } from "../../lib/store";
 
@@ -13,6 +17,8 @@ export default function HasilPage() {
     setPlafonPerFase,
     c9MinFase1,
     setC9MinFase1,
+    setSelectedAltId,
+    scenario,
   } = useDSS();
 
   const c9Label = dataset.id === "naskah_uts" ? "Skor C9 minimum untuk alokasi" : "Skor C9 minimum untuk Fase 1";
@@ -90,10 +96,8 @@ export default function HasilPage() {
     }
   };
 
-  // Warning for alternatives deferred due to low C9
-
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="decision-page space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
@@ -101,15 +105,28 @@ export default function HasilPage() {
             Hasil TOPSIS & Alokasi Anggaran
           </h1>
           <p className="text-xs sm:text-sm text-[#55625F] mt-0.5">
-            Urgensi diperingkat dulu, lalu kelayakan C9 dan plafon anggaran membagi pemasangan ke dalam fase.
+            {scenario && "Skenario Saya · "}{presetLabel(dataset.id)}. Urgensi menentukan peringkat, lalu C9 dan biaya menentukan fase.
           </p>
         </div>
-        <button
-          onClick={handleDownloadCSV}
-          className="px-4 py-2 text-xs font-semibold text-[#14201F] bg-white hover:bg-[#F3F5F4] border border-[#DDE3E1] rounded-lg shadow-2xs transition-colors cursor-pointer w-full sm:w-auto"
-        >
-          Unduh hasil (CSV)
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href="/perbandingan" className="px-3 py-2 text-xs font-semibold text-[#0E6B66] underline">
+            Bandingkan skenario
+          </Link>
+          <button
+            type="button"
+            onClick={handleDownloadCSV}
+            className="rounded-lg border border-[#DDE3E1] bg-white px-3 py-2 text-xs font-semibold hover:bg-[#EEF2F1]"
+          >
+            Unduh hasil (CSV)
+          </button>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="rounded-lg bg-[#0E6B66] px-3 py-2 text-xs font-semibold text-white hover:bg-[#0B5652]"
+          >
+            Cetak / simpan PDF
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)]">
@@ -154,7 +171,26 @@ export default function HasilPage() {
           Peringkat urgensi dan jarak ke solusi ideal
         </h2>
 
-        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tabel Hasil TOPSIS">
+        <ol aria-label="Ringkasan peringkat TOPSIS" className="divide-y divide-[#DDE3E1] md:hidden">
+          {result.allocation.items.map((item) => {
+            const index = dataset.alternatives.findIndex((alt) => alt.id === item.alternatif_id);
+            return (
+              <li key={item.alternatif_id} className="space-y-2 py-3 first:pt-0">
+                <a href="#alasan-prioritas" aria-label={"Jelaskan " + item.alternatif_id}
+                  onClick={() => setSelectedAltId(item.alternatif_id)} className="inline-block text-sm font-semibold text-[#0E6B66] underline">
+                  {item.ranking}. {item.alternatif_id} · {item.nama_segmen}
+                </a>
+                <p className="text-sm text-[#3D4A47]">CC {fmt(item.cc)} · {formatPhase(item.fase)} · Rp{fmt(item.biaya_rp / 1e6, 1)} jt</p>
+                <details className="text-xs text-[#55625F]">
+                  <summary className="w-fit cursor-pointer py-1 font-medium">Rincian perhitungan</summary>
+                  <p className="mt-1">D⁺ {fmt(result.topsis.Dp[index])} · D⁻ {fmt(result.topsis.Dm[index])} · C9 {item.skor_c9}/5</p>
+                </details>
+              </li>
+            );
+          })}
+        </ol>
+
+        <div className="hidden overflow-x-auto md:block" tabIndex={0} role="region" aria-label="Tabel Hasil TOPSIS">
           <table className="w-full min-w-[700px] text-xs text-left border-collapse">
             <thead>
               <tr className="bg-[#EEF2F1] text-[#3D4A47] font-semibold border-b border-[#DDE3E1]">
@@ -188,7 +224,10 @@ export default function HasilPage() {
                       </span>
                     </td>
                     <td className="p-3 font-semibold text-[#14201F]">
-                      <span className="font-bold">{alt.id}</span> {alt.nama_segmen}
+                      <a href="#alasan-prioritas" aria-label={"Jelaskan " + alt.id}
+                        onClick={() => setSelectedAltId(alt.id)} className="text-[#0E6B66] underline">
+                        {alt.id} {alt.nama_segmen}
+                      </a>
                     </td>
                     <td className="p-3 text-right font-mono text-[#55625F]">{dp.toFixed(4).replace(".", ",")}</td>
                     <td className="p-3 text-right font-mono text-[#55625F]">{dm.toFixed(4).replace(".", ",")}</td>
@@ -239,6 +278,13 @@ export default function HasilPage() {
         </p>
       </div>
 
+      <SegmentDecision />
+      <DecisionReport
+        allocation={result.allocation}
+        preset={dataset.id}
+        scenario={Boolean(scenario)}
+        c9Minimum={c9MinFase1}
+      />
     </div>
   );
 }

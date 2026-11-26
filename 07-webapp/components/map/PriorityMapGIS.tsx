@@ -403,6 +403,7 @@ export function PriorityMapGIS() {
 
       const marker = L.marker([alt.lat, alt.lng], {
         icon: candidateIcon,
+        title: alt.id + " · " + alt.nama_segmen,
         keyboard: false,
         zIndexOffset: isSelected ? 1000 : (6 - rank) * 100,
       });

@@ -6,11 +6,12 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import ilustratifData from "../data/ilustratif.json";
 import naskahUtsData from "../data/naskah-uts.json";
 import { FullDSSResult, solveDataset, SolveDatasetInput } from "./engine/index.ts";
-import type { Alternative, AlternativeValue } from "./engine/index.ts";
+import type { Alternative, AlternativeValue, RecordedInput } from "./engine/index.ts";
 import {
   clearScenario,
   cloneFromPreset,
   loadScenario,
+  KRITERIA_URGENSI,
   saveScenario,
   SCENARIO_VERSION,
 } from "./scenario.ts";
@@ -23,6 +24,7 @@ interface DSSContextType {
   datasetId: string;
   setDatasetId: (id: string) => void;
   dataset: SolveDatasetInput;
+  baselineDataset: SolveDatasetInput;
   result: FullDSSResult;
   role: Role;
   setRole: (role: Role) => void;
@@ -61,6 +63,13 @@ const rawDatasets: Record<string, SolveDatasetInput> = {
 };
 
 const storageErrorMessage = "Skenario gagal disimpan. Penyimpanan browser mungkin penuh atau diblokir.";
+
+function recordValues(value: AlternativeValue, method: RecordedInput["method"], recordedAt: string): AlternativeValue {
+  const inputEvidence = Object.fromEntries([...KRITERIA_URGENSI, "C9", "RAB"].map(
+    (code) => [code, { method, recordedAt }],
+  ));
+  return { ...value, inputEvidence };
+}
 
 export function DSSProvider({ children }: { children: React.ReactNode }) {
   const [datasetId, setDatasetIdState] = useState<string>("ilustratif");
@@ -131,7 +140,11 @@ export function DSSProvider({ children }: { children: React.ReactNode }) {
       plafonPerFase,
       c9MinFase1,
     );
-    const next = { ...current, values: { ...current.values, ...updates } };
+    const recordedAt = new Date().toISOString();
+    const importedValues = Object.fromEntries(Object.entries(updates).map(([id, value]) => [
+      id, recordValues(value, "csv", recordedAt),
+    ]));
+    const next = { ...current, values: { ...current.values, ...importedValues } };
     if (!saveScenario(next)) {
       setStorageError(storageErrorMessage);
       return false;
@@ -190,7 +203,8 @@ export function DSSProvider({ children }: { children: React.ReactNode }) {
       alt,
     ]);
     setScenarioPreset((prev) => prev ?? datasetId);
-    setValues((prev) => ({ ...prev, [alt.id]: value }));
+    const addedValues = recordValues(value, "manual", new Date().toISOString());
+    setValues((prev) => ({ ...prev, [alt.id]: addedValues }));
     setSelectedAltId(alt.id);
     setStorageError(null);
   };
@@ -212,36 +226,24 @@ export function DSSProvider({ children }: { children: React.ReactNode }) {
     setStorageError(null);
   };
 
-  const updateCriterionValue = (altId: string, criterionCode: string, val: number) => {
+  const updateValue = (id: string, code: string, next: number) => {
+    const recordedAt = new Date().toISOString();
     setValues((prev) => {
-      const copy = JSON.parse(JSON.stringify(prev));
-      if (!copy[altId]) {
-        copy[altId] = { kriteria: {}, c9: 3, biaya_rp: 0 };
-      }
-      copy[altId].kriteria[criterionCode] = val;
-      return copy;
-    });
-  };
+      const value = prev[id] ?? { kriteria: {}, c9: 3, biaya_rp: 0 };
+      const old = code === "C9" ? value.c9 : code === "RAB" ? value.biaya_rp : value.kriteria[code];
+      if (old === next) return prev;
 
-  const updateC9Value = (altId: string, val: number) => {
-    setValues((prev) => {
-      const copy = JSON.parse(JSON.stringify(prev));
-      if (!copy[altId]) {
-        copy[altId] = { kriteria: {}, c9: 3, biaya_rp: 0 };
-      }
-      copy[altId].c9 = val;
-      return copy;
-    });
-  };
-
-  const updateCostValue = (altId: string, val: number) => {
-    setValues((prev) => {
-      const copy = JSON.parse(JSON.stringify(prev));
-      if (!copy[altId]) {
-        copy[altId] = { kriteria: {}, c9: 3, biaya_rp: 0 };
-      }
-      copy[altId].biaya_rp = val;
-      return copy;
+      const fields = code === "C9" ? { c9: next } : code === "RAB" ? { biaya_rp: next } : {
+        kriteria: { ...value.kriteria, [code]: next },
+      };
+      return {
+        ...prev,
+        [id]: {
+          ...value,
+          ...fields,
+          inputEvidence: { ...value.inputEvidence, [code]: { method: "manual", recordedAt } },
+        },
+      };
     });
   };
 
@@ -316,6 +318,7 @@ export function DSSProvider({ children }: { children: React.ReactNode }) {
         datasetId,
         setDatasetId,
         dataset: currentDatasetInput,
+        baselineDataset: baseData,
         result,
         role,
         setRole,
@@ -327,9 +330,9 @@ export function DSSProvider({ children }: { children: React.ReactNode }) {
         setPlafonPerFase,
         c9MinFase1,
         setC9MinFase1,
-        updateCriterionValue,
-        updateC9Value,
-        updateCostValue,
+        updateCriterionValue: updateValue,
+        updateC9Value: (id, value) => updateValue(id, "C9", value),
+        updateCostValue: (id, value) => updateValue(id, "RAB", value),
         updatePairwiseScore,
         resetDataset,
         scenario,

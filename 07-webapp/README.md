@@ -8,12 +8,15 @@ Aplikasi mengimplementasikan model keputusan **AHP–TOPSIS** multi-kriteria den
 
 ## Fitur Utama
 
-1. **5 Layar Terintegrasi (Desain Mockup SiPrioCCTV):**
-   - **Dashboard (`/`):** 4 KPI utama, peta GIS Jatinangor (Leaflet/OpenStreetMap), peringkat TOPSIS interaktif, dan kartu alokasi bertahap.
+1. **Layar keputusan SiPrioCCTV**
+   - **Dashboard (`/`):** keputusan utama Fase 1, peta GIS Jatinangor (Leaflet/OpenStreetMap), peringkat TOPSIS interaktif, dan kartu alokasi bertahap.
    - **Data Kriteria (`/kriteria`):** Matriks keputusan terkelompok (Risiko, Paparan, Spasial, Biaya & Kelayakan), form penyesuaian nilai alternatif, dan transparansi sumber data.
    - **Pembobotan AHP (`/ahp`):** Matriks perbandingan klaster, status konsistensi Saaty (CR, $\lambda_{\max}$, RI), kuesioner slider Saaty untuk responden pakar/stakeholder, dan kartu bobot global kriteria.
-   - **Hasil & Anggaran (`/hasil`):** Tabel komprehensif TOPSIS ($D^+$, $D^-$, $CC$), alokasi bertahap dengan progress bar, pengaturan plafon dinamis & ambang C9, serta unduhan ekspor CSV.
+   - **Hasil & Anggaran (`/hasil`):** Tabel komprehensif TOPSIS ($D^+$, $D^-$, $CC$), alokasi bertahap dengan progress bar, pengaturan plafon dan ambang C9, serta keluaran CSV dan cetak PDF.
+   - **Bandingkan Skenario (`/perbandingan`)** membandingkan preset acuan dengan hasil aktif. Plafon uji pada layar ini tidak mengubah skenario aktif.
    - **Uji Sensitivitas (`/sensitivitas`):** Simulasi OAT $\pm20\%$, visualisasi pergeseran peringkat, indikator pembalikan peringkat (*rank reversal*), dan tabel matriks 16 skenario.
+
+   Klik nama segmen di Dashboard atau Hasil untuk membuka alasan prioritas. Setelah memilih titik di peta, buka **Lihat alasan prioritas titik terpilih**. Data Kriteria menampilkan sumber, tanggal input jika tercatat, dan checklist survei untuk segmen yang dipilih. Di Hasil, **Cetak / simpan PDF** membuka dialog cetak peramban untuk ringkasan keputusan.
 
 2. **Dua Preset Dataset:**
    - **Preset `ilustratif` (Default):** Berbasis file Excel `Dataset_Ilustratif_DSS_CCTV_Jatinangor.xlsx` dengan AHP hierarki 3 klaster $\times$ 3 kelompok stakeholder (agregat rata-rata geometrik). Bobot global: C1 31,56%, C3 19,88%, C2 16,14%, C5 10,50%, C8 6,83%, C4 6,81%, C7 5,17%, C6 3,11%; TOPSIS A3 (0,7674) > A1 (0,5650) > A4 (0,4287) > A2 (0,4128) > A5 (0,1397).
@@ -75,9 +78,9 @@ npm run parity         # 75 pemeriksaan paritas numerik (AHP, TOPSIS, Alokasi, S
 npm run test:ui       # Uji interaksi di 5 layar peramban Chromium
 npm run test:bugs     # Regresi keandalan input angka NumberCell
 npm run test:scenario # Alur Skenario Saya: tambah titik, klik peta, reload, ekspor/impor, hapus
-npm run test:workflow # Regresi GIS, fase dinamis, simpan skenario, dan impor CSV (atur CHROME bila diperlukan)
+npm run test:workflow # Regresi produksi dan alur keputusan (atur CHROME bila diperlukan)
 npm run test:export   # Pengujian unduhan nyata berkas CSV dan validasi isinya
-npm run test:a11y     # Audit aksesibilitas axe-core pada 5 layar (0 pelanggaran)
+npm run test:a11y     # Audit aksesibilitas axe-core pada layar utama
 ```
 
 ---
@@ -112,6 +115,7 @@ supabase db push
 │   ├── kriteria/page.tsx      # Layar 2: Data Kriteria Segmen & edit form
 │   ├── ahp/page.tsx           # Layar 3: Pembobotan AHP & slider kuesioner Saaty
 │   ├── hasil/page.tsx         # Layar 4: Hasil TOPSIS, alokasi bertahap & CSV export
+│   ├── perbandingan/page.tsx  # Acuan dan simulasi anggaran berdampingan
 │   ├── sensitivitas/page.tsx  # Layar 5: Uji sensitivitas OAT ±20%
 │   ├── globals.css            # Token desain, warna Saaty, dan styling
 │   └── icon.svg               # Favicon
