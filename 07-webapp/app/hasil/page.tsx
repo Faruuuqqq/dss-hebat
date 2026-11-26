@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { AllocationSummary } from "../../components/AllocationSummary";
+import { NumberCell } from "../../components/NumberCell";
 import { useDSS } from "../../lib/store";
 
 export default function HasilPage() {
@@ -13,7 +15,7 @@ export default function HasilPage() {
     setC9MinFase1,
   } = useDSS();
 
-  const plafonJt = plafonPerFase / 1_000_000;
+  const c9Label = dataset.id === "naskah_uts" ? "Skor C9 minimum untuk alokasi" : "Skor C9 minimum untuk Fase 1";
 
   // CSV download function
   const handleDownloadCSV = () => {
@@ -89,7 +91,6 @@ export default function HasilPage() {
   };
 
   // Warning for alternatives deferred due to low C9
-  const lowC9Item = result.allocation.items.find((i) => i.skor_c9 < c9MinFase1);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -109,6 +110,42 @@ export default function HasilPage() {
         >
           Unduh hasil (CSV)
         </button>
+      </div>
+
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)]">
+        <section className="space-y-4 rounded-2xl border border-[#DDE3E1] bg-white p-5 lg:col-start-2 lg:row-start-1">
+          <h2 className="font-bold text-[#14201F]">Atur anggaran</h2>
+          <p className="text-xs text-[#55625F]">Alokasi dihitung ulang saat nilai berubah.</p>
+          <div>
+            <label htmlFor="plafon-input" className="mb-1 block text-xs font-medium text-[#55625F]">
+              Plafon per fase (Rp)
+            </label>
+            <NumberCell
+              id="plafon-input"
+              label="Plafon per fase dalam Rupiah"
+              min={0}
+              max={Number.MAX_SAFE_INTEGER}
+              value={plafonPerFase}
+              onCommit={(value) => setPlafonPerFase(Math.round(value))}
+            />
+          </div>
+          <div>
+            <label htmlFor="c9min-input" className="mb-1 block text-xs font-medium text-[#55625F]">
+              {c9Label}
+            </label>
+            <NumberCell
+              id="c9min-input"
+              label={c9Label}
+              min={1}
+              max={5}
+              value={c9MinFase1}
+              onCommit={(value) => setC9MinFase1(Math.round(value))}
+            />
+          </div>
+        </section>
+        <div className="lg:col-start-1 lg:row-start-1">
+          <AllocationSummary allocation={result.allocation} title="Alokasi bertahap" />
+        </div>
       </div>
 
       {/* Main Table: TOPSIS Rankings and Distances */}
@@ -202,141 +239,6 @@ export default function HasilPage() {
         </p>
       </div>
 
-      {/* Bottom Grid: Phased Allocation & Budget Controls */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
-        {/* Left: Phased Allocation Cards */}
-        <div className="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
-            Alokasi bertahap (plafon Rp{plafonJt.toFixed(1).replace(".", ",")} jt per fase)
-          </h2>
-
-          <div className="space-y-4">
-            {/* Phase 1 */}
-            <div className="p-4 rounded-xl border border-[#F5C2BC] bg-[#FDF5F4] space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-[#A8231A]">FASE 1 · SEGERA</span>
-                <span className="text-[#55625F]">
-                  Rp{((result.allocation.subtotals[1] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt dari Rp{plafonJt.toFixed(1).replace(".", ",")} jt
-                </span>
-              </div>
-              <div className="w-full bg-[#E5E9E8] h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-[#A8231A] h-full rounded-full"
-                  style={{ width: `${Math.min(100, (((result.allocation.subtotals[1] ?? 0) / plafonPerFase) * 100))}%` }}
-                />
-              </div>
-              <p className="text-xs text-[#14201F] font-medium pt-1">
-                {result.allocation.items
-                  .filter((i) => i.fase === 1)
-                  .map((i) => `${i.alternatif_id} ${i.nama_segmen} · Rp${(i.biaya_rp / 1e6).toFixed(1)} jt`)
-                  .join("   ")}
-              </p>
-            </div>
-
-            {/* Phase 2 */}
-            <div className="p-4 rounded-xl border border-[#F5DEB3] bg-[#FFFBF0] space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-[#8A6A00]">FASE 2</span>
-                <span className="text-[#55625F]">
-                  Rp{((result.allocation.subtotals[2] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt dari Rp{plafonJt.toFixed(1).replace(".", ",")} jt
-                </span>
-              </div>
-              <div className="w-full bg-[#E5E9E8] h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-[#B45309] h-full rounded-full"
-                  style={{ width: `${Math.min(100, (((result.allocation.subtotals[2] ?? 0) / plafonPerFase) * 100))}%` }}
-                />
-              </div>
-              <p className="text-xs text-[#14201F] font-medium pt-1">
-                {result.allocation.items
-                  .filter((i) => i.fase === 2)
-                  .map((i) => `${i.alternatif_id} ${i.nama_segmen} · Rp${(i.biaya_rp / 1e6).toFixed(1)} jt`)
-                  .join("   ")}
-              </p>
-            </div>
-
-            {/* Phase 3 */}
-            <div className="p-4 rounded-xl border border-[#C5D7DC] bg-[#F5F8F9] space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-[#2F6F8F]">FASE 3</span>
-                <span className="text-[#55625F]">
-                  Rp{((result.allocation.subtotals[3] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt dari Rp{plafonJt.toFixed(1).replace(".", ",")} jt
-                </span>
-              </div>
-              <div className="w-full bg-[#E5E9E8] h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-[#2F6F8F] h-full rounded-full"
-                  style={{ width: `${Math.min(100, (((result.allocation.subtotals[3] ?? 0) / plafonPerFase) * 100))}%` }}
-                />
-              </div>
-              <p className="text-xs text-[#14201F] font-medium pt-1">
-                {result.allocation.items
-                  .filter((i) => i.fase === 3)
-                  .map((i) => `${i.alternatif_id} ${i.nama_segmen} · Rp${(i.biaya_rp / 1e6).toFixed(1)} jt`)
-                  .join("   ")}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Budget Settings */}
-        <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-          <h2 className="font-bold text-sm sm:text-base text-[#14201F]">Atur anggaran</h2>
-
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="plafon-input" className="text-xs font-medium text-[#55625F] block mb-1">
-                Plafon per fase (Rp)
-              </label>
-              <input
-                id="plafon-input"
-                type="number"
-                step="500000"
-                value={plafonPerFase}
-                onChange={(e) => setPlafonPerFase(Number(e.target.value))}
-                aria-label="Plafon per fase dalam Rupiah"
-                className="w-full p-2.5 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="c9min-input" className="text-xs font-medium text-[#55625F] block mb-1">
-                Skor C9 minimum untuk Fase 1
-              </label>
-              <input
-                id="c9min-input"
-                type="number"
-                step="1"
-                min="1"
-                max="5"
-                value={c9MinFase1}
-                onChange={(e) => setC9MinFase1(Number(e.target.value))}
-                aria-label="Skor C9 minimum untuk Fase 1"
-                className="w-full p-2.5 bg-[#F8FAF9] border border-[#DDE3E1] rounded-lg text-xs font-mono text-[#14201F] focus:outline-none focus:ring-1 focus:ring-[#0E6B66]"
-              />
-            </div>
-
-            {/* Warning Callout */}
-            {lowC9Item && (
-              <div className="p-3.5 bg-[#FFF1D6] text-[#7A4300] rounded-xl border border-[#F5DEB3] text-xs space-y-1">
-                <p className="font-bold">
-                  Perhatian: {lowC9Item.alternatif_id} peringkat {lowC9Item.ranking}, tetapi C9 = {lowC9Item.skor_c9}
-                </p>
-                <p className="text-[11px] leading-relaxed">
-                  Pastikan tiang, listrik, dan sinyal tersedia sebelum menjadwalkan Fase 2.
-                </p>
-              </div>
-            )}
-
-            <button
-              onClick={() => {}}
-              className="w-full py-2.5 px-4 bg-[#0E6B66] hover:bg-[#0B5652] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
-            >
-              Hitung ulang alokasi
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

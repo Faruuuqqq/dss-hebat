@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useDSS } from "../lib/store";
 import { MapModeToggle } from "../components/map/MapModeToggle";
 import { PriorityMapPanel } from "../components/map/PriorityMapPanel";
+import { AllocationSummary } from "../components/AllocationSummary";
 import { SegmentForm } from "../components/SegmentForm";
 import { parseScenario } from "../lib/scenario";
 
@@ -73,9 +74,6 @@ export default function DashboardPage() {
   const plafonJt = plafonPerFase / 1_000_000;
 
   // Group alternatives by allocated phase
-  const phase1Items = result.allocation.items.filter((i) => i.fase === 1);
-  const phase2Items = result.allocation.items.filter((i) => i.fase === 2);
-  const phase3Items = result.allocation.items.filter((i) => i.fase === 3);
 
   const getRankBadgeColor = (rank: number) => {
     switch (rank) {
@@ -244,7 +242,7 @@ export default function DashboardPage() {
                 const rank = rankIdx + 1;
                 const cc = result.topsis.CC[origIdx] ?? 0;
                 const allocItem = result.allocation.items.find((i) => i.alternatif_id === alt.id);
-                const phaseTag = allocItem?.fase === 1 ? "Segera" : `Fase ${allocItem?.fase ?? "-"}`;
+                const phaseTag = allocItem?.fase === 1 ? "Segera" : (allocItem?.fase ? "Fase " + allocItem.fase : "Tidak dialokasikan");
 
                 return (
                   <div key={alt.id} className="space-y-1.5">
@@ -295,61 +293,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Bottom Panel: Phased Installation Plan */}
-      <div className="bg-white p-5 sm:p-6 rounded-2xl border border-[#DDE3E1] shadow-xs space-y-4">
-        <h2 className="font-bold text-sm sm:text-base text-[#14201F]">
-          Rencana pemasangan bertahap (plafon Rp{plafonJt.toFixed(1).replace(".", ",")} jt per fase)
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4">
-          {/* Phase 1 Card */}
-          <div className="bg-[#FBE4E1] p-4 rounded-xl border border-[#F5C2BC] space-y-2">
-            <span className="text-xs font-bold text-[#A8231A] tracking-wider uppercase block">
-              FASE 1 · SEGERA
-            </span>
-            <p className="text-sm font-bold text-[#14201F]">
-              {phase1Items.map((i) => `${i.alternatif_id} ${i.nama_segmen.split(" ")[0]}`).join(" + ") || "Tidak ada segmen"}
-            </p>
-            <p className="text-xs text-[#55625F]">
-              Rp{((result.allocation.subtotals[1] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt · sisa Rp{((result.allocation.remainingBudget[1] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt
-            </p>
-          </div>
-
-          {/* Phase 2 Card */}
-          <div className="bg-[#FFF1D6] p-4 rounded-xl border border-[#F5DEB3] space-y-2">
-            <span className="text-xs font-bold text-[#8A6A00] tracking-wider uppercase block">
-              FASE 2
-            </span>
-            <p className="text-sm font-bold text-[#14201F]">
-              {phase2Items.map((i) => `${i.alternatif_id} ${i.nama_segmen.split(" ")[0]}`).join(" + ") || "Tidak ada segmen"}
-            </p>
-            <p className="text-xs text-[#55625F]">
-              Rp{((result.allocation.subtotals[2] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt
-            </p>
-            {phase2Items.some((i) => i.warning) && (
-              <p className="text-[11px] text-[#8A6A00]">
-                {phase2Items
-                  .filter((i) => i.warning)
-                  .map((i) => i.warning)
-                  .join(" · ")}
-              </p>
-            )}
-          </div>
-
-          {/* Phase 3 Card */}
-          <div className="bg-[#E3ECEF] p-4 rounded-xl border border-[#C5D7DC] space-y-2">
-            <span className="text-xs font-bold text-[#2F6F8F] tracking-wider uppercase block">
-              FASE 3
-            </span>
-            <p className="text-sm font-bold text-[#14201F]">
-              {phase3Items.map((i) => `${i.alternatif_id} ${i.nama_segmen.split(" ")[0]}`).join(" + ") || "Tidak ada segmen"}
-            </p>
-            <p className="text-xs text-[#55625F]">
-              Rp{((result.allocation.subtotals[3] ?? 0) / 1e6).toFixed(1).replace(".", ",")} jt
-            </p>
-          </div>
-        </div>
-      </div>
+      <AllocationSummary allocation={result.allocation} title="Rencana pemasangan bertahap" />
     </div>
   );
 }

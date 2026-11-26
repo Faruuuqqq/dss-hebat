@@ -116,8 +116,8 @@ chk("judul hasil", (await page.locator("main h1").textContent())?.trim(), "Hasil
 const hasilText = await page.innerText("main");
 chk("tabel TOPSIS tampil", hasilText.includes("Peringkat urgensi dan jarak"), true);
 chk("A3 peringkat 1", hasilText.includes("A3 Persimpangan Hegarmanah"), true);
-chk("kartu alokasi fase 1", hasilText.includes("FASE 1 · SEGERA"), true);
-chk("input plafon tampil", (await page.locator('input[type="number"]').count()) >= 2, true);
+chk("kartu alokasi fase 1", await page.getByRole("heading", { name: /Fase 1 · Segera/i }).isVisible(), true);
+chk("input plafon tampil", await page.getByLabel("Plafon per fase dalam Rupiah").isVisible(), true);
 
 console.log("\n=== 5. Layar Uji Sensitivitas (/sensitivitas) ===");
 await page.goto(`${BASE}/sensitivitas`, { waitUntil: "networkidle" });

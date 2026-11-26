@@ -86,7 +86,7 @@ export function solveAllocation(
     let warning: string | undefined = undefined;
 
     if (cand.c9 < c9MinFase1) {
-      warning = `Perhatian: ${cand.id} peringkat ${ranking}, tetapi C9 = ${cand.c9}. Pastikan tiang, listrik, dan sinyal tersedia sebelum menjadwalkan Fase 2.`;
+      warning = `Perhatian: ${cand.id} peringkat ${ranking}, tetapi C9 = ${cand.c9}. Pastikan tiang, listrik, dan sinyal tersedia sebelum pemasangan.`;
     }
 
     while (true) {
